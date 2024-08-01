@@ -789,7 +789,9 @@ var imports = {
 // In non-fastcomp non-asm.js builds, grab wasm exports to outer scope
 // for emscripten_get_exported_function() to be able to access them.
 
-var _main,
+var _add,
+ _incr,
+ _main,
  ___stdio_exit,
  _emscripten_stack_init,
  _emscripten_stack_get_free,
@@ -817,6 +819,8 @@ WebAssembly.instantiate(Module['wasm'], imports).then(function(output) {
   // Depending on the build mode, Module['wasm'] can mean a different thing.
   asm = output.instance.exports;
 
+  _add = asm["add"];
+  _incr = asm["incr"];
   _main = asm["main"];
   ___stdio_exit = asm["__stdio_exit"];
   _emscripten_stack_init = asm["emscripten_stack_init"];
