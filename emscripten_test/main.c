@@ -15,7 +15,7 @@ int main(){
 
 EMSCRIPTEN_KEEPALIVE 
 int add(int a){
-  return a + 11;
+  return a + 1;
 }
 
 EMSCRIPTEN_KEEPALIVE

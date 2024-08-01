@@ -19,8 +19,9 @@ EMSCRIPTEN_KEEPALIVE
 
 
 
-## compiling
+## compiling the test
 
 ```
-emmake make
+make
 ```
+
