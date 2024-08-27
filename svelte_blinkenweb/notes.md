@@ -7,3 +7,8 @@ https://surma.dev/things/c-to-webassembly/
 
 https://vitejs.dev/guide/features.html#webassembly
 
+
+## compiler explorer asm features:
+
+https://github.com/compiler-explorer/compiler-explorer/blob/main/lib/asm-docs/generated/asm-docs-amd64.ts
+

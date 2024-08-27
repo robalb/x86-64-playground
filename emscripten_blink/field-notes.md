@@ -33,4 +33,6 @@ can be easily set via `./configure LDFLAGS=""`.
 They will be appended to other flags, in `config.mk`.
 To save time during experimentation they can be set directly in the config.mk
 
+## file upload
 
+https://stackoverflow.com/questions/69935188/open-a-file-in-emscripten-using-browser-file-selector-dialogue
