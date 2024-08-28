@@ -1,0 +1,745 @@
+#!/bin/sh
+# Blinkenlights Configuration Script
+# Run ./configure --help for usage
+
+CONFIG_COMMAND="$0 $*"
+
+# Evaluate FOO=bar environment variables passed as arguments (carefully
+# ignoring --foo=bar flags) and then remove MODE=foo from the arguments
+cleared=
+for x; do
+  test "$cleared" || set -- ; cleared=1
+  if [ x"${x%%=*}" != x"$x" ] && [ x"${x#--}" = x"$x" ]; then
+    eval "${x%%=*}='${x#*=}'"
+  fi
+  if [ x"${x%%=*}" != x"MODE" ]; then
+    set -- "$@" "$x"
+  fi
+done
+
+CC="${CC:-cc}"
+AR="${AR:-ar}"
+PREFIX="/usr/local"
+MODE="${MODE:-${m}}"
+TMPDIR="${TMPDIR:-o/tmp}"
+CFLAGS="${CFLAGS:--g -O2}"
+UOPFLAGS="${UOPFLAGS:--O2}"
+CPPFLAGS="${CPPFLAGS:--D_FILE_OFFSET_BITS=64 -D_DARWIN_C_SOURCE -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_GNU_SOURCE}"
+
+HOST_ARCH=$(uname -m)
+HOST_SYSTEM=$(uname -s)
+HOST_OS=$(uname -o 2>/dev/null)
+
+if [ "${HOST_ARCH}" = "amd64" ] ||
+   [ "${HOST_ARCH}" = "x86_64" ] ||
+   [ "${HOST_ARCH}" = "arm64" ] ||
+   [ "${HOST_ARCH}" = "aarch64" ]; then
+  JIT_POSSIBLE=1
+else
+  JIT_POSSIBLE=
+fi
+
+if [ "$1" = "--help" ]; then
+  echo "usage: ./configure [OPTION]... [VARIABLE=VAL]..."
+  echo
+  echo "options"
+  echo
+  echo "  --help"
+  echo "    shows this help"
+  echo
+  echo "  --static"
+  echo "    compile blink as a statically-linked binary"
+  echo
+  echo "  --prefix=PATH"
+  echo "    configures system install path (defaults to /usr/local)"
+  echo
+  echo "  --enable-vfs"
+  echo "    enables true filesystem emulation support (overlays alternative)"
+  echo
+  echo "  --disable-jit"
+  echo "    forces jit compilation to be disabled (shaves ~26kb off MODE=tiny)"
+  echo
+  echo "  --disable-x87"
+  echo "    disables x87 fpu and long double support (shaves ~23kb off MODE=tiny)"
+  echo
+  echo "  --disable-threads"
+  echo "    disables clone() and removes locks / barriers (shaves ~12kb off MODE=tiny)"
+  echo
+  echo "  --disable-sockets"
+  echo "    disables socket() and related system calls (shaves ~5kb off MODE=tiny)"
+  echo
+  if [ "${MODE%%-*}" != "tiny" ] && [ "${MODE%%-*}" != "rel" ] && [ "${MODE%%-*}" != "opt" ]; then
+    echo "  --disable-disassembler"
+    echo "    disables printing disassembled opcodes on crash (shaves ~48kb off MODE='')"
+    echo
+    echo "  --disable-strace"
+    echo "    disables system call logging functionality (shaves ~40kb off MODE='')"
+    echo
+    echo "  --disable-backtrace"
+    echo "    disables printing guest backtrace on crash (shaves ~5kb off MODE='')"
+    echo
+  fi
+  echo "  --disable-metal"
+  echo "    disables i8086, i386, and ring-0 instructions (shaves ~3kb off MODE=tiny)"
+  echo
+  echo "  --disable-mmx"
+  echo "    disables rarely used intel mmx legacy instructions (shaves ~3kb off MODE=tiny)"
+  echo
+  echo "  --disable-fork"
+  echo "    disables fork() and interprocess communication (shaves ~3kb off MODE=tiny)"
+  echo
+  echo "  --disable-overlays"
+  echo "    disables filesystem overlays and chroot() support (shaves ~3kb off MODE=tiny)"
+  echo
+  echo "  --disable-nonposix"
+  echo "    disables linux apis that aren't part of posix (shaves ~6kb off MODE=tiny)"
+  echo "    intended for testing compliance of guest programs"
+  echo
+  echo "  --disable-bmi2"
+  echo "    disables bmi2 and adx instruction sets (shaves ~3kb off MODE=tiny)"
+  echo
+  echo "  --disable-ancillary"
+  echo "    disables sendmsg/recvmsg control data support (shaves ~2kb off MODE=tiny)"
+  echo
+  echo "  --disable-bcd"
+  echo "    disables i8086 binary coded decimal support (shaves ~1kb off MODE=tiny)"
+  echo
+  echo "  --disable-rom"
+  echo "    disables write protection of metal bios (shaves ~600 bytes off MODE=tiny)"
+  echo
+  echo "  --disable-all"
+  echo "    disable all optional features (shaves ~81kb off MODE=tiny)"
+  echo "    you may use --enable-FOO to turn features back on"
+  echo
+  echo "  --posix"
+  echo "    strictly conform to POSIX.1-2008 XSI and C11 standards (clobbers \$CPPFLAGS)"
+  echo "    linux-specific apis are still provided by blink when they can be polyfilled"
+  echo "    intended for testing compliance of blink's codebase"
+  echo
+  echo "variables"
+  echo
+  echo "  MODE"
+  echo "    tunes makefile by choosing a preset configuration. defaults"
+  echo "    to empty string which is recommended. may alternatively be"
+  echo "    set to: tiny, opt, rel, dbg, cosmo, prof, cov, asan, ubsan,"
+  echo "    tsan, msan, llvm, llvm++, rel-llvm, or tiny-llvm."
+  echo
+  echo "  CC"
+  echo "    used to compile and link code [currently: $CC]"
+  echo
+  echo "  CFLAGS"
+  echo "    shall be passed to \$CC when compiling c sources [currently: $CFLAGS]"
+  echo
+  echo "  CPPFLAGS"
+  echo "    shall be passed to \$CC when using the c preprocessor [currently: $CPPFLAGS]"
+  echo
+  echo "  LDFLAGS"
+  echo "    shall be passed to \$CC when linking binaries [currently: $LDFLAGS]"
+  echo
+  echo "  TARGET_ARCH"
+  echo "    shall be passed to \$CC when compiling objects [currently: $TARGET_ARCH]"
+  echo
+  echo "  LOADLIBES"
+  echo "    may supply additional libraries to link earlier [currently: $LOADLIBES]"
+  echo
+  echo "  LDLIBS"
+  echo "    may supply additional libraries to link [currently: $LDLIBS]"
+  echo
+  echo "  TMPDIR"
+  echo "    used to store temporary files [currently: $TMPDIR]"
+  echo
+  echo "  AR"
+  echo "    used to create static archives [currently: $AR]"
+  echo
+  exit 0
+fi
+
+if ! [ -f blink/blink.c ]; then
+  echo "error: not in blink project root directory" >&2
+  echo "please change the current directory" >&2
+  exit 1
+fi
+
+# POSIX compliant realpath solution for Darwin
+# https://stackoverflow.com/a/18443300/1653720
+realpath() (
+  OURPWD=$PWD
+  cd "$(dirname "$1")"
+  LINK=$(readlink "$(basename "$1")")
+  while [ "$LINK" ]; do
+    cd "$(dirname "$LINK")"
+    LINK=$(readlink "$(basename "$1")")
+  done
+  REALPATH="$PWD/$(basename "$1")"
+  cd "$OURPWD"
+  echo "$REALPATH"
+)
+
+mkdir -p "${TMPDIR}" || exit
+mkdir -p o/tool/config || exit
+export TMPDIR=$(realpath "$TMPDIR")
+
+printf "checking for flock... " >&2
+if command -v flock >/dev/null; then
+  echo yes >&2
+  FLOCK=flock
+elif [ -x o/tool/flock ]; then
+  echo o/tool/flock >&2
+  FLOCK=o/tool/flock
+else
+  echo no >&2
+  printf "building tool/flock.c... " >&2
+  f=$(mktemp "${TMPDIR}/flock.XXXXXX")
+  if ${CC} -o "${f}" tool/flock.c; then
+    echo ok >&2
+    mv -f "${f}" o/tool/flock || exit
+    FLOCK=o/tool/flock
+  else
+    echo "error: need the flock command" >&2
+    exit 1
+  fi
+fi
+
+CONFIG=$(mktemp "${TMPDIR}/blink-config.h.XXXXXX")
+BUILD=$(mktemp "${TMPDIR}/blink-config.mk.XXXXXX")
+LOCK=$(mktemp "${TMPDIR}/blink-config.lock.XXXXXX")
+
+cp config.h.in "${CONFIG}" || exit
+rm -f config.log
+
+run() {
+  (
+    printf '%s\n' "$*"
+    if nice "$@"; then
+      exit 0
+    else
+      rc=$?
+      echo "exit code $rc"
+      exit $rc
+    fi
+  ) >&6 2>&6
+}
+
+compile() {
+  run ${CC:-cc} \
+      ${EXTRA_CFLAGS} \
+      ${CFLAGS} \
+      ${EXTRA_CPPFLAGS} \
+      ${CPPFLAGS} \
+      ${EXTRA_LDFLAGS} \
+      ${LDFLAGS} \
+      ${TARGET_ARCH} \
+      "$@" \
+      ${LOADLIBES} \
+      ${EXTRA_LDLIBS} \
+      ${LDLIBS}
+}
+
+config() {
+  PROGRAM="$1"
+  # If running on cygwin, msys2 or wsl then enable testing mingw-w64 produced binaries
+  if test "${CC#*w64-mingw}" != "${CC}"; then
+    RUNPROGRAM="$1.exe"
+  elif [ "${HOST_OS}" = "Cygwin" ]; then
+    RUNPROGRAM="$1.exe"
+  else
+    RUNPROGRAM="$1"
+  fi
+  MESSAGE="$2"
+  shift 2
+  LOG=$(mktemp "${TMPDIR}/blink-config.log.XXXXXX")
+  exec 6<>"${LOG}"
+  echo >&6
+  echo ======================================================================== >&6
+  echo "${MESSAGE}" >&6
+  echo ======================================================================== >&6
+  echo >&6
+  if [ ! -f "tool/config/${PROGRAM}.c" ]; then
+    echo "tool/config/${PROGRAM}.c: not found" >&2
+    exit 1
+  fi
+  if compile -Werror -o "o/tool/config/${PROGRAM}" "tool/config/${PROGRAM}.c" &&
+     run "o/tool/config/${RUNPROGRAM}"; then
+    printf '%s\n' "${MESSAGE} yes" >&2
+    if [ $# -gt 0 ]; then
+      "$@"
+    fi
+    rc=0
+  else
+    printf '%s\n' "${MESSAGE} no" >&2
+    rc=1
+  fi
+  cat <"${LOG}" >>config.log
+  rm -f "${LOG}"
+  exec 6<&-
+  EXTRA_CFLAGS=
+  EXTRA_CPPFLAGS=
+  EXTRA_LDFLAGS=
+  EXTRA_LDLIBS=
+  return $rc
+}
+
+hassstr() {
+  if ! grep "$1" <"${CONFIG}" >/dev/null 2>&1; then
+    echo "config.h.in didn't contain $1" >&2
+  fi
+}
+
+replace() {
+  exec 7<>"${LOCK}"
+  "${FLOCK}" -x 7
+  sed "s@$1@$2@" <"${CONFIG}" >"${CONFIG}.tmp" &&
+  mv -f "${CONFIG}.tmp" "${CONFIG}"
+  exec 7<&-
+}
+
+comment() {
+  hassstr "$1"
+  replace "$1" "// $1"
+}
+
+uncomment() {
+  hassstr "$1"
+  replace "// $1" "$1"
+}
+
+for x; do
+  if [ x"${x%=*}" != x"$x" ] && [ x"${x#--}" = x"$x" ]; then
+    continue
+  fi
+
+  if [ x"$x" = x"--disable-all" ]; then
+    uncomment "#define DISABLE"
+    DISABLE_NONPOSIX=1
+    DISABLE_THREADS=1
+    DISABLE_SOCKETS=1
+    DISABLE_FORK=1
+    DISABLE_X87=1
+    DISABLE_JIT=1
+
+  elif [ x"${x%%=*}" = x"--prefix" ]; then
+    PREFIX="${x#*=}"
+
+  elif [ x"$x" = x"--static" ]; then
+    STATIC=1
+
+  elif [ x"$x" = x"--enable-fork" ]; then
+    unset DISABLE_FORK
+  elif [ x"$x" = x"--disable-fork" ]; then
+    DISABLE_FORK=1
+
+  elif [ x"$x" = x"--enable-jit" ]; then
+    comment "#define DISABLE_JIT"
+    unset DISABLE_JIT
+  elif [ x"$x" = x"--disable-jit" ]; then
+    uncomment "#define DISABLE_JIT"
+    DISABLE_JIT=1
+
+  elif [ x"$x" = x"--enable-x87" ]; then
+    comment "#define DISABLE_X87"
+    unset DISABLE_X87
+  elif [ x"$x" = x"--disable-x87" ]; then
+    uncomment "#define DISABLE_X87"
+    DISABLE_X87=1
+
+  elif [ x"$x" = x"--enable-mmx" ]; then
+    comment "#define DISABLE_MMX"
+  elif [ x"$x" = x"--disable-mmx" ]; then
+    uncomment "#define DISABLE_MMX"
+
+  elif [ x"$x" = x"--enable-metal" ]; then
+    comment "#define DISABLE_METAL"
+  elif [ x"$x" = x"--disable-metal" ]; then
+    uncomment "#define DISABLE_METAL"
+
+  elif [ x"$x" = x"--enable-strace" ]; then
+    comment "#define DISABLE_STRACE"
+  elif [ x"$x" = x"--disable-strace" ]; then
+    uncomment "#define DISABLE_STRACE"
+
+  elif [ x"$x" = x"--enable-threads" ]; then
+    comment "#define DISABLE_THREADS"
+    unset DISABLE_THREADS
+  elif [ x"$x" = x"--disable-threads" ]; then
+    uncomment "#define DISABLE_THREADS"
+    DISABLE_THREADS=1
+
+  elif [ x"$x" = x"--enable-sockets" ]; then
+    comment "#define DISABLE_SOCKETS"
+    unset DISABLE_SOCKETS
+  elif [ x"$x" = x"--disable-sockets" ]; then
+    uncomment "#define DISABLE_SOCKETS"
+    DISABLE_SOCKETS=1
+
+  elif [ x"$x" = x"--enable-overlays" ]; then
+    comment "#define DISABLE_OVERLAYS"
+    uncomment "#define DISABLE_VFS"
+  elif [ x"$x" = x"--disable-overlays" ]; then
+    uncomment "#define DISABLE_OVERLAYS"
+
+  elif [ x"$x" = x"--enable-vfs" ]; then
+    comment "#define DISABLE_VFS"
+    uncomment "#define DISABLE_OVERLAYS"
+  elif [ x"$x" = x"--disable-vfs" ]; then
+    uncomment "#define DISABLE_VFS"
+
+  elif [ x"$x" = x"--enable-ancillary" ]; then
+    comment "#define DISABLE_ANCILLARY"
+  elif [ x"$x" = x"--disable-ancillary" ]; then
+    uncomment "#define DISABLE_ANCILLARY"
+
+  elif [ x"$x" = x"--enable-disassembler" ]; then
+    comment "#define DISABLE_DISASSEMBLER"
+  elif [ x"$x" = x"--disable-disassembler" ]; then
+    uncomment "#define DISABLE_DISASSEMBLER"
+
+  elif [ x"$x" = x"--enable-backtrace" ]; then
+    comment "#define DISABLE_BACKTRACE"
+  elif [ x"$x" = x"--disable-backtrace" ]; then
+    uncomment "#define DISABLE_BACKTRACE"
+
+  elif [ x"$x" = x"--enable-nonposix" ]; then
+    comment "#define DISABLE_NONPOSIX"
+    unset DISABLE_NONPOSIX
+  elif [ x"$x" = x"--disable-nonposix" ]; then
+    uncomment "#define DISABLE_NONPOSIX"
+    DISABLE_NONPOSIX=1
+
+  elif [ x"$x" = x"--enable-bmi2" ]; then
+    comment "#define DISABLE_BMI2"
+  elif [ x"$x" = x"--disable-bmi2" ]; then
+    uncomment "#define DISABLE_BMI2"
+
+  elif [ x"$x" = x"--enable-bcd" ]; then
+    comment "#define DISABLE_BCD"
+  elif [ x"$x" = x"--disable-bcd" ]; then
+    uncomment "#define DISABLE_BCD"
+
+  elif [ x"$x" = x"--enable-rom" ]; then
+    comment "#define DISABLE_ROM"
+  elif [ x"$x" = x"--disable-rom" ]; then
+    uncomment "#define DISABLE_ROM"
+
+  elif [ x"$x" = x"--posix" ]; then
+    CPPFLAGS="-D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -std=c11"
+    POSIX=1
+
+  elif [ x"$x" = x"--pedantic" ]; then
+    CFLAGS="$CFLAGS -std=c11 -pedantic -Wall -Werror"
+
+  else
+    echo "error: unrecognized flag: $x" >&2
+    echo "use $0 --help for help" >&2
+    exit 1
+  fi
+done
+
+if [ "${STATIC}" ]; then
+  LDFLAGS="-static ${LDFLAGS}"
+  EXTRA_CFLAGS=-fno-pie
+  EXTRA_LDFLAGS=-no-pie
+  if config noop "checking for no-pie... "; then
+    CFLAGS="-fno-pie ${CFLAGS}"
+    LDFLAGS="-no-pie ${LDFLAGS}"
+  fi
+fi
+
+# position independent executables
+# 1. help ensure blink won't overlap static binaries in memory
+# 2. gcc and clang generates tinier code for switch statements
+EXTRA_CFLAGS=-fpie
+EXTRA_LDFLAGS=-pie
+if [ -z "${STATIC}" ] && config noop "checking for pie... "; then
+  CFLAGS="-fpie ${CFLAGS}"
+  LDFLAGS="-pie ${LDFLAGS}"
+else
+  # otherwise relocate blink somewhere irregular
+  BASE=-Wl,--image-base=0x23000000
+  EXTRA_LDFLAGS="${BASE}"
+  if config noop "checking for ${BASE}... "; then
+    LDFLAGS="${BASE} ${LDFLAGS}"
+  else
+    BASE=-Wl,-Ttext-segment=0x23000000
+    EXTRA_LDFLAGS="${BASE}"
+    if config noop "checking for ${BASE}... "; then
+      LDFLAGS="${BASE} ${LDFLAGS}"
+    fi
+  fi
+fi
+
+# ensure binaries will run on apple m1, cygwin, etc.
+# blink can't map a program into memory without this
+GOODELF=-Wl,-z,common-page-size=65536,-z,max-page-size=65536
+EXTRA_LDFLAGS="${GOODELF}"
+if config noop "checking for ${GOODELF}..."; then
+  LDFLAGS="${GOODELF} ${LDFLAGS}"
+  # with 64kb pages these two security blankets would otherwise cause
+  # blink's minimum binary size to increase from 120kb to 250kb. yuck
+  NORELRO=-Wl,-z,norelro
+  EXTRA_LDFLAGS="${NORELRO}"
+  if config noop "checking for ${NORELRO}... "; then
+    LDFLAGS="${NORELRO} ${LDFLAGS}"
+  fi
+  NORODATAPHDR=-Wl,-z,noseparate-code
+  EXTRA_LDFLAGS="${NORODATAPHDR}"
+  if config noop "checking for ${NORODATAPHDR}... "; then
+    LDFLAGS="${NORODATAPHDR} ${LDFLAGS}"
+  fi
+fi
+
+# check for the math library
+EXTRA_LDLIBS=-lm
+if config lm "checking for -lm... "; then
+  LDLIBS="-lm ${LDLIBS}"
+fi
+
+# check for the posix threads library
+if [ -z "${DISABLE_THREADS}" ]; then
+  EXTRA_CFLAGS=-pthread
+  EXTRA_LDFLAGS=-pthread
+  if config pthread "checking for -pthread... "; then
+    CFLAGS="-pthread ${CFLAGS}"
+    LDFLAGS="-pthread ${LDFLAGS}"
+  else
+    EXTRA_LDLIBS=-lpthread
+    if config pthread "checking for -lpthread... "; then
+      LDLIBS="-lpthread ${LDLIBS}"
+    else
+      if config pthread "checking for pthreads... "; then
+        LDLIBS="-lpthread ${LDLIBS}"
+      else
+        uncomment "#define DISABLE_THREADS"
+      fi
+    fi
+  fi
+fi
+
+# check for the posix.1b realtime extensions library
+# note: librt depends on pthreads, on rhel5 at least
+EXTRA_LDLIBS=-lrt
+if config lrt "checking for -lrt... "; then
+  LDLIBS="-lrt ${LDLIBS}"
+fi
+
+# should be the default and macos build fails without it
+EXTRA_CFLAGS=-fno-common
+if config noop "checking for -fno-common... "; then
+  CFLAGS="-fno-common ${CFLAGS}"
+fi
+
+# make sure sanitizers aren't enabled on micro-op functions
+EXTRA_CFLAGS=-fno-sanitize=all
+if config noop "checking for -fno-sanitize=all... "; then
+  UOPFLAGS="-fno-sanitize=all ${UOPFLAGS}"
+fi
+
+# blink's jit will align the functions that matter
+if [ -n "${JIT_POSSIBLE}" ] && [ -z "${DISABLE_JIT}" ]; then
+  EXTRA_CFLAGS=-fno-align-functions
+  if config noop "checking for -fno-align-functions... "; then
+    CFLAGS="-fno-align-functions ${CFLAGS}"
+  fi
+fi
+
+# blink's jit can't extract and relocate micro-op function bodies if the
+# compiler inserts things like static memory references into them.
+EXTRA_CFLAGS=-fno-stack-protector
+if config noop "checking for -fno-stack-protector... "; then
+  UOPFLAGS="-fno-stack-protector ${UOPFLAGS}"
+fi
+
+# avoid creating stack frames in micro-op functions
+if [ "${MODE}" != "prof" ]; then
+  EXTRA_CFLAGS=-fomit-frame-pointer
+  if config noop "checking for -fomit-frame-pointer... "; then
+    UOPFLAGS="${UOPFLAGS} -fomit-frame-pointer"
+  fi
+fi
+
+# for everything else, stack frames are extremely important
+if [ "${MODE}" != "tiny" ]; then
+  EXTRA_CFLAGS=-fno-omit-frame-pointer
+  if config noop "checking for -fno-omit-frame-pointer... "; then
+    CFLAGS="${CFLAGS} -fno-omit-frame-pointer"
+  fi
+fi
+
+# c11 atomics are no-op'd when both fork and threads are disabled
+# this causes code to break modern compiler strict aliasing rules
+# TODO(jart) is it safe to quash warning w/o -fno-strict-aliasing
+if [ -n "${DISABLE_THREADS}" ] && [ -n "${DISABLE_FORK}" ]; then
+  EXTRA_CFLAGS=-Wno-strict-aliasing
+  if config noop "checking for -Wno-strict-aliasing... "; then
+    CFLAGS="${CFLAGS} -Wno-strict-aliasing"
+  fi
+fi
+
+# this optimization harms our ability to backtrace binaries
+# blink doesn't rely on tail call optimization so we don't need it
+if [ -z "${MODE}" ] && [ -n "${JIT_POSSIBLE}" ] && [ -z "${DISABLE_JIT}" ]; then
+  EXTRA_CFLAGS=-fno-optimize-sibling-calls
+  if config noop "checking for -fno-optimize-sibling-calls... "; then
+    CFLAGS="${CFLAGS} -fno-optimize-sibling-calls"
+  fi
+fi
+
+# the new intel cet instructions may interfere with jit, and only
+# offer improved security if the os and cpu both know about them;
+# we can revisit cet later when it becomes more mainstream
+if [ -n "${JIT_POSSIBLE}" ] && [ -z "${DISABLE_JIT}" ]; then
+  EXTRA_CFLAGS=-fcf-protection=none
+  if config noop "checking for -fcf-protection=none... "; then
+    CFLAGS="${CFLAGS} -fcf-protection=none"
+  fi
+fi
+
+# use the system zlib if available
+# otherwise, use our vendored copy
+ZLIB_CFLAGS="$(pkg-config --cflags zlib 2>/dev/null)"
+if ! ZLIB_LDLIBS="$(pkg-config --libs zlib 2>/dev/null)"; then
+  ZLIB_LDLIBS="-lz"
+fi
+EXTRA_CFLAGS="${ZLIB_CFLAGS}"
+EXTRA_LDLIBS="${ZLIB_LDLIBS}"
+if config zlib "checking for zlib... "; then
+  CFLAGS="${ZLIB_CFLAGS} ${CFLAGS}"
+  LDLIBS="${ZLIB_LDLIBS} ${LDLIBS}"
+  ZLIB=
+else
+  ZLIB='o/$(MODE)/third_party/libz/zlib.a'
+fi
+
+# try to get blink backtraces if possible
+if [ "${MODE}" != "tiny" ] && [ "${MODE}" != "rel" ]; then
+  UNWIND_CFLAGS="$(pkg-config --cflags libunwind 2>/dev/null)"
+  if ! UNWIND_LDLIBS="$(pkg-config --libs libunwind 2>/dev/null)"; then
+    UNWIND_LDLIBS="-lunwind -llzma"
+  fi
+  EXTRA_CFLAGS="${UNWIND_CFLAGS}"
+  EXTRA_LDLIBS="${UNWIND_LDLIBS}"
+  if config libunwind "checking for libunwind... "; then
+    CFLAGS="${UNWIND_CFLAGS} ${CFLAGS}"
+    LDLIBS="${UNWIND_LDLIBS} ${LDLIBS}"
+    uncomment "#define HAVE_LIBUNWIND"
+  fi
+fi
+
+# attempt to polyfill c11 atomics if it's not available
+if ! config stdatomic "checking for stdatomic.h... "; then
+  CPPFLAGS="-isystem tool/stdatomic ${CPPFLAGS}"
+fi
+
+if [ -z "${DISABLE_FORK}" ]; then
+  ( config fork "checking for fork()... " uncomment "#define HAVE_FORK" ) &
+else
+  echo "checking for fork()... disabled"
+fi
+
+if [ -z "${POSIX}" ]; then
+  ( config dup3 "checking for dup3()... " uncomment "#define HAVE_DUP3" ) &
+  ( config pipe2 "checking for pipe2()... " uncomment "#define HAVE_PIPE2" ) &
+  ( config getrandom "checking for getrandom()... " uncomment "#define HAVE_GETRANDOM" ) &
+  ( config getentropy "checking for getentropy() in unistd.h... " uncomment "#define HAVE_GETENTROPY" ) &
+  ( config dev_urandom "checking for /dev/urandom... " uncomment "#define HAVE_DEV_URANDOM" ) &
+  ( config rtlgenrandom "checking for RtlGenRandom()... " uncomment "#define HAVE_RTLGENRANDOM" ) &
+  ( config sys_getrandom "checking for syscall(SYS_getrandom)... " uncomment "#define HAVE_SYS_GETRANDOM" ) &
+  ( config sys_getentropy "checking for getentropy() in sys/random.h... " uncomment "#define HAVE_SYS_GETENTROPY" ) &
+  ( config getdomainname "checking for getdomainname()... " uncomment "#define HAVE_GETDOMAINNAME" ) &
+  ( config kern_arnd "checking for sysctl(KERN_ARND)... " uncomment "#define HAVE_KERN_ARND" ) &
+  ( config siocgifconf "checking for SIOCGIFCONF... " uncomment "#define HAVE_SIOCGIFCONF" ) &
+  ( config epoll_pwait1 "checking for epoll_pwait()... " uncomment "#define HAVE_EPOLL_PWAIT1" ) &
+  wait
+  ( config epoll_pwait2 "checking for epoll_pwait2()... " uncomment "#define HAVE_EPOLL_PWAIT2" ) &
+  ( config map_anonymous "checking for mmap(MAP_ANONYMOUS)... " uncomment "#define HAVE_MAP_ANONYMOUS" ) &
+  ( config sched_getaffinity "checking for sched_getaffinity()... " uncomment "#define HAVE_SCHED_GETAFFINITY" ) &
+  ( config scm_credentials "checking for SCM_CREDENTIALS... " uncomment "#define HAVE_SCM_CREDENTIALS" ) &
+  ( config f_getown_ex "checking for F_GETOWN_EX... " uncomment "#define HAVE_F_GETOWN_EX" ) &
+  ( config setgroups "checking for setgroups()... " uncomment "#define HAVE_SETGROUPS" ) &
+  ( config vasprintf "checking for vasprintf()... " uncomment "#define HAVE_VASPRINTF" ) &
+  ( config strchrnul "checking for strchrnul()... " uncomment "#define HAVE_STRCHRNUL" ) &
+  ( config mkfifo "checking for mkfifo()... " uncomment "#define HAVE_MKFIFO" ) &
+  ( config mkfifoat "checking for mkfifoat()... " uncomment "#define HAVE_MKFIFOAT" ) &
+  ( config preadv "checking for preadv() and pwritev()... " uncomment "#define HAVE_PREADV" ) &
+  ( config wait4 "checking for wait4()... " uncomment "#define HAVE_WAIT4" ) &
+  ( config setresuid "checking for setresuid()... " uncomment "#define HAVE_SETRESUID" ) &
+  ( config sys_mount_h "checking for sys/mount.h... " uncomment "#define HAVE_SYS_MOUNT_H" ) &
+fi
+
+( config sync "checking for sync()... " uncomment "#define HAVE_SYNC" ) &
+( config sysctl "checking for sysctl()... " uncomment "#define HAVE_SYSCTL" ) &
+( config sysinfo "checking for sysinfo()... " uncomment "#define HAVE_SYSINFO" ) &
+( config fexecve "checking for fexecve()... " uncomment "#define HAVE_FEXECVE" ) &
+( config wcwidth "checking for wcwidth()... " uncomment "#define HAVE_WCWIDTH" ) &
+( config memccpy "checking for memccpy()... " uncomment "#define HAVE_MEMCCPY" ) &
+( config seekdir "checking for seekdir()... " uncomment "#define HAVE_SEEKDIR" ) &
+( config realpath "checking for realpath()... " uncomment "#define HAVE_REALPATH" ) &
+( config setreuid "checking for setreuid()... " uncomment "#define HAVE_SETREUID" ) &
+( config fdatasync "checking for fdatasync()... " uncomment "#define HAVE_FDATASYNC" ) &
+( config sendto_zero "checking for sendto(0.0.0.0)... " uncomment "#define HAVE_SENDTO_ZERO" ) &
+wait
+( config struct_timezone "checking for struct timezone... " uncomment "#define HAVE_STRUCT_TIMEZONE" ) &
+( config sa_len "checking for sockaddr::sa_len... " uncomment "#define HAVE_SA_LEN" ) &
+( config map_shared "checking for mmap(MAP_SHARED)... " uncomment "#define HAVE_MAP_SHARED" ) &
+( config sched_yield "checking for sched_yield()... " uncomment "#define HAVE_SCHED_YIELD" ) &
+( config clock_settime "checking for clock_settime()... " uncomment "#define HAVE_CLOCK_SETTIME" ) &
+( config sched_h "checking for sched.h... " uncomment "#define HAVE_SCHED_H" ) &
+( config pthread_process_shared "checking for PTHREAD_PROCESS_SHARED... " uncomment "#define HAVE_PTHREAD_PROCESS_SHARED" ) &
+( config pthread_setcancelstate "checking for pthread_setcancelstate()... " uncomment "#define HAVE_PTHREAD_SETCANCELSTATE" ) &
+( config sockatmark "checking for sockatmark()... " uncomment "#define HAVE_SOCKATMARK" ) &
+
+wait
+rm -f "${LOCK}"
+
+BLINK_UNAME_V=
+if test "${DISABLE_NONPOSIX}"; then
+  BLINK_UNAME_V="${BLINK_UNAME_V} POSIX"
+fi
+if test "${DISABLE_JIT}" || test -z "${JIT_POSSIBLE}"; then
+  BLINK_UNAME_V="${BLINK_UNAME_V} NOJIT"
+fi
+if test "${DISABLE_SOCKETS}"; then
+  BLINK_UNAME_V="${BLINK_UNAME_V} NOSOCK"
+fi
+if test -z "${BLINK_UNAME_V}"; then
+  if test -z "$*"; then
+    BLINK_UNAME_V="${BLINK_UNAME_V:-DEFAULT}"
+  else
+    BLINK_UNAME_V="${BLINK_UNAME_V:-CUSTOM}"
+  fi
+fi
+
+for x; do
+  if [ x"${x%=*}" != x"$x" ] && [ x"${x#--}" = x"$x" ]; then
+    printf '%s\n' "$x" >>"${BUILD}"
+  fi
+done
+
+cat >>"${BUILD}" <<EOF || exit
+CC = ${CC}
+AR = ${AR}
+MODE ?= ${MODE}
+TMPDIR = ${TMPDIR}
+PREFIX = ${PREFIX}
+CFLAGS = ${CFLAGS}
+CPPFLAGS = ${CPPFLAGS}
+UOPFLAGS = ${UOPFLAGS}
+TARGET_ARCH = ${TARGET_ARCH}
+LDFLAGS = ${LDFLAGS}
+LDLIBS = ${LDLIBS}
+HOST_OS = ${HOST_OS}
+HOST_ARCH = ${HOST_ARCH}
+HOST_SYSTEM = ${HOST_SYSTEM}
+CONFIG_HOSTNAME = $(hostname)
+CONFIG_COMMAND = ${CONFIG_COMMAND}
+CONFIG_ARGUMENTS = -DCONFIG_ARGUMENTS="\"$(echo $* | sed s/\ / /g)\""
+BLINK_UNAME_V = -DBLINK_UNAME_V="\"$(echo ${BLINK_UNAME_V})\""
+ZLIB = ${ZLIB}
+EOF
+
+echo "creating config.log" >&2
+
+echo "creating config.mk" >&2
+mv "${BUILD}" config.mk || exit
+
+echo "creating config.h" >&2
+mv "${CONFIG}" config.h || exit

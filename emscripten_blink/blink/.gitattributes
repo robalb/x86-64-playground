@@ -1,0 +1,5 @@
+# -*- conf -*-
+*.xz binary
+*.com binary
+*.elf binary
+/configure text eol=lf

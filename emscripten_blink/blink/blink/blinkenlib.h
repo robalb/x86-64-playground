@@ -1,0 +1,6 @@
+#ifndef BLINK_BLINKENLIB_H_
+#define BLINK_BLINKENLIB_H_
+
+
+#endif /* BLINK_BLINKENLIB_H_ */
+

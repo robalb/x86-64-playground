@@ -1,0 +1,71 @@
+#ifndef BLINK_CONFIG_H_
+#define BLINK_CONFIG_H_
+
+// #define DISABLE_JIT
+// #define DISABLE_X87
+// #define DISABLE_THREADS
+// #define DISABLE_SOCKETS
+// #define DISABLE_OVERLAYS
+#define DISABLE_VFS
+// #define DISABLE_NONPOSIX
+// #define DISABLE_ANCILLARY
+// #define DISABLE_DISASSEMBLER
+// #define DISABLE_BACKTRACE
+// #define DISABLE_STRACE
+// #define DISABLE_METAL
+// #define DISABLE_MMX
+// #define DISABLE_BCD
+// #define DISABLE_ROM
+// #define DISABLE_BMI2
+
+// #define HAVE_FORK
+// #define HAVE_SYNC
+// #define HAVE_DUP3
+// #define HAVE_PIPE2
+// #define HAVE_WAIT4
+// #define HAVE_SYSCTL
+// #define HAVE_INT128
+// #define HAVE_SA_LEN
+// #define HAVE_PREADV
+// #define HAVE_MKFIFO
+// #define HAVE_WCWIDTH
+// #define HAVE_SYSINFO
+// #define HAVE_FEXECVE
+// #define HAVE_SCHED_H
+// #define HAVE_MEMCCPY
+// #define HAVE_SEEKDIR
+// #define HAVE_MKFIFOAT
+// #define HAVE_REALPATH
+// #define HAVE_SETREUID
+// #define HAVE_FDATASYNC
+// #define HAVE_STRCHRNUL
+// #define HAVE_VASPRINTF
+// #define HAVE_SETRESUID
+// #define HAVE_KERN_ARND
+// #define HAVE_GETRANDOM
+// #define HAVE_SETGROUPS
+// #define HAVE_LIBUNWIND
+// #define HAVE_GETENTROPY
+// #define HAVE_MAP_SHARED
+// #define HAVE_SENDTO_ZERO
+// #define HAVE_SIOCGIFCONF
+// #define HAVE_F_GETOWN_EX
+// #define HAVE_DEV_URANDOM
+// #define HAVE_SCHED_YIELD
+// #define HAVE_RTLGENRANDOM
+// #define HAVE_EPOLL_PWAIT1
+// #define HAVE_EPOLL_PWAIT2
+// #define HAVE_GETDOMAINNAME
+// #define HAVE_MAP_ANONYMOUS
+// #define HAVE_CLOCK_SETTIME
+// #define HAVE_SYS_GETRANDOM
+// #define HAVE_SYS_GETENTROPY
+// #define HAVE_SCM_CREDENTIALS
+// #define HAVE_STRUCT_TIMEZONE
+// #define HAVE_SCHED_GETAFFINITY
+// #define HAVE_PTHREAD_PROCESS_SHARED
+// #define HAVE_SYS_MOUNT_H
+// #define HAVE_PTHREAD_SETCANCELSTATE
+// #define HAVE_SOCKATMARK
+
+#endif /* BLINK_CONFIG_H_ */

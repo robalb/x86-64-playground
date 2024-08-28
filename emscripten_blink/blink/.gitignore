@@ -1,0 +1,23 @@
+# -*- conf -*-
+*.gz
+*.xz
+*.elf
+*.so
+*.so.1
+blink.log
+/o
+/core*
+/TAGS
+/HTAGS
+/config.h
+/config.mk
+/config.log
+/*.dump
+/gmon.out
+/perf.data
+/perf.data.old
+/third_party/cosmo/**/*.com
+/third_party/cosmo/**/*.dbg
+
+compile_commands.json
+.cache
