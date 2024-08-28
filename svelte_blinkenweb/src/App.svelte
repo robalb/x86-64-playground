@@ -1,5 +1,5 @@
 <script>
-  import main_wasm from './assets/main.wasm?url'
+  import main_wasm from './assets/blinkenlib.wasm?url'
 
   let result = 0
   let acc = 0;
@@ -10,9 +10,9 @@
       fetch(main_wasm)
     );
     main_instance = instance
-    window["c"] = main_instance
-    console.log(instance.exports)
-    result = instance.exports.add(4, 1);
+    window["c"] = main_instance //for debug
+    // console.log(instance.exports)
+    // result = instance.exports.add(4, 1);
   }
   init();
 

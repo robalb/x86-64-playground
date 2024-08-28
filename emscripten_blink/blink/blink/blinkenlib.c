@@ -94,6 +94,7 @@ void DumpHex(const void* data, size_t size) {
 }
 
 
+EMSCRIPTEN_KEEPALIVE
 void SetUp(void) {
   //initialize some flags
   InitMap();
@@ -213,6 +214,7 @@ void inspect(){
 }
 
 
+EMSCRIPTEN_KEEPALIVE
 void runLoop(){
   printf("page tables:\n%s\n", FormatPml4t(m));
   //as a test, run only the first 100 instructions
@@ -227,6 +229,7 @@ void runLoop(){
   }
 }
 
+EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
   puts("blinkenlib main starting!\n");
 
