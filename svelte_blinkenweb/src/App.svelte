@@ -1,31 +1,22 @@
 <script>
-  import main_wasm from './assets/blinkenlib.wasm?url'
+  import {Module, incr, add, init} from './core/emulator.js'
+  
+  init()
 
   let result = 0
   let acc = 0;
-  let main_instance;
-
-  async function init() {
-    const { instance } = await WebAssembly.instantiateStreaming(
-      fetch(main_wasm)
-    );
-    main_instance = instance
-    window["c"] = main_instance //for debug
-    // console.log(instance.exports)
-    // result = instance.exports.add(4, 1);
-  }
-  init();
 
   async function handleIncr(){
-    if(!main_instance) return;
-    acc = main_instance.exports.incr();
+    if(!Module) return;
+      acc = incr()
+      console.log(add(acc))
   }
   
 
 </script>
 
 <main>
-  <h1>Daje roma</h1>
+  <h1>wasm engine test</h1>
   <p>4+1 = {result}</p>
   <button on:click={handleIncr}>{acc}</button>
 </main>

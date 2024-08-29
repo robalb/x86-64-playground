@@ -36,3 +36,12 @@ To save time during experimentation they can be set directly in the config.mk
 ## file upload
 
 https://stackoverflow.com/questions/69935188/open-a-file-in-emscripten-using-browser-file-selector-dialogue
+
+
+emscripten alternative:
+https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-running-it-without-emscripten/
+
+
+## assembler
+
+https://github.com/AlexAltea/keystone.js
