@@ -37,6 +37,8 @@
 
 
   import Hexdump from './Hexdump.svelte'
+  import Controls from './Controls.svelte'
+  import Editor from './Editor.svelte'
   import { createEventDispatcher } from 'svelte';
 
   export let codePanel = true;
@@ -84,26 +86,27 @@
 
 
 <div class="embed">
+  {#if true}
+  <section
+      class="embed__panel embed_panel--ctrls"
+      aria-labelledby="">
+    <div class="embed__content">
+        <Controls/>
+    </div>
+  </section>
+  {/if}
 
   {#if codePanel}
   <section
-      class="embed__panel embed_panel--code --round_top"
-      class:--round_bottom={!registersPanel && !memoryPanel}
+      class="embed__panel embed_panel--code"
       aria-labelledby="">
     <div
-        class="embed__panel_bar --round_top"
-        class:--round_bottom={!registersPanel && !memoryPanel}
+        class="embed__panel_bar"
       >
       <p>code</p>
     </div>
     <div class="embed__content">
-      <pre><code class="language-assembly"><slot/></code></pre>
-    </div>
-    <div class="embed__code_controls_box">
-      <div class="embed__code_controls">
-        <button on:click={onReset}>reset</button>
-        <button on:click={onRun}>run</button>
-      </div>
+        <Editor/>
     </div>
   </section>
   {/if}
@@ -111,13 +114,8 @@
   {#if registersPanel}
   <section
       class="embed__panel embed_panel--regs"
-      class:--round_top={!codePanel}
-      class:--round_bottom={!memoryPanel}
       aria-labelledby="">
-    <div 
-        class="embed__panel_bar"
-        class:--round_top={!codePanel}
-        class:--round_bottom={!memoryPanel} >
+    <div class="embed__panel_bar" >
       <p>registers</p>
     </div>
     <div class="embed__content">
@@ -129,9 +127,7 @@
 
   {#if memoryPanel}
   <section
-      class="embed__panel embed_panel--memory --round_bottom"
-      class:--round_top={!codePanel && !memoryPanel}
-      aria-labelledby="">
+      class="embed__panel embed_panel--memory --round_bottom" aria-labelledby="">
     <div class="embed__panel_bar">
       <p>memory</p>
     </div>
@@ -177,10 +173,9 @@
   width: 100vw;
 
   grid-template-columns: 1fr 1fr 1fr 49rem;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 3fr;
   grid-template-areas: 
     "ctrls  ctrls  regs   memory"
-    "code   code   regs   memory"
     "code   code   regs   memory";
 }
 
@@ -243,11 +238,6 @@
     padding: 1rem;
     padding-bottom: .5rem;
     margin: 0;
-  }
-
-  & code {
-    margin: 0;
-    padding: 0;
   }
 }
 
