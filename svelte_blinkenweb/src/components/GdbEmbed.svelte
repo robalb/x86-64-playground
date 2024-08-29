@@ -87,7 +87,7 @@
 
   {#if codePanel}
   <section
-      class="embed__panel --round_top"
+      class="embed__panel embed_panel--code --round_top"
       class:--round_bottom={!registersPanel && !memoryPanel}
       aria-labelledby="">
     <div
@@ -110,7 +110,7 @@
 
   {#if registersPanel}
   <section
-      class="embed__panel"
+      class="embed__panel embed_panel--regs"
       class:--round_top={!codePanel}
       class:--round_bottom={!memoryPanel}
       aria-labelledby="">
@@ -129,7 +129,7 @@
 
   {#if memoryPanel}
   <section
-      class="embed__panel --round_bottom"
+      class="embed__panel embed_panel--memory --round_bottom"
       class:--round_top={!codePanel && !memoryPanel}
       aria-labelledby="">
     <div class="embed__panel_bar">
@@ -172,12 +172,39 @@
 .embed{
   border: 1px solid rgba(255,255,255,.1);
   border-radius: 8px;
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+
+  grid-template-columns: 1fr 1fr 1fr 49rem;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: 
+    "ctrls  ctrls  regs   memory"
+    "code   code   regs   memory"
+    "code   code   regs   memory";
 }
 
 .embed__panel {
   display: flex;
   flex-direction:column;
+  border-left: 1px solid var(--controls-border-color);
   background-color: var(--panel-bg-color);
+}
+
+.embed_panel--header {
+  grid-area: header;
+}
+.embed_panel--code {
+  grid-area: code;
+}
+.embed_panel--regs {
+  grid-area: regs;
+}
+.embed_panel--memory {
+  grid-area: memory;
+}
+.embed_panel--ctrls {
+  grid-area: ctrls;
 }
 
 .embed__panel_bar {
@@ -208,6 +235,7 @@
 
 .embed__content {
   padding-bottom: 1rem;
+  overflow-y: scroll;
 
   & pre{
     overflow: auto;

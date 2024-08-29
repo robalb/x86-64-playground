@@ -1027,8 +1027,8 @@ a.gatsby-resp-image-link {
 }
 
 main {
-  margin-top: 60px;
-  min-height: calc(100vh - 215px);
+  /* margin-top: 60px; */
+  /* min-height: calc(100vh - 215px); */
   background: var(--background-color);
 }
 
@@ -1093,10 +1093,6 @@ main {
   .flex-content {
     flex-direction: column;
     gap: 0.5rem;
-  }
-
-  main {
-    margin-top: 60px;
   }
 
   ul,
