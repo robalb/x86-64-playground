@@ -27,7 +27,8 @@ onMount(() => {
   .editor{
     display: grid;
     width: 100%;
-    height: 100%;
+    height: 65vh;
+    overflow: scroll;
     /* min-width: 10rem; */
   }
   .container{
