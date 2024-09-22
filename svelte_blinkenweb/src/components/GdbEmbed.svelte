@@ -1,45 +1,8 @@
 <script>
-  /**
-  * This element can be used to create live code examples that are similar
-  * to a gdb session. It displays three optional panels:
-  * code panel: must be provided externally by the parent, must contain code
-  * registers panel: will display the registers provided in the `registers` address
-  * memorypanel: will show a hexdump of the data provided in `data`, optionally highlighted
-                 at the addressess provided in `colorRegions`
-
-    example usage:
-
-    let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]
-    let registers = [
-      {color: "blue", name: "rsp", bytes: [0x50, 0xff, 0xff, 0x7f, 0x00, 0x00, 0x00, 0x00], preview: "hex_int"},
-      {color: "blue", name: "rax", bytes: [0,0,0,0,0,0,0,0], preview: "hex_int"},
-    ]
-    
-    let colorRegions = {
-      blue: [0,1,2,3,4,5,6,7]
-    }
-    let startAddress = 0
-
-    <GdbEmbed
-        on:runClick={()=>console.log("run clicked")}
-        on:resetClick={()=>console.log("reset clicked")}
-        {data}
-        showAscii={true}
-        {startAddress}
-        colorRegions={color_regions}
-    >
-    push rax
-    xor rbx rbx
-    mov [rax] rbx
-    </GdbEmbed>
-
-  */
-
 
   import Hexdump from './Hexdump.svelte'
   import Controls from './Controls.svelte'
   import Editor from './Editor.svelte'
-  import { createEventDispatcher } from 'svelte';
 
   export let codePanel = true;
   export let registersPanel = true;
@@ -52,13 +15,6 @@
   export let startAddress = 0;
   export let colorRegions = {};
 
-	const dispatch = createEventDispatcher();
-	function onRun() {
-		dispatch('runClick', 'button1')
-	}
-	function onReset() {
-		dispatch('resetClick', 'button2');
-	}
 
   function hex_intPreview(bytes){
       let hexBytes = bytes.map(byte => byte.toString(16).padStart(2, '0'));

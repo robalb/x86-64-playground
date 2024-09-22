@@ -26,3 +26,11 @@ setup symlink based patches: create
 init.sh that will clone blink and copy the symlinks,
 then call emconfigure
 
+## plan
+
+- figure out bytes transfer between asm and js (endianness in js?)
+- create demo where bytes are sent from js to c, and vice versa
+- figure out how to run elf from bytearray in blinkelib
+
+
+

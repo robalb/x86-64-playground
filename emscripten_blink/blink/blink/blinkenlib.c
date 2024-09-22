@@ -31,6 +31,11 @@ int incr(){
   return test_accumulator;
 }
 
+EMSCRIPTEN_KEEPALIVE
+int* getincr(){
+  return &test_accumulator;
+}
+
 struct System *s;
 struct Machine *m;
 struct XedDecodedInst xedd;
@@ -231,7 +236,7 @@ void runLoop(){
 
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
-  puts("blinkenlib main starting!\n");
+  puts("blinkenlib main starting! --\n");
 
   SetUp();
 

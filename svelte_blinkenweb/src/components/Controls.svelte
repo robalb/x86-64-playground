@@ -1,3 +1,15 @@
+<script>
+  import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+	function onRun() {
+		dispatch('runClick', 'button1')
+	}
+	function onReset() {
+		dispatch('resetClick', 'button2');
+	}
+</script>
+
 <div class="controls">
   <div class="controls__header">
     <h1 class="logo">x86-64 playground</h1>
