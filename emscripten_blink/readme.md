@@ -95,13 +95,11 @@ VIM commands like `gd`, `gD` et all.
 
 
 
-## todo
+## scaffolding todo
 
-setup symlink based patches: create
-init.sh that will clone blink and copy the symlinks,
-then call emconfigure
+move the blinkenlights fork in a dedicated repo, use git submodules from here
 
-## plan
+## roadmap
 
 - figure out bytes transfer between asm and js (endianness in js?)
 - create demo where bytes are sent from js to c, and vice versa
