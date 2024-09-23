@@ -12,6 +12,9 @@ o/$(MODE)/blink/blinkenlib: o/$(MODE)/blink/blinkenlib.o o/$(MODE)/blink/blink.a
 	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 ```
 
+note: in a successive iteration, i replaced the .html target into .js, since i have my own
+html, and i only need the js part
+
 
 classic compilation steps:
 

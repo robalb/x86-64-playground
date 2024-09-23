@@ -32,7 +32,7 @@ int incr(){
 }
 
 EMSCRIPTEN_KEEPALIVE
-int* getincr(){
+int* get_incr(){
   return &test_accumulator;
 }
 

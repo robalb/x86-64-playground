@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","_add","_incr","_SetUp","_runLoop","___indirect_function_table","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","_add","_incr","_get_incr","_SetUp","_runLoop","___indirect_function_table","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5013,6 +5013,7 @@ var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
 var _add = Module['_add'] = createExportWrapper('add', 1);
 var _incr = Module['_incr'] = createExportWrapper('incr', 0);
+var _get_incr = Module['_get_incr'] = createExportWrapper('get_incr', 0);
 var _SetUp = Module['_SetUp'] = createExportWrapper('SetUp', 0);
 var _runLoop = Module['_runLoop'] = createExportWrapper('runLoop', 0);
 var _main = Module['_main'] = createExportWrapper('__main_argc_argv', 2);

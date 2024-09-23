@@ -116,7 +116,7 @@ o/$(MODE)/powerpc/blink/blink: o/$(MODE)/powerpc/blink/blink.o o/$(MODE)/powerpc
 o/$(MODE)/powerpc64le/blink/blink: o/$(MODE)/powerpc64le/blink/blink.o o/$(MODE)/powerpc64le/blink/blink.a
 	$(VM) o/third_party/gcc/powerpc64le/bin/powerpc64le-linux-musl-gcc $(LDFLAGS_STATIC) $^ -o $@
 
-o/$(MODE)/blink/blinkenlib.html: o/$(MODE)/blink/blinkenlib.o o/$(MODE)/blink/blink.a $(ZLIB)
+o/$(MODE)/blink/blinkenlib.js: o/$(MODE)/blink/blinkenlib.o o/$(MODE)/blink/blink.a $(ZLIB)
 	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 o/$(MODE)/blink/blinkenlib: o/$(MODE)/blink/blinkenlib.o o/$(MODE)/blink/blink.a $(ZLIB)
 	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
