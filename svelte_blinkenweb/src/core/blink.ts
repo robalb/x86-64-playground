@@ -20,6 +20,7 @@ export default class Blink{
   #readyHandler: ()=>void;
 
   Module: any;
+  memory: ArrayBuffer;
   ready: boolean;
   
 
@@ -52,8 +53,9 @@ export default class Blink{
           this.#default_stderrHandler,
         );
       },
-      postRun: ()=>{
+      postRun: (M: any)=>{
         this.ready = true;
+        this.memory = M.wasmExports.memory.buffer
         this.#readyHandler();
       }
     });
@@ -134,7 +136,7 @@ export default class Blink{
 
   }
   #default_stdinHandler(): number{
-    return 0;
+    return null; //EOF
   }
   #default_stdoutHandler(charcode: number){
   }

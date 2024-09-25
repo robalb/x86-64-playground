@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","_add","_incr","_get_incr","_SetUp","_runLoop","___indirect_function_table","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","_add","_incr","_get_incr","_iotest","_blinkenlib_loadProgram","_blinkenlib_start","___indirect_function_table","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5025,13 +5025,14 @@ var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
 var _add = Module['_add'] = createExportWrapper('add', 1);
 var _incr = Module['_incr'] = createExportWrapper('incr', 0);
 var _get_incr = Module['_get_incr'] = createExportWrapper('get_incr', 0);
-var _SetUp = Module['_SetUp'] = createExportWrapper('SetUp', 0);
-var _runLoop = Module['_runLoop'] = createExportWrapper('runLoop', 0);
+var _iotest = Module['_iotest'] = createExportWrapper('iotest', 0);
 var _main = Module['_main'] = createExportWrapper('__main_argc_argv', 2);
+var _blinkenlib_loadProgram = Module['_blinkenlib_loadProgram'] = createExportWrapper('blinkenlib_loadProgram', 0);
+var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blinkenlib_start', 0);
 var _malloc = createExportWrapper('malloc', 1);
-var _strerror = createExportWrapper('strerror', 1);
 var _fflush = createExportWrapper('fflush', 1);
 var _emscripten_builtin_memalign = createExportWrapper('emscripten_builtin_memalign', 2);
+var _strerror = createExportWrapper('strerror', 1);
 var __emscripten_timeout = createExportWrapper('_emscripten_timeout', 2);
 var _setThrew = createExportWrapper('setThrew', 2);
 var __emscripten_tempret_set = createExportWrapper('_emscripten_tempret_set', 1);

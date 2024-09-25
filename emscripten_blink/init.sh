@@ -7,7 +7,6 @@
 exported_runtime_methods="\
 \"ccall\",\
 \"cwrap\",\
-\"UTF8ToString\",\
 \"mmapAlloc\",\
 \"setValue\",\
 \"getValue\",\
@@ -20,6 +19,7 @@ exported_runtime_methods="\
 emscripten_flags="\
 -sENVIRONMENT=web \
 -sALLOW_MEMORY_GROWTH=1 \
+-sEXIT_RUNTIME=0 \
 -sEXPORT_ES6=1 \
 -sMODULARIZE \
 -s EXPORT_NAME=\"blinkenlib\" \

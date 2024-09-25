@@ -12,6 +12,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #else
@@ -34,6 +38,11 @@ int incr(){
 EMSCRIPTEN_KEEPALIVE
 int* get_incr(){
   return &test_accumulator;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void iotest(){
+  puts("@@@@@@@");
 }
 
 struct System *s;
@@ -98,22 +107,6 @@ void DumpHex(const void* data, size_t size) {
 	}
 }
 
-
-EMSCRIPTEN_KEEPALIVE
-void SetUp(void) {
-  //initialize some flags
-  InitMap();
-  //sets up some global variable related to locks and comms
-  InitBus();
-
-  s = NewSystem(XED_MACHINE_MODE_LONG);
-  m = g_machine = NewMachine(s, 0);
-  m->metal = false;
-}
-
-void TearDown(void) {
-  FreeMachine(m);
-}
 
 void snippets(void){
   // uint8_t op[] = {0x8d, 0x04, 0x03}; /* lea (%rbx,%rax,1),%eax */
@@ -219,7 +212,6 @@ void inspect(){
 }
 
 
-EMSCRIPTEN_KEEPALIVE
 void runLoop(){
   printf("page tables:\n%s\n", FormatPml4t(m));
   //as a test, run only the first 100 instructions
@@ -234,24 +226,62 @@ void runLoop(){
   }
 }
 
+//====================
+//      actual code
+//====================
+
+void SetUp(void) {
+  //initialize some flags
+  InitMap();
+  //sets up some global variable related to locks and comms
+  // InitBus();
+
+  s = NewSystem(XED_MACHINE_MODE_LONG);
+  m = g_machine = NewMachine(s, 0);
+  m->metal = false;
+}
+
+void TearDown(void) {
+  FreeMachine(m);
+}
+
+
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
+  //TODO: remove this debug print
   puts("blinkenlib main starting! --\n");
-
+  //overlays setup goes here
+  //vfs setup goes here
   SetUp();
-
+  //TODO: remove this debug print
   puts("setup done!\n");
+}
 
-  char codepath[] = "./program";
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_loadProgram(){
+  //TODO: all this must be received as arg.
+  //remember to free these strings after they are used, since
+  //they will be allocated dynamically from js
+  char codepath[] = "/program";
   char *args = 0;
   char *vars = 0;
   char *bios = 0;
-  LoadProgram(m, codepath, codepath, &args, &vars, bios);
+
+  int fd = open(codepath, O_RDONLY);
+  printf("fd: %d", fd);
+
+  // LoadProgram(m, codepath, codepath, &args, &vars, bios);
   //fix bug with some pages being cached incorrectly as not executable
-  ResetTlb(m);
+  //this is not required with the latest patch
+  // ResetTlb(m);
+}
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_start(){
 
   runLoop();
 
   TearDown();
 }
+
 
