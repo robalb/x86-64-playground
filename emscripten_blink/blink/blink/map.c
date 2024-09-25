@@ -95,6 +95,9 @@ static void *PortableMmap(void *addr,     //
 }
 
 static int GetBitsInAddressSpace(void) {
+#ifdef __EMSCRIPTEN__
+  return 32;
+#else
   int i;
   void *ptr;
   uint64_t want;
@@ -113,6 +116,7 @@ static int GetBitsInAddressSpace(void) {
     }
   }
   Abort();
+#endif
 }
 
 static u64 GetVirtualAddressSpace(int vabits, long pagesize) {
@@ -139,21 +143,15 @@ static u64 ScaleAddress(u64 address) {
 // but we can't do that on systems like rasberry pi, since they'll
 // assign addresses greater than 2**47 which won't fit with x86_64
 void InitMap(void) {
-  puts("LL 0");
   FLAG_pagesize = GetSystemPageSize();
-  puts("LL 1");
   FLAG_vabits = GetBitsInAddressSpace();
-  puts("LL 2");
   FLAG_vaspace = GetVirtualAddressSpace(FLAG_vabits, FLAG_pagesize);
-  puts("LL 3");
   FLAG_aslrmask = ScaleAddress(kAslrMask);
   FLAG_imagestart = ScaleAddress(kImageStart);
   FLAG_automapstart = ScaleAddress(kAutomapStart);
-  puts("LL 4");
   FLAG_automapend = ScaleAddress(kAutomapEnd);
   FLAG_dyninterpaddr = ScaleAddress(kDynInterpAddr);
   FLAG_stacktop = ScaleAddress(kStackTop);
-  puts("LL 5");
 }
 
 void *Mmap(void *addr,     //

@@ -48,3 +48,40 @@ https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-runni
 ## assembler
 
 https://github.com/AlexAltea/keystone.js
+
+
+
+
+
+
+## issues running blink in wasm
+
+
+when running InitMap(),
+
+an unexpected code path is reached:
+in 
+map.c:115
+```
+GetBitsInAddressSpace()
+```
+
+something is not compatible, and
+Abort is called.
+
+The fact that blink has been already succesffuly run on wasm could indicate that this is
+specific to the flags i'm using.
+with a quick glance, these flags affect the code:
+DISABLE_OVERLAYS,
+HAVE_MAP_ANONYMOUS,
+MAP_FIXED_NOREPLACE
+
+solved with:
+```
+#ifdef __EMSCRIPTEN__
+  return 32;
+#else
+
+```
+
+

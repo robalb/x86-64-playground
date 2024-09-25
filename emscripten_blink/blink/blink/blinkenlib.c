@@ -269,6 +269,7 @@ void blinkenlib_loadProgram(){
 
   int fd = open(codepath, O_RDONLY);
   printf("fd: %d", fd);
+  puts("@");
 
   // LoadProgram(m, codepath, codepath, &args, &vars, bios);
   //fix bug with some pages being cached incorrectly as not executable
