@@ -1,7 +1,7 @@
 
 # wasm memory
 
-the javascript memory model:
+### first: the javascript memory api
 
     views <--> arraybuffers <--> wasm memory
 
@@ -31,7 +31,81 @@ we want control over the endiannes, because wasm is little endian.
 we don't want to break our code for the firefox-on-powerpc users
 out there right?
 
+### the wasm memory model
 
+required read: [the mdn docs on webassembly](https://developer.mozilla.org/en-US/docs/WebAssembly/Using_the_JavaScript_API)
+
+web assembly memory is just a classical js arraybuffer. see [1](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Memory).
+
+You can decide if you want the memory defined in the webassembly module, and export it to js
+as an ArrayBuffer,
+or if you want to define the memory in js, and then pass it to the module when you instantiate it.
+
+Forget everything you know about paging, aslr, rwx...
+The wasm virtual architecture will perform all its memory operations on 
+a simple ArrayBuffer, so basically an uint8_t array.
+address can start at 0. `42` is a valid pointer value.
+All you need to know is that it's a little endian architecture, while js's endiannes is 
+platform dependent
+
+```c
+EMSCRIPTEN_KEEPALIVE
+int test_var = 2;
+int* get_pointer(){
+  return &test_var;
+}
+```
+
+```js
+//using emscripten pre-generated typedArray views
+Module.HEAP8[Module._get_pointer()]
+// 2
+
+```
+
+### The emscripten+libc memory
+
+wasm is super simple, as long as you don't have a large program that uses the libc,
+malloc, the file system, pipes,stdin,stdout...
+
+That's when emscripten comes into play. by default, emscripten will generate
+both the wasm file and a companion js file with 4000+ lines of code.
+How does it work? can i get rid of it and just call the wasm exports?
+I need pretty low level access to memory, and i don't need the fs. 
+i probably don't need wrappers and converters.
+
+
+TODO
+
+
+### passing a file to wasm
+
+TODO
+
+idea: js api allow us to get an arraybuffer.
+we can then get its size, and call malloc from js to allocate that memory.
+then we copy the array into the allocated mem
+then we call the wasm function we want from js, passing it the pointer to the
+file we put in mem.
+we just need to remember to free when we are done.
+
+Why would we do this? basically blink already has code for a virtual filesystem.
+we could teoretically use that, and remove completely the emscripten vfs dependencies.
+for this to work tho, we would need to remove every filesystem call that blinkenlights does
+
+read:
+https://emscripten.org/docs/api_reference/Filesystem-API.html#including-file-system-support
+
+
+
+
+
+
+
+
+
+
+### other stuff
 
 https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Memory
 
@@ -44,7 +118,7 @@ you can also generate typed arrays from base64, or a local file (https://develop
 then, read this:
 https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#access-memory-from-javascript
 
-# wasm - js 
+wasm - js 
 
 https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#interacting-with-code-direct-function-calls
 

@@ -15,6 +15,11 @@ export async function init(){
   incr = Module.cwrap("incr", "number", [])
   add = Module.cwrap("add", "number", ["number"])
 
+  // var data = new Uint8Array(32);
+  // var stream = FS.open('dummy', 'w+');
+  // FS.write(stream, data, 0, data.length, 0);
+  // FS.close(stream);
+
   //debug
   window["Module"] = Module 
   console.log(Module)
