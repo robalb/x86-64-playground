@@ -10,10 +10,14 @@ export let add: (val:number) => number;
 function stdin(){
   console.log("stdin")
 }
-function stdout(){
+function stdout(charcode: number){
+  let char = String.fromCharCode(charcode);
+  console.log(char)
   console.log("stdout")
 }
-function stderr(){
+function stderr(charcode: number){
+  let char = String.fromCharCode(charcode);
+  console.log(char)
   console.log("stderr")
 }
 
@@ -22,6 +26,8 @@ export async function init(){
     preRun: function(M){
       console.log("prerun!!!!!")
       // https://emscripten.org/docs/api_reference/Filesystem-API.html#FS.init
+      // https://github.com/emscripten-core/emscripten/issues/6935
+      // https://stackoverflow.com/questions/32912129/providing-stdin-to-an-emscripten-html-program
       M.FS.init(stdin, stdout, stderr)
     }
   })
@@ -44,6 +50,4 @@ export async function init(){
   window["Module"] = Module 
   console.log(Module)
 }
-
-
 
