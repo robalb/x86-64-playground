@@ -233,9 +233,6 @@ function assert(condition, text) {
 
 // We used to include malloc/free by default in the past. Show a helpful error in
 // builds with assertions.
-function _malloc() {
-  abort('malloc() called but not included in the build - add `_malloc` to EXPORTED_FUNCTIONS');
-}
 function _free() {
   // Show a helpful error since we used to include free by default in the past.
   abort('free() called but not included in the build - add `_free` to EXPORTED_FUNCTIONS');
@@ -660,7 +657,7 @@ function createWasm() {
   function receiveInstance(instance, module) {
     wasmExports = instance.exports;
 
-    
+    Module['wasmExports'] = wasmExports;
 
     wasmMemory = wasmExports['memory'];
     
@@ -4884,6 +4881,20 @@ function dbg(...args) {
       return (...args) => ccall(ident, returnType, argTypes, args, opts);
     };
 
+
+
+
+
+  
+  
+  var stringToNewUTF8 = (str) => {
+      var size = lengthBytesUTF8(str) + 1;
+      var ret = _malloc(size);
+      if (ret) stringToUTF8(str, ret, size);
+      return ret;
+    };
+
+
   FS.createPreloadedFile = FS_createPreloadedFile;
   FS.staticInit();;
 function checkIncomingModuleAPI() {
@@ -5017,6 +5028,7 @@ var _get_incr = Module['_get_incr'] = createExportWrapper('get_incr', 0);
 var _SetUp = Module['_SetUp'] = createExportWrapper('SetUp', 0);
 var _runLoop = Module['_runLoop'] = createExportWrapper('runLoop', 0);
 var _main = Module['_main'] = createExportWrapper('__main_argc_argv', 2);
+var _malloc = createExportWrapper('malloc', 1);
 var _strerror = createExportWrapper('strerror', 1);
 var _fflush = createExportWrapper('fflush', 1);
 var _emscripten_builtin_memalign = createExportWrapper('emscripten_builtin_memalign', 2);
@@ -5039,8 +5051,15 @@ var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji', 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
 
+Module['wasmExports'] = wasmExports;
+Module['mmapAlloc'] = mmapAlloc;
 Module['ccall'] = ccall;
 Module['cwrap'] = cwrap;
+Module['setValue'] = setValue;
+Module['getValue'] = getValue;
+Module['UTF8ToString'] = UTF8ToString;
+Module['stringToNewUTF8'] = stringToNewUTF8;
+Module['FS'] = FS;
 var missingLibrarySymbols = [
   'writeI53ToI64',
   'writeI53ToI64Clamped',
@@ -5101,7 +5120,6 @@ var missingLibrarySymbols = [
   'UTF32ToString',
   'stringToUTF32',
   'lengthBytesUTF32',
-  'stringToNewUTF8',
   'registerKeyEventCallback',
   'maybeCStringToJsString',
   'findEventTarget',
@@ -5212,7 +5230,6 @@ var unexportedSymbols = [
   'callMain',
   'abort',
   'wasmMemory',
-  'wasmExports',
   'writeStackCookie',
   'checkStackCookie',
   'readI53FromI64',
@@ -5249,19 +5266,15 @@ var unexportedSymbols = [
   'maybeExit',
   'asyncLoad',
   'alignMemory',
-  'mmapAlloc',
   'wasmTable',
   'noExitRuntime',
   'getCFunc',
   'freeTableIndexes',
   'functionsInTableMap',
-  'setValue',
-  'getValue',
   'PATH',
   'PATH_FS',
   'UTF8Decoder',
   'UTF8ArrayToString',
-  'UTF8ToString',
   'stringToUTF8Array',
   'stringToUTF8',
   'lengthBytesUTF8',
@@ -5295,7 +5308,6 @@ var unexportedSymbols = [
   'FS_createPath',
   'FS_createDevice',
   'FS_readFile',
-  'FS',
   'FS_createDataFile',
   'FS_createLazyFile',
   'MEMFS',

@@ -96,7 +96,16 @@ for this to work tho, we would need to remove every filesystem call that blinken
 read:
 https://emscripten.org/docs/api_reference/Filesystem-API.html#including-file-system-support
 
+### files  using emscripten
 
+ok, we are temporarily going the the easy route of using
+the emscripten js api.
+All we need is to add FS, and some other stuff to
+the exported runtime methods, then we can 
+setup stdin/stdout handers in the Module.preRun method.
+We can also create files from js
+
+https://stackoverflow.com/questions/32912129/providing-stdin-to-an-emscripten-html-program
 
 
 

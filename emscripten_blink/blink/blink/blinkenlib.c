@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
 
   puts("setup done!\n");
 
-  char codepath[] = "./example_elf";
+  char codepath[] = "./program";
   char *args = 0;
   char *vars = 0;
   char *bios = 0;
