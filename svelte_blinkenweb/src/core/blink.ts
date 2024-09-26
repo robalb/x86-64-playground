@@ -17,12 +17,21 @@ export default class Blink{
   #stdoutHandler: (charCode: number)=>void;
   #stderrHandler: (charCode: number)=>void;
   #signalHandler: (signal: number)=>void;
-  #readyHandler: ()=>void;
+  #stateChangeHandler: (state: string, oldState: string)=>void;
+
+  states = {
+    'NOT_READY': 'NOT_READY',
+    'READY': 'READY',
+    'PROGRAM_LOADED': 'PROGRAM_LOADED',
+    'PROGRAM_RUNNING': 'PROGRAM_RUNNING',
+    'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
+  } as const;
 
   Module: any;
   memory: ArrayBuffer;
-  ready: boolean;
-  
+  state: typeof this.states[keyof typeof this.states] =
+    this.states.NOT_READY;
+
 
   /**
   * Initialize the emscripten blink module.
@@ -32,14 +41,14 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number)=>void,
-    readyHandler?: ()=>void
+    stateChangeHandler?: ()=>void
   ){
     this.setCallbacks(
       stdinHandler,
       stdoutHandler,
       stderrHandler,
       signalHandler,
-      readyHandler,
+      stateChangeHandler,
     );
     this.#initEmscripten();
   }
@@ -54,11 +63,18 @@ export default class Blink{
         );
       },
       postRun: (M: any)=>{
-        this.ready = true;
         this.memory = M.wasmExports.memory.buffer
-        this.#readyHandler();
+        this.#setState(this.states.READY)
       }
     });
+  }
+
+  #setState(state: typeof this.states[keyof typeof this.states]){
+    if(this.state == state){
+      return;
+    }
+    this.#stateChangeHandler(state, this.state);
+    this.state = state;
   }
 
   setCallbacks(
@@ -66,7 +82,7 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number)=>void,
-    readyHandler?: ()=>void,
+    stateChangeHandler?: ()=>void,
   ){
     if(stdinHandler)
       this.#stdinHandler = stdinHandler
@@ -76,8 +92,8 @@ export default class Blink{
       this.#stderrHandler = stderrHandler
     if(signalHandler)
       this.#signalHandler = signalHandler
-    if(readyHandler)
-      this.#readyHandler = readyHandler
+    if(stateChangeHandler)
+      this.#stateChangeHandler = stateChangeHandler
 
     if(!this.#stdinHandler)
       this.#stdinHandler = this.#default_stdinHandler
@@ -87,8 +103,8 @@ export default class Blink{
       this.#stderrHandler = this.#default_stderrHandler
     if(!this.#signalHandler)
       this.#signalHandler = this.#default_signalHandler
-    if(!this.#readyHandler)
-      this.#readyHandler = this.#default_readyHandler
+    if(!this.#stateChangeHandler)
+      this.#stateChangeHandler = this.#default_stateChangeHandler
   }
 
   /**
@@ -96,11 +112,27 @@ export default class Blink{
   * reset the emaulator state,
   * and load the given elf file
   */
-  loadElf(elfArrayBytes, filename, argc, argv): boolean{
-    if(!this.ready)
-      return false
-
-      
+  loadElf(elfArrayBytes:ArrayBuffer, filename, argc, argv): boolean{
+    if(this.state == this.states.NOT_READY){
+      return false;
+    }
+    let data = new Uint8Array(elfArrayBytes);
+    let FS = this.Module.FS
+    let stream = FS.open('/program', 'w+');
+    FS.write(stream, data, 0, data.length, 0);
+    FS.close(stream);
+    FS.chmod('/program', 0o777);
+    //TODO allocate param strings
+    //
+    try{
+      this.Module._blinkenlib_loadProgram()
+      this.#setState(this.states.PROGRAM_LOADED);
+    }
+    catch(e){
+      this.#setState(this.states.PROGRAM_STOPPED);
+    }
+    //TODO free param strings
+    //
   }
 
   /**
@@ -108,8 +140,11 @@ export default class Blink{
   * reset the emaulator state,
   * and load the given asm bytes in a minimalistic elf
   */
-  loadASM(asmBytes){
-
+  loadASM(asmBytes): boolean{
+    if(this.state == this.states.NOT_READY){
+      return false
+    }
+    //TODO: figure this out
   }
 
   start(){
@@ -143,7 +178,7 @@ export default class Blink{
   #default_stderrHandler(Charcode: number){
 
   }
-  #default_readyHandler(){
+  #default_stateChangeHandler(state: string, oldState: string){
 
   }
 
