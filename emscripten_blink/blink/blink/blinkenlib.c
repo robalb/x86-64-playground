@@ -234,7 +234,8 @@ void SetUp(void) {
   //initialize some flags
   InitMap();
   //sets up some global variable related to locks and comms
-  // InitBus();
+  //TODO: check if this is really required
+  InitBus();
 
   s = NewSystem(XED_MACHINE_MODE_LONG);
   m = g_machine = NewMachine(s, 0);
@@ -247,31 +248,20 @@ void TearDown(void) {
 
 
 EMSCRIPTEN_KEEPALIVE
-int main(int argc, char *argv[]) {
-  //TODO: remove this debug print
-  puts("blinkenlib main starting! --\n");
-  //overlays setup goes here
-  //vfs setup goes here
-  SetUp();
-  //TODO: remove this debug print
-  puts("setup done!\n");
-}
-
-EMSCRIPTEN_KEEPALIVE
 void blinkenlib_loadProgram(){
   //TODO: all this must be received as arg.
   //remember to free these strings after they are used, since
   //they will be allocated dynamically from js
-  char codepath[] = "/program";
+  char codepath[] = "./program";
   char *args = 0;
   char *vars = 0;
   char *bios = 0;
 
-  int fd = open(codepath, O_RDONLY);
-  printf("fd: %d", fd);
-  puts("@");
+  // int fd = open(codepath, O_RDONLY);
+  // printf("fd: %d", fd);
 
-  // LoadProgram(m, codepath, codepath, &args, &vars, bios);
+  LoadProgram(m, codepath, codepath, &args, &vars, bios);
+  puts("@");
   //fix bug with some pages being cached incorrectly as not executable
   //this is not required with the latest patch
   // ResetTlb(m);
@@ -286,3 +276,17 @@ void blinkenlib_start(){
 }
 
 
+
+EMSCRIPTEN_KEEPALIVE
+int main(int argc, char *argv[]) {
+  //TODO: remove this debug print
+  puts("blinkenlib main starting! --\n");
+  //overlays setup goes here
+  //vfs setup goes here
+  SetUp();
+  //TODO: remove this debug print
+  puts("setup done!\n");
+
+  // blinkenlib_loadProgram();
+  // blinkenlib_start();
+}

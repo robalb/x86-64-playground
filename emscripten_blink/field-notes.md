@@ -57,6 +57,8 @@ https://github.com/AlexAltea/keystone.js
 ## issues running blink in wasm
 
 
+#### initmap
+
 when running InitMap(),
 
 an unexpected code path is reached:
@@ -83,5 +85,27 @@ solved with:
 #else
 
 ```
+
+moving on
+
+#### loadprogram exits with err 127
+
+This is weird, the elf fails to be parsed.
+a quick view of the code seems to be just very portable
+parsing of the file into a struct.
+
+turns out, the way i'm importing the example elfs via 
+vite static assets is wrong, and the elfs are somehow passing
+via the typescript pipeline before ending up in the
+arraybuffer.
+
+explicitly defining any .elf as a static asset solved the problem
+https://vitejs.dev/config/shared-options.html#assetsinclude
+
+now files are working
+
+
+
+
 
 

@@ -1,6 +1,7 @@
 import blinkenlib from '../assets/blinkenlib.js'
 
-import example_elf_url from '../assets/example_elf?url'
+import example_elf_url from '../assets/example.elf'
+console.log(example_elf_url)
 
 //this is just a test, a proper es6 class with a good api
 //should be  defined
@@ -15,12 +16,12 @@ function stdin(){
 function stdout(charcode: number){
   let char = String.fromCharCode(charcode);
   console.log(char)
-  console.log("stdout")
+  // console.log("stdout")
 }
 function stderr(charcode: number){
   let char = String.fromCharCode(charcode);
   console.log(char)
-  console.log("stderr")
+  // console.log("stderr")
 }
 
 async function fetchBinaryFile(url) {
@@ -56,8 +57,9 @@ export async function init(){
 
 
       let filedata = await fetchBinaryFile(example_elf_url)
-      window["filedata"] = filedata
       let data = new Uint8Array(filedata);
+      window["filedata"] = data
+    
       // data[0] = 1
       // data[1] = 2
       // data[2] = 8
@@ -65,6 +67,8 @@ export async function init(){
       let stream = FS.open('/program', 'w+');
       FS.write(stream, data, 0, data.length, 0);
       FS.close(stream);
+
+      FS.chmod('/program', 0o777);
 
   //debug
   window["Module"] = Module 
