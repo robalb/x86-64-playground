@@ -117,7 +117,7 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
-    stateChangeHandler?: ()=>void
+    stateChangeHandler?: (state: string, oldState: string)=>void
   ){
     this.setCallbacks(
       stdinHandler,
@@ -180,7 +180,7 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
-    stateChangeHandler?: ()=>void,
+    stateChangeHandler?: (state: string, oldState: string)=>void
   ){
     if(stdinHandler)
       this.#stdinHandler = stdinHandler

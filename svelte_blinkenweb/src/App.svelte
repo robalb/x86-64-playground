@@ -6,20 +6,10 @@
 
   import GdbEmbed from './components/GdbEmbed.svelte'
 
-  import {Module, incr, add, init} from './core/emulator.ts'
-  
-  import {emulatorStore} from './core/blinkSvelteTest'
-  
-  init()
+  import {blinkStore} from './core/blinkSvelte'
 
-  let result = 0
-  let acc = 0;
-
-  async function handleIncr(){
-    if(!Module) return;
-      acc = incr()
-      console.log(add(acc))
-  }
+  let blink = blinkStore.getInstance()
+  window["blink"] = blink;
   
   let data = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -89,17 +79,12 @@
 </script>
 
 <main>
-  <h1>wasm engine test</h1>
-  <p>4+1 = {result}</p>
-  <button on:click={handleIncr}>{acc}</button>
 
 <h1>Emulator Properties</h1>
 
-<p><strong>State:</strong> {$emulatorStore.state}</p>
-<p><strong>Speed:</strong> {$emulatorStore.speed} km/h</p>
-<p><strong>Temperature:</strong> {$emulatorStore.temperature} °C</p>
-
-
+<p><strong>State:</strong> {$blinkStore.state}</p>
+<p><strong>stdout:</strong><br/>
+<code>{$blinkStore.term_buffer}</code></p>
 
   <!-- <GdbEmbed -->
   <!--     on:runClick={()=>console.log("run clicked")} -->
