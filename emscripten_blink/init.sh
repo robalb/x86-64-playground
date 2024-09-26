@@ -13,6 +13,7 @@ exported_runtime_methods="\
 \"UTF8ToString\",\
 \"stringToNewUTF8\",\
 \"FS\",\
+\"callMain\",\
 \"addFunction\",\
 \"wasmExports\"\
 "

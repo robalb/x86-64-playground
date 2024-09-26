@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -19,6 +20,7 @@
 #endif
 
 int test_accumulator = 0;
+void(*signal_callback)(int, int) = 0;
 
 
 EMSCRIPTEN_KEEPALIVE 
@@ -40,6 +42,8 @@ int* get_incr(){
 EMSCRIPTEN_KEEPALIVE
 void iotest(){
   puts("@@@@@@@");
+  //intentionally not checking nullptr ref
+  signal_callback(1,2);
 }
 
 struct System *s;
@@ -48,12 +52,19 @@ struct XedDecodedInst xedd;
 bool single_stepping = false;
 bool running = false;
 
+/**
+ * Signals handler.
+ * Signals will be passed to the javascript runtime.
+ * SIGTRAP will not terminate the program
+ */
 void TerminateSignal(struct Machine *m, int sig, int code) {
-  running = false;
-
+  if(sig != SIGTRAP){
+    running = false;
+  }
+  if(signal_callback){
+    signal_callback(sig, code);
+  }
   printf("Terminate signal received! %d : %d \n", sig, code);
-  exit(100);
-
 }
 
 
@@ -227,7 +238,8 @@ void runLoop(){
     LoadInstruction(m, GetPc(m));
     ExecuteInstruction(m);
 
-    if(single_stepping || !running){
+    if(single_stepping){
+      TerminateSignal(m, SIGTRAP, 0);
       break;
     }
   }
@@ -325,14 +337,18 @@ void blinkenlib_continue(){
 
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
-  //TODO: remove this debug print
-  puts("blinkenlib main starting! --\n");
+  puts("blinkenlib main starting!\n");
+
+  if(argc != 2){
+    abort();
+  }
+  printf("c: %d", argc);
+  int signal_callback_num = atoi(argv[1]);
+  printf("fp: %d\n", signal_callback_num);
+  signal_callback = (void(*)(int, int))signal_callback_num;
+
   //overlays setup goes here
   //vfs setup goes here
-  SetUp();
-  //TODO: remove this debug print
-  puts("setup done!\n");
 
-  // blinkenlib_loadProgram();
-  // blinkenlib_start();
+  puts("setup done!\n");
 }

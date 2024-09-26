@@ -39,15 +39,28 @@ async function fetchBinaryFile(url) {
 
 export async function init(){
   Module = await blinkenlib({
+    noInitialRun: true,
     preRun: async function(M){
       console.log("prerun!!!!!")
       // https://emscripten.org/docs/api_reference/Filesystem-API.html#FS.init
       // https://github.com/emscripten-core/emscripten/issues/6935
       // https://stackoverflow.com/questions/32912129/providing-stdin-to-an-emscripten-html-program
       M.FS.init(stdin, stdout, stderr)
-    }
+    },
+    postRun: function(){
+      console.log("postrun")
+  }
+
   })
 
+  //register function callback
+  let callback = (a,b)=>console.log(`a: ${a} b: ${b}`);
+  let callback_llvm_signature = "vii"
+  let fp = Module.addFunction(callback, callback_llvm_signature)
+  console.log("function registered")
+  console.log(fp)
+
+  Module.callMain([fp.toString()])
 
   //init native functions
   //probably not needed, we can call all these
@@ -69,6 +82,7 @@ export async function init(){
       FS.close(stream);
 
       FS.chmod('/program', 0o777);
+
 
   //debug
   window["Module"] = Module 
