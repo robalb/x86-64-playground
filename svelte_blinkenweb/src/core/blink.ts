@@ -1,8 +1,15 @@
 import blinkenlib from '../assets/blinkenlib.js'
 
+/**
+* *rsp (pointer to stack mem, useful for us)
+* rsp 
+* every single register
+* flags
+*/
 let protocolMap = {
   rsp: 1,
   rbp: 2,
+
 }
 
 /**

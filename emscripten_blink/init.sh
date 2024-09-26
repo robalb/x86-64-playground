@@ -13,16 +13,18 @@ exported_runtime_methods="\
 \"UTF8ToString\",\
 \"stringToNewUTF8\",\
 \"FS\",\
+\"addFunction\",\
 \"wasmExports\"\
 "
 
 emscripten_flags="\
 -sENVIRONMENT=web \
 -sALLOW_MEMORY_GROWTH=1 \
+-sALLOW_TABLE_GROWTH=1 \
 -sEXIT_RUNTIME=0 \
 -sEXPORT_ES6=1 \
 -sMODULARIZE \
--s EXPORT_NAME=\"blinkenlib\" \
+-sEXPORT_NAME=\"blinkenlib\" \
 -sEXPORTED_RUNTIME_METHODS='[$exported_runtime_methods]' \
 "
 

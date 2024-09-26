@@ -108,6 +108,14 @@ We can also create files from js
 https://stackoverflow.com/questions/32912129/providing-stdin-to-an-emscripten-html-program
 
 
+### calling js from wasm (emscripten edition)
+
+we can only do this dynamically:
+https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#calling-javascript-functions-as-function-pointers-from-c
+
+sRESERVED_FUNCTION_POINTERS=10 <- max num of functions we will register at runtime 
+
+and addFunction
 
 
 

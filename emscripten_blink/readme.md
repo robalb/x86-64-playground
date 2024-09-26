@@ -10,6 +10,16 @@ svelte web project
 ## compiling the wasm binary
 
 1. install the following dependencies: [emscripten](https://emscripten.org/docs/getting_started/downloads.html)
+   the version used for this project is:
+    ```
+    > emsdk list | grep INSTALLED
+           3.1.64             INSTALLED
+           3.1.64    INSTALLED
+      *    sdk-releases-fd61bacaf40131f74987e649a135f1dd559aff60-64bit    INSTALLED
+      (*)    releases-fd61bacaf40131f74987e649a135f1dd559aff60-64bit      INSTALLED
+      (*)    node-18.20.3-64bit           INSTALLED
+
+    ```
 1. the blinkenlights fork is currently stored in `blink/`
 1. run `./init.sh` to initialize the project
 1. run `./compile.sh` to compile the wasm file, and copy it into the svelte project assets folder

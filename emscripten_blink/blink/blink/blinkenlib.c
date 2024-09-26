@@ -12,10 +12,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #else
@@ -23,6 +19,7 @@
 #endif
 
 int test_accumulator = 0;
+
 
 EMSCRIPTEN_KEEPALIVE 
 int add(int a){
@@ -48,10 +45,15 @@ void iotest(){
 struct System *s;
 struct Machine *m;
 struct XedDecodedInst xedd;
+bool single_stepping = false;
+bool running = false;
 
 void TerminateSignal(struct Machine *m, int sig, int code) {
+  running = false;
+
   printf("Terminate signal received! %d : %d \n", sig, code);
   exit(100);
+
 }
 
 
@@ -214,15 +216,20 @@ void inspect(){
 
 void runLoop(){
   printf("page tables:\n%s\n", FormatPml4t(m));
-  //as a test, run only the first 100 instructions
+  //as a test, run only the first 100 instructions.
+  //TODO: make this loop infinite
   for(int i=0; i<100; i++){
+    //debug prints
     u64 entry = FindPageTableEntry(m, (GetPc(m) & -4096));
     printf("pagetable %lx: %lx\n", GetPc(m), entry);
     inspect();
 
     LoadInstruction(m, GetPc(m));
-    //runs the instruction, increments pc
     ExecuteInstruction(m);
+
+    if(single_stepping || !running){
+      break;
+    }
   }
 }
 
@@ -249,6 +256,10 @@ void TearDown(void) {
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_loadProgram(){
+  //close previous instances
+  running = false;
+  TearDown();
+
   //TODO: all this must be received as arg.
   //remember to free these strings after they are used, since
   //they will be allocated dynamically from js
@@ -257,9 +268,7 @@ void blinkenlib_loadProgram(){
   char *vars = 0;
   char *bios = 0;
 
-  // int fd = open(codepath, O_RDONLY);
-  // printf("fd: %d", fd);
-
+  SetUp();
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
   //fix bug with some pages being cached incorrectly as not executable
@@ -268,13 +277,50 @@ void blinkenlib_loadProgram(){
 }
 
 EMSCRIPTEN_KEEPALIVE
-void blinkenlib_start(){
-
-  runLoop();
-
+void blinkenlib_loadPlayground(){
+  //close previous instances
+  running = false;
   TearDown();
+
+  //TODO: write playground program to disk here
+
+  char codepath[] = "./program";
+  char *args = 0;
+  char *vars = 0;
+  char *bios = 0;
+  SetUp();
+  LoadProgram(m, codepath, codepath, &args, &vars, bios);
+  puts("@");
 }
 
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_start(bool step){
+  if(running){
+    abort();
+  }
+  single_stepping = step;
+  running = true;
+  runLoop();
+}
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_stepi(){
+  if(!running){
+    abort();
+  }
+  single_stepping = true;
+  runLoop();
+}
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_continue(){
+  if(!running){
+    abort();
+  }
+  single_stepping = false;
+  runLoop();
+}
 
 
 EMSCRIPTEN_KEEPALIVE

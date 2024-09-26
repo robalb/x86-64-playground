@@ -8,6 +8,8 @@
 
   import {Module, incr, add, init} from './core/emulator.ts'
   
+  import {emulatorStore} from './core/blinkSvelteTest'
+  
   init()
 
   let result = 0
@@ -87,23 +89,31 @@
 </script>
 
 <main>
-  <!-- <h1>wasm engine test</h1> -->
-  <!-- <p>4+1 = {result}</p> -->
-  <!-- <button on:click={handleIncr}>{acc}</button> -->
+  <h1>wasm engine test</h1>
+  <p>4+1 = {result}</p>
+  <button on:click={handleIncr}>{acc}</button>
 
-  <GdbEmbed
-      on:runClick={()=>console.log("run clicked")}
-      on:resetClick={()=>console.log("reset clicked")}
-      {data}
-      showAscii={true}
-      {startAddress}
-      {registers}
-      colorRegions={colorRegions}
-  >
-  push rax
-  xor rbx rbx
-  mov [rax] rbx
-  </GdbEmbed>
+<h1>Emulator Properties</h1>
+
+<p><strong>State:</strong> {$emulatorStore.state}</p>
+<p><strong>Speed:</strong> {$emulatorStore.speed} km/h</p>
+<p><strong>Temperature:</strong> {$emulatorStore.temperature} °C</p>
+
+
+
+  <!-- <GdbEmbed -->
+  <!--     on:runClick={()=>console.log("run clicked")} -->
+  <!--     on:resetClick={()=>console.log("reset clicked")} -->
+  <!--     {data} -->
+  <!--     showAscii={true} -->
+  <!--     {startAddress} -->
+  <!--     {registers} -->
+  <!--     colorRegions={colorRegions} -->
+  <!-- > -->
+  <!-- push rax -->
+  <!-- xor rbx rbx -->
+  <!-- mov [rax] rbx -->
+  <!-- </GdbEmbed> -->
 </main>
 
 <style>
