@@ -172,11 +172,11 @@ export default class Blink{
   #extern_c__signal_callback(sig: number, code: number){
     if(sig != signals.SIGTRAP){
       let exitCode = 128 + sig
-      let details = `Program stopped due to terminating signal ${sig}`
+      let details = `Program terminated with Exit($($exitCode)) Due to signal ${sig}`
       if(signals_info.hasOwnProperty(sig)){
         let sigString = signals_info[sig].name
         let sigDescr = signals_info[sig].description
-        details = `Program stopped due to signal ${sigString}: ${sigDescr}`;
+        details = `Program terminated with Exit(${exitCode}) due to signal ${sigString}: ${sigDescr}`;
       }
       this.stopReason = {loadFail: false, exitCode: exitCode, details: details}
       this.#setState(this.states.PROGRAM_STOPPED);

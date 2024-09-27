@@ -122,7 +122,6 @@
 <code >{$blinkStore.term_buffer}</code>
 {#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
   <div class="stopInfo">
-    <p>Program terminated</p>
     <p>{blink.stopReason.details}</p>
   </div>
 {/if}
