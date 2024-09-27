@@ -85,6 +85,17 @@
     blue: [0,1,2,3,4,5,6,7]
   }
   let startAddress = 0
+  
+
+  //handle terminal scroll
+  let termref;
+  function scroll(){
+    if(termref){
+      termref.scrollTop = termref.scrollHeight; // focus on bottom
+    }
+  }
+  $: $blinkStore.state && scroll()
+
 </script>
 
 <main>
@@ -92,10 +103,23 @@
 <h1>Emulator Properties</h1>
 
 <p><strong>State:</strong> {$blinkStore.state}</p>
-<p><strong>stdout:</strong><br/>
-<code>{$blinkStore.term_buffer}</code></p>
-    <button style="border: 1px solid white; color: white"
-  on:click={handle_demo}>load demo</button>
+
+
+  <button on:click={handle_demo}>load demo</button>
+  <button on:click={()=>blink.starti()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
+  > starti </button>
+  <button on:click={()=>blink.stepi()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+  > stepi </button>
+  <button on:click={()=>blink.continue()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+  > continue </button>
+
+<div class="term" bind:this={termref}>
+<p><strong>stdout:</strong><br/></p>
+<code >{$blinkStore.term_buffer}</code>
+</div>
 
   <!-- <GdbEmbed -->
   <!--     on:runClick={()=>console.log("run clicked")} -->
@@ -113,4 +137,26 @@
 </main>
 
 <style>
+  button{
+    border: 1px solid gray;
+    color: white;
+    padding: .3rem;
+  }
+  button:disabled{
+    color: gray;
+  }
+  .term{
+    height: 800px;
+    border: 1px solid gray;
+    overflow: auto;
+    font-family: 'Lucida Console', Monaco, monospace;
+    background-color: rgb(0,0,0,0.4);
+    margin: .5rem;
+    padding: .5rem;
+  }
+  .term code {
+    background-color: transparent!important;
+  }
+
 </style>
+

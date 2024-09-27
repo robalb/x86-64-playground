@@ -65,11 +65,15 @@ bool running = false;
 void TerminateSignal(struct Machine *m, int sig, int code) {
   if(sig != SIGTRAP){
     running = false;
+    printf("Terminate signal received! %d : %d \n", sig, code);
   }
+  else{
+    printf("SIGTRAP received\n");
+  }
+
   if(signal_callback){
     signal_callback(sig, code);
   }
-  printf("Terminate signal received! %d : %d \n", sig, code);
 }
 
 

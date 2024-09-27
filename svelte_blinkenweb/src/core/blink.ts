@@ -248,11 +248,13 @@ export default class Blink{
   start(){
     let single_stepping = false;
     this.Module._blinkenlib_start(single_stepping);
+    this.#setState(this.states.PROGRAM_RUNNING)
   }
 
   starti(){
     let single_stepping = true;
     this.Module._blinkenlib_start(single_stepping);
+    this.#setState(this.states.PROGRAM_RUNNING)
   }
 
   stepi(){
