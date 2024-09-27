@@ -1,0 +1,27 @@
+CC=gcc
+AS=as
+LD=ld
+
+CFLAGS= --static #-nostdlib
+ASFLAGS=
+LDFLAGS= --no-dynamic-linker #-z noexecstack -z stack-size=4096
+
+.PHONY: all
+all: hang.elf argv.elf exit.elf nop.elf
+
+hang.elf: hang.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+argv.elf: argv.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+exit.elf: exit.o
+	$(LD) $(LDFLAGS) -o $@ $<
+exit.o: exit.s
+	$(AS) $(ASFLAGS) -o $@ $<
+
+nop.elf: nop.o
+	$(LD) $(LDFLAGS) -o $@ $<
+nop.o: nop.s
+	$(AS) $(ASFLAGS) -o $@ $<
+

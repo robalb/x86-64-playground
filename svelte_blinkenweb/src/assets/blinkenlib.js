@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","_add","_incr","_get_incr","_iotest","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","_add","_incr","_get_incr","_iotest","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5222,6 +5222,7 @@ var _blinkenlib_loadPlayground = Module['_blinkenlib_loadPlayground'] = createEx
 var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blinkenlib_start', 1);
 var _blinkenlib_stepi = Module['_blinkenlib_stepi'] = createExportWrapper('blinkenlib_stepi', 0);
 var _blinkenlib_continue = Module['_blinkenlib_continue'] = createExportWrapper('blinkenlib_continue', 0);
+var _blinkenlib_get_clstruct = Module['_blinkenlib_get_clstruct'] = createExportWrapper('blinkenlib_get_clstruct', 0);
 var _main = Module['_main'] = createExportWrapper('__main_argc_argv', 2);
 var _malloc = createExportWrapper('malloc', 1);
 var _strerror = createExportWrapper('strerror', 1);

@@ -9,6 +9,8 @@
   import {blinkStore} from './core/blinkSvelte'
   import {fetchBinaryFile} from './core/utils'
   import demo1_url from './assets/example.elf?url'
+  // import demo2_url from './assets/demo_programs/argv.elf?url'
+
   console.log(demo1_url)
 
   let blink = blinkStore.getInstance()
@@ -152,7 +154,7 @@
     color: gray;
   }
   .term{
-    height: 800px;
+    height: calc(100vh - 200px);
     border: 1px solid gray;
     overflow: auto;
     font-family: 'Lucida Console', Monaco, monospace;

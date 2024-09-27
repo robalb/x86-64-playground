@@ -1,16 +1,22 @@
 import blinkenlib from '../assets/blinkenlib.js'
 
 /**
+* Cross-Language struct
 * *rsp (pointer to stack mem, useful for us)
 * rsp 
 * every single register
 * flags
 */
-let protocolMap = {
-  rsp: 1,
-  rbp: 2,
 
+let clstruct_elements = {
+  0: {name: "version", type: "u32"},
+  1: {name: "rip", type: "u64*"},
+  2: {name: "rsp", type: "u64*"},
+  3: {name: "rbp", type: "u64*"},
+  4: {name: "rax", type: "u64*"},
 }
+
+
 
 let signals = {
     "SIGHUP": 1,
@@ -95,6 +101,16 @@ export default class Blink{
   #signalHandler: (signal: number, code: number)=>void;
   #stateChangeHandler: (state: string, oldState: string)=>void;
 
+  //TODO: temporary, remove this object
+clstruct_elements = {
+  0: {name: "vmmaps", type: "string"},
+  1: {name: "rip", type: "u64"},
+  2: {name: "rsp", type: "u64"},
+  3: {name: "rbp", type: "u64"},
+  4: {name: "rax", type: "u64"},
+}
+cls = 0;
+
   states = {
     'NOT_READY': 'NOT_READY',
     'READY': 'READY',
@@ -150,6 +166,10 @@ export default class Blink{
     this.Module.callMain([
       fp_1.toString(), /* signal_callback */
     ])
+
+    //get a pointer to the cross-language struct
+    this.cls = this.Module._blinkenlib_get_clstruct();
+
     this.memory = this.Module.wasmExports.memory.buffer
     this.#setState(this.states.READY)
   }
@@ -230,6 +250,8 @@ export default class Blink{
     FS.close(stream);
     FS.chmod('/program', 0o777);
     //TODO allocate param strings
+    //
+    //
     //
     try{
       this.Module._blinkenlib_loadProgram()

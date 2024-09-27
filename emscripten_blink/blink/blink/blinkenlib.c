@@ -7,6 +7,7 @@
 #include "blink/bus.h"
 #include "blink/x86.h"
 #include "blink/loader.h"
+#include "blink/high.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -20,6 +21,21 @@
 #endif
 
 void(*signal_callback)(int, int) = 0;
+
+/**
+ * cross-language struct.
+ * This is just a list of wasm 32-bit pointers
+ * that will be passed to js
+ */
+#define CLSTRUCT_VERSION 1
+struct clstruct{
+  uint32_t version;
+  uint32_t rip;
+  uint32_t rsp;
+  uint32_t rax;
+};
+struct clstruct cls;
+
 
 
 ////////////////////////
@@ -235,14 +251,13 @@ void inspect(){
 
 
 void runLoop(){
-  printf("page tables:\n%s\n", FormatPml4t(m));
-  //as a test, run only the first 100 instructions.
-  //TODO: make this loop infinite
-  for(int i=0; i<100; i++){
+  for(;;){
     //debug prints
-    u64 entry = FindPageTableEntry(m, (GetPc(m) & -4096));
-    printf("pagetable %lx: %lx\n", GetPc(m), entry);
-    inspect();
+    // g_high.enabled = false; //disable ansi colors in prints
+    // printf("page tables:\n%s\n", FormatPml4t(m));
+    // u64 entry = FindPageTableEntry(m, (GetPc(m) & -4096));
+    // printf("pagetable %lx: %lx\n", GetPc(m), entry);
+    // inspect();
 
     LoadInstruction(m, GetPc(m));
     ExecuteInstruction(m);
@@ -343,18 +358,24 @@ void blinkenlib_continue(){
   runLoop();
 }
 
+EMSCRIPTEN_KEEPALIVE
+int blinkenlib_get_clstruct(){
+  return (uint32_t) &cls;
+}
+
 
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
-  puts("blinkenlib main starting!\n");
-
+  puts("blinkenlib main starting...\n");
   if(argc != 2){
     abort();
   }
-  printf("c: %d", argc);
   int signal_callback_num = atoi(argv[1]);
-  printf("fp: %d\n", signal_callback_num);
   signal_callback = (void(*)(int, int))signal_callback_num;
+  printf("fp1: %d\n", signal_callback_num);
+
+  //initialize the cross-language struct
+  cls.version = CLSTRUCT_VERSION;
 
   //overlays setup goes here
   //vfs setup goes here

@@ -115,7 +115,8 @@ https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-wi
 
 sRESERVED_FUNCTION_POINTERS=10 <- max num of functions we will register at runtime 
 
-and addFunction
+then we can register our callback using Module.addFunction()
+
 
 ### reading a struct from js
 
@@ -131,6 +132,7 @@ of pointers.
 I could harcode the meaning of each pointer 
 both wasm-side and js-side, like a poor man's protobuff
 
+https://stackoverflow.com/a/23917034/9169799
 
 
 
