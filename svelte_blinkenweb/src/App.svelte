@@ -7,9 +7,18 @@
   import GdbEmbed from './components/GdbEmbed.svelte'
 
   import {blinkStore} from './core/blinkSvelte'
+  import {fetchBinaryFile} from './core/utils'
+  import demo1_url from './assets/example.elf?url'
+  console.log(demo1_url)
 
   let blink = blinkStore.getInstance()
   window["blink"] = blink;
+
+  async function handle_demo(){
+    let filedata = await fetchBinaryFile(demo1_url)
+    // console.log(filedata)
+    blink.loadElf(filedata);
+  }
   
   let data = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -85,6 +94,8 @@
 <p><strong>State:</strong> {$blinkStore.state}</p>
 <p><strong>stdout:</strong><br/>
 <code>{$blinkStore.term_buffer}</code></p>
+    <button style="border: 1px solid white; color: white"
+  on:click={handle_demo}>load demo</button>
 
   <!-- <GdbEmbed -->
   <!--     on:runClick={()=>console.log("run clicked")} -->

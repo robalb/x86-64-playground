@@ -117,6 +117,20 @@ sRESERVED_FUNCTION_POINTERS=10 <- max num of functions we will register at runti
 
 and addFunction
 
+### reading a struct from js
+
+this part is kinda tricky.
+we want to pass a struct to js when a machine is 
+initialized.
+since machines are initialized with a void call, we could
+return a pointer to the struct.
+escept js does not understand structs.
+
+One possible hack would be to return a pointer to an array
+of pointers.
+I could harcode the meaning of each pointer 
+both wasm-side and js-side, like a poor man's protobuff
+
 
 
 

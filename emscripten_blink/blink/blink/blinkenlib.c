@@ -19,32 +19,37 @@
 #define EMSCRIPTEN_KEEPALIVE
 #endif
 
-int test_accumulator = 0;
 void(*signal_callback)(int, int) = 0;
 
 
+////////////////////////
+///test functions, remove
+////////////////////////
+int test_accumulator = 0;
 EMSCRIPTEN_KEEPALIVE 
 int add(int a){
   return a + 1;
 }
-
 EMSCRIPTEN_KEEPALIVE
 int incr(){
   test_accumulator++;
   return test_accumulator;
 }
-
 EMSCRIPTEN_KEEPALIVE
 int* get_incr(){
   return &test_accumulator;
 }
-
 EMSCRIPTEN_KEEPALIVE
 void iotest(){
   puts("@@@@@@@");
   //intentionally not checking nullptr ref
   signal_callback(1,2);
 }
+
+
+
+
+
 
 struct System *s;
 struct Machine *m;
