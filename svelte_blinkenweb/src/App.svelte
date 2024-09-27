@@ -85,13 +85,14 @@
     blue: [0,1,2,3,4,5,6,7]
   }
   let startAddress = 0
-  
 
   //handle terminal scroll
   let termref;
   function scroll(){
     if(termref){
-      termref.scrollTop = termref.scrollHeight; // focus on bottom
+      setTimeout(()=>{
+        termref.scrollTop = termref.scrollHeight; // focus on bottom
+      },1)
     }
   }
   $: $blinkStore.state && scroll()
@@ -119,6 +120,12 @@
 <div class="term" bind:this={termref}>
 <p><strong>stdout:</strong><br/></p>
 <code >{$blinkStore.term_buffer}</code>
+{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
+  <div class="stopInfo">
+    <p>Program terminated</p>
+    <p>{blink.stopReason.details}</p>
+  </div>
+{/if}
 </div>
 
   <!-- <GdbEmbed -->
@@ -156,6 +163,10 @@
   }
   .term code {
     background-color: transparent!important;
+  }
+  .term .stopInfo{
+    background-color: darkred;
+    color: white;
   }
 
 </style>

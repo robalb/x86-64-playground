@@ -107,6 +107,7 @@ export default class Blink{
   memory: ArrayBuffer;
   state: typeof this.states[keyof typeof this.states] =
     this.states.NOT_READY;
+  stopReason: null|{loadFail: boolean, exitCode: number, details: string};
 
 
   /**
@@ -170,6 +171,14 @@ export default class Blink{
   */
   #extern_c__signal_callback(sig: number, code: number){
     if(sig != signals.SIGTRAP){
+      let exitCode = 128 + sig
+      let details = `Program stopped due to terminating signal ${sig}`
+      if(signals_info.hasOwnProperty(sig)){
+        let sigString = signals_info[sig].name
+        let sigDescr = signals_info[sig].description
+        details = `Program stopped due to signal ${sigString}: ${sigDescr}`;
+      }
+      this.stopReason = {loadFail: false, exitCode: exitCode, details: details}
       this.#setState(this.states.PROGRAM_STOPPED);
     }
     this.#signalHandler(sig, code);
@@ -225,8 +234,10 @@ export default class Blink{
     try{
       this.Module._blinkenlib_loadProgram()
       this.#setState(this.states.PROGRAM_LOADED);
+      this.stopReason = null;
     }
     catch(e){
+      this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
       this.#setState(this.states.PROGRAM_STOPPED);
     }
     //TODO free param strings
@@ -253,20 +264,48 @@ export default class Blink{
 
   starti(){
     let single_stepping = true;
-    this.Module._blinkenlib_start(single_stepping);
     this.#setState(this.states.PROGRAM_RUNNING)
+    try{
+      this.Module._blinkenlib_start(single_stepping);
+    }
+    catch(e){
+      this.#handle_runException(e)
+    }
   }
 
   stepi(){
-    this.Module._blinkenlib_stepi()
+    try{
+      this.Module._blinkenlib_stepi()
+    }
+    catch(e){
+      this.#handle_runException(e)
+    }
   }
 
   continue(){
-    this.Module._blinkenlib_continue()
+    try{
+      this.Module._blinkenlib_continue()
+    }
+    catch(e){
+      this.#handle_runException(e)
+    }
   }
 
   setBreakpoint(){
 
+  }
+
+  #handle_runException(e){
+    if(e.name == "ExitStatus"){
+      this.stopReason = {
+        loadFail: false,
+        exitCode: e.status,
+        details: `program terminated with Exit(${e.status})`}
+      this.#setState(this.states.PROGRAM_STOPPED);
+    }
+    else{
+      console.log(e)
+    }
   }
 
   #default_signalHandler(sig: number, code: number){
