@@ -4,24 +4,32 @@ import {blinkStore} from '../core/blinkSvelte'
 //TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
 export let centered = true;
 export let bytesPerRow = 8;
-export let data = [0, 0, 0, 0, 0xca, 0xfe, 0xba, 0xbe];
-export let strData = "";
 export let colorRegions = {}
 export let showAscii = true;
-export let startAddress = 0;
 export let unstyled = false;
 
 
 let blink = blinkStore.getInstance()
 
+
+let byte_count = 1024
+let startAddress = 0n;
+let data = Array(byte_count).fill(0)
 //rerender registers on machine step
-// $: $blinkStore.state && updateAll();
+$: $blinkStore.state && updateAll();
 
 let hoveredIndex = -1;
 
   function updateAll(){
-
-}
+    if(blink.state == blink.states.NOT_READY || blink.state == blink.states.READY){
+      return
+    }
+    startAddress = blink.m.readU64("rip");
+    for(let i=0; i< byte_count; i++){
+      let ptr = blink.m.getPtr("codemem");
+      data[i] = blink.m.memView.getUint8(ptr + i);
+    }
+  }
 
 
   function ascii(number) {
@@ -84,7 +92,7 @@ let hoveredIndex = -1;
   >
     <div class="hexdump__address">
       {#each data as _, i}
-        <div>{("0000000" + (i + startAddress).toString(16)).slice(-8)}</div>
+        <div>{("0000000" + (BigInt(i) + startAddress).toString(16)).slice(-8)}</div>
       {/each}
     </div>
     <div class="hexdump__hex hexdump__responsivecol" on:mouseover={handleHover}>

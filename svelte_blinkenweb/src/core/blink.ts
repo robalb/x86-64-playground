@@ -9,17 +9,24 @@ import blinkenlib from '../assets/blinkenlib.js'
 * Javascript DataView  <-----> Struct of uint32_t pointers to
 *                              important elements of Machine m
 *
+*
 */
 class M_CLStruct{
   readonly version = 1
   readonly sizeof_key = 4;
   readonly keys = {
-    version: {index: 0, type: "u32"},
-    cs__base: {index: 1, type: "u64*"},
-    rip: {index: 2, type: "u64*"},
-    rsp: {index: 3, type: "u64*"},
-    rbp: {index: 4, type: "u64*"},
-    rax: {index: 5, type: "u64*"},
+    version: {index: 0, pointer: false},/*number*/
+    codemem: {index: 1, pointer: true},
+    stackmem: {index: 2, pointer: true},
+    readaddr: {index: 3, pointer: true},
+    readsize: {index: 4, pointer: false},/*number*/
+    writeaddr: {index: 5, pointer: true},
+    writesize: {index: 6, pointer: false},/*number*/
+    cs__base: {index: 7, pointer: true},
+    rip: {index: 8, pointer: true},
+    rsp: {index: 9, pointer: true},
+    rbp: {index: 10, pointer: true},
+    rax: {index: 11, pointer: true},
   }
   memView: DataView;
   structView: DataView;

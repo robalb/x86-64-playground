@@ -22,6 +22,8 @@
 
 void(*signal_callback)(int, int) = 0;
 
+void setclstruct(struct Machine *m);
+
 /**
  * cross-language struct.
  * This is just a list of wasm 32-bit pointers
@@ -29,7 +31,16 @@ void(*signal_callback)(int, int) = 0;
  */
 #define CLSTRUCT_VERSION 1
 struct clstruct{
-  uint32_t version;
+  uint32_t version; //number
+
+  uint32_t codemem;
+  uint32_t stackmem;
+
+  uint32_t readaddr;
+  uint32_t readsize; //number
+  uint32_t writeaddr;
+  uint32_t writesize; //number
+
   uint32_t cs__base;
   uint32_t rip;
   uint32_t rsp;
@@ -89,6 +100,7 @@ void TerminateSignal(struct Machine *m, int sig, int code) {
     printf("SIGTRAP received\n");
   }
 
+  setclstruct(m);
   if(signal_callback){
     signal_callback(sig, code);
   }
@@ -252,12 +264,33 @@ void inspect(){
 }
 
 void setclstruct(struct Machine *m){
+  //memory regions
+  int pc = GetPc(m);
+  int sp = GetSp();
+  cls.codemem = (uint32_t) SpyAddress(m, pc);
+  cls.stackmem = (uint32_t) SpyAddress(m, sp);
+
+  //read or writes
+  cls.readaddr = 0;
+  cls.readsize = 0;
+  cls.writeaddr = 0;
+  cls.writesize = 0;
+  if (!IsShadow(m->readaddr) && !IsShadow(m->readaddr + m->readsize)) {
+    cls.readaddr = (uint32_t) &m->readaddr;
+    cls.readsize = (uint32_t) &m->readsize;
+  }
+  if (!IsShadow(m->writeaddr) &&
+      !IsShadow(m->writeaddr + m->writesize)) {
+    cls.writeaddr = (uint32_t) &m->writeaddr;
+    cls.writesize = (uint32_t) &m->writesize;
+  }
+
+  //registers
   cls.cs__base = (uint32_t) &m->cs.base;
   cls.rip = (uint32_t) &m->ip;
   cls.rsp = (uint32_t) &m->sp;
   cls.rbp = (uint32_t) &m->bp;
   cls.rax = (uint32_t) &m->ax;
-  printf("clstruct: cls.rax: %d", cls.rax);
 }
 
 
