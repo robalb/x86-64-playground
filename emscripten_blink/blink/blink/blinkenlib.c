@@ -30,8 +30,10 @@ void(*signal_callback)(int, int) = 0;
 #define CLSTRUCT_VERSION 1
 struct clstruct{
   uint32_t version;
+  uint32_t cs__base;
   uint32_t rip;
   uint32_t rsp;
+  uint32_t rbp;
   uint32_t rax;
 };
 struct clstruct cls;
@@ -249,6 +251,15 @@ void inspect(){
 
 }
 
+void setclstruct(struct Machine *m){
+  cls.cs__base = (uint32_t) &m->cs.base;
+  cls.rip = (uint32_t) &m->ip;
+  cls.rsp = (uint32_t) &m->sp;
+  cls.rbp = (uint32_t) &m->bp;
+  cls.rax = (uint32_t) &m->ax;
+  printf("clstruct: cls.rax: %d", cls.rax);
+}
+
 
 void runLoop(){
   for(;;){
@@ -267,6 +278,10 @@ void runLoop(){
       break;
     }
   }
+  //TODO: make the loop run a fixed num of instructions,
+  //then from here use the emscripten loop features
+  //to schedule a recursive call to runLoop that won't block
+  //the thread
 }
 
 //====================
@@ -307,6 +322,8 @@ void blinkenlib_loadProgram(){
   SetUp();
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
+  setclstruct(m);
+  puts("@@");
   //fix bug with some pages being cached incorrectly as not executable
   //this is not required with the latest patch
   // ResetTlb(m);
@@ -320,13 +337,20 @@ void blinkenlib_loadPlayground(){
 
   //TODO: write playground program to disk here
 
-  char codepath[] = "./program";
+  char codepath[] = "./playground";
   char *args = 0;
   char *vars = 0;
   char *bios = 0;
   SetUp();
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
+  setclstruct(m);
+  puts("@@");
+
+  //todo: get RIP, return it.
+  //js will overwrite that memory
+  //with the user-written asm.
+
 }
 
 
@@ -379,6 +403,9 @@ int main(int argc, char *argv[]) {
 
   //overlays setup goes here
   //vfs setup goes here
+
+  //disable ansi colors in prints
+  g_high.enabled = false; 
 
   puts("setup done!\n");
 }

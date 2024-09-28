@@ -1,19 +1,64 @@
 import blinkenlib from '../assets/blinkenlib.js'
 
-/**
-* Cross-Language struct
-* *rsp (pointer to stack mem, useful for us)
-* rsp 
-* every single register
-* flags
-*/
 
-let clstruct_elements = {
-  0: {name: "version", type: "u32"},
-  1: {name: "rip", type: "u64*"},
-  2: {name: "rsp", type: "u64*"},
-  3: {name: "rbp", type: "u64*"},
-  4: {name: "rax", type: "u64*"},
+/**
+* Machine Cross-language struct.
+* offsers access to some of the blink Machine struct elements,
+* such as registers and virtual memory.
+*
+* Javascript DataView  <-----> Struct of uint32_t pointers to
+*                              important elements of Machine m
+*
+*/
+class M_CLStruct{
+  readonly version = 1
+  readonly sizeof_key = 4;
+  readonly keys = {
+    version: {index: 0, type: "u32"},
+    cs__base: {index: 1, type: "u64*"},
+    rip: {index: 2, type: "u64*"},
+    rsp: {index: 3, type: "u64*"},
+    rbp: {index: 4, type: "u64*"},
+    rax: {index: 5, type: "u64*"},
+  }
+  pointer = 0;
+  memView: DataView;
+  structView: DataView;
+
+  constructor(memory: ArrayBuffer, struct_pointer: number){
+    let struct_size = Object.keys(this.keys).length *this.sizeof_key;
+    this.pointer = struct_pointer;
+    this.memView = new DataView(memory);
+    this.structView = new DataView(
+      memory,
+      struct_pointer,
+      struct_size
+    );
+    //check shared struct version
+    let js_version =this.version;
+    let wasm_version = this.readNum("version");
+    if (js_version != wasm_version){
+      throw new Error("shared struct version mismatch")
+    }
+
+  }
+
+  readBytes(key: keyof typeof this.keys, num: number){
+    let ptr = this.readNum(key);
+    let retStr = ""
+    for(let i=0; i<num; i++){
+      retStr += this.memView.getUint8(ptr + i).toString(16)
+      retStr += " "
+    }
+    return retStr;
+  }
+
+  readNum(key: keyof typeof this.keys){
+    let index = this.keys[key].index * this.sizeof_key;
+    let little_endian = true;
+    return this.structView.getUint32(index, little_endian);
+  }
+
 }
 
 
@@ -101,15 +146,7 @@ export default class Blink{
   #signalHandler: (signal: number, code: number)=>void;
   #stateChangeHandler: (state: string, oldState: string)=>void;
 
-  //TODO: temporary, remove this object
-clstruct_elements = {
-  0: {name: "vmmaps", type: "string"},
-  1: {name: "rip", type: "u64"},
-  2: {name: "rsp", type: "u64"},
-  3: {name: "rbp", type: "u64"},
-  4: {name: "rax", type: "u64"},
-}
-cls = 0;
+  m: M_CLStruct;
 
   states = {
     'NOT_READY': 'NOT_READY',
@@ -119,12 +156,11 @@ cls = 0;
     'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
   } as const;
 
-  Module: any;
+  Module: any;/*Emscripten Module object*/
   memory: ArrayBuffer;
   state: typeof this.states[keyof typeof this.states] =
     this.states.NOT_READY;
   stopReason: null|{loadFail: boolean, exitCode: number, details: string};
-
 
   /**
   * Initialize the emscripten blink module.
@@ -167,10 +203,12 @@ cls = 0;
       fp_1.toString(), /* signal_callback */
     ])
 
-    //get a pointer to the cross-language struct
-    this.cls = this.Module._blinkenlib_get_clstruct();
+    //init memory
+    this.memory = this.Module.wasmExports.memory.buffer;
+    //initialize the cross language struct
+    let cls_pointer = this.Module._blinkenlib_get_clstruct();
+    this.m = new M_CLStruct(this.memory, cls_pointer);
 
-    this.memory = this.Module.wasmExports.memory.buffer
     this.#setState(this.states.READY)
   }
 
