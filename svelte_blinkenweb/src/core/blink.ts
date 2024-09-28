@@ -21,13 +21,11 @@ class M_CLStruct{
     rbp: {index: 4, type: "u64*"},
     rax: {index: 5, type: "u64*"},
   }
-  pointer = 0;
   memView: DataView;
   structView: DataView;
 
   constructor(memory: ArrayBuffer, struct_pointer: number){
     let struct_size = Object.keys(this.keys).length *this.sizeof_key;
-    this.pointer = struct_pointer;
     this.memView = new DataView(memory);
     this.structView = new DataView(
       memory,
@@ -36,24 +34,40 @@ class M_CLStruct{
     );
     //check shared struct version
     let js_version =this.version;
-    let wasm_version = this.readNum("version");
+    let wasm_version = this.getPtr("version");
     if (js_version != wasm_version){
       throw new Error("shared struct version mismatch")
     }
 
   }
 
-  readBytes(key: keyof typeof this.keys, num: number){
-    let ptr = this.readNum(key);
+  stringReadBytes(key: keyof typeof this.keys, num: number): string{
+    let ptr = this.getPtr(key);
     let retStr = ""
     for(let i=0; i<num; i++){
-      retStr += this.memView.getUint8(ptr + i).toString(16)
+      retStr += this.memView.getUint8(ptr + i).toString(16).padStart(2, "0")
       retStr += " "
     }
     return retStr;
   }
 
-  readNum(key: keyof typeof this.keys){
+  stringReadU64(key: keyof typeof this.keys): string{
+    let ptr = this.getPtr(key);
+    let hexStr = ""
+    for(let i=7; i>=0; i--){
+      let byte = this.memView.getUint8(ptr + i);
+      if(hexStr || byte || i==0) hexStr += byte.toString(16).padStart(2, "0")
+    }
+    return "0x"+hexStr;
+  }
+
+  readU64(key: keyof typeof this.keys): BigInt{
+    let ptr = this.getPtr(key);
+    let little_endian = true;
+    return this.memView.getBigUint64(ptr, little_endian);
+  }
+
+  getPtr(key: keyof typeof this.keys): number{
     let index = this.keys[key].index * this.sizeof_key;
     let little_endian = true;
     return this.structView.getUint32(index, little_endian);
