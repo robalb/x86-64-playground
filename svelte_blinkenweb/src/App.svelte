@@ -6,6 +6,7 @@
 
   import GdbEmbed from './components/GdbEmbed.svelte'
   import Registers from './components/Registers.svelte'
+  import Hexdump from './components/Hexdump.svelte'
 
   import {blinkStore} from './core/blinkSvelte'
   import {fetchBinaryFile} from './core/utils'
@@ -70,6 +71,10 @@
 <section class="regs">
     <Registers/>
 </section>
+
+<section class="hex">
+    <Hexdump/>
+</section>
   <!-- <GdbEmbed -->
   <!--     on:runClick={()=>console.log("run clicked")} -->
   <!--     on:resetClick={()=>console.log("reset clicked")} -->
@@ -97,6 +102,11 @@
   .regs{
     max-width: 400px;
     border: 1px solid gray;
+  }
+  .hex{
+    border: 1px solid gray;
+    width: 600px;
+
   }
   button{
     border: 1px solid gray;

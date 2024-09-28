@@ -1,32 +1,28 @@
 <script>
-  //TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
-  export let centered = true;
-  export let bytesPerRow = 8;
-  export let data = [0, 0, 0, 0, 0xca, 0xfe, 0xba, 0xbe];
-  export let strData = "";
-  export let showAscii = true;
-  export let startAddress = 0;
-  export let colorRegions = {};
-  export let unstyled = false;
+import {blinkStore} from '../core/blinkSvelte'
 
-  let hoveredIndex = -1;
+//TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
+export let centered = true;
+export let bytesPerRow = 8;
+export let data = [0, 0, 0, 0, 0xca, 0xfe, 0xba, 0xbe];
+export let strData = "";
+export let colorRegions = {}
+export let showAscii = true;
+export let startAddress = 0;
+export let unstyled = false;
 
-  function parseHexdump(hexdump) {
-    const lines = hexdump.trim().split("\n");
-    const parsedArray = [];
-    for (const line of lines) {
-      const hexBytes = line.trim().split(" ");
-      for (const hexByte of hexBytes) {
-        const intValue = parseInt(hexByte, 16);
-        parsedArray.push(intValue);
-      }
-    }
-    return parsedArray;
-  }
 
-  $: if (strData.length > 0) {
-    data = parseHexdump(strData);
-  }
+let blink = blinkStore.getInstance()
+
+//rerender registers on machine step
+// $: $blinkStore.state && updateAll();
+
+let hoveredIndex = -1;
+
+  function updateAll(){
+
+}
+
 
   function ascii(number) {
     if (number >= 32 && number <= 126) {
