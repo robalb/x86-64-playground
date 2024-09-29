@@ -15,18 +15,36 @@ class M_CLStruct{
   readonly version = 1
   readonly sizeof_key = 4;
   readonly keys = {
-    version: {index: 0, pointer: false},/*number*/
+    version: {index: 0, pointer: false}, /*number*/
     codemem: {index: 1, pointer: true},
     stackmem: {index: 2, pointer: true},
     readaddr: {index: 3, pointer: true},
-    readsize: {index: 4, pointer: false},/*number*/
+    readsize: {index: 4, pointer: false}, /*number*/
     writeaddr: {index: 5, pointer: true},
-    writesize: {index: 6, pointer: false},/*number*/
-    cs__base: {index: 7, pointer: true},
-    rip: {index: 8, pointer: true},
-    rsp: {index: 9, pointer: true},
-    rbp: {index: 10, pointer: true},
-    rax: {index: 11, pointer: true},
+    writesize: {index: 6, pointer: false}, /*number*/
+
+    flags: {index: 7, pointer: false},
+    cs__base: {index: 8, pointer: true},
+
+    rip: {index: 9, pointer: true},
+    rsp: {index: 10, pointer: true},
+    rbp: {index: 11, pointer: true},
+    rsi: {index: 12, pointer: true},
+    rdi: {index: 13, pointer: true},
+
+    r8: {index: 14, pointer: true},
+    r9: {index: 15, pointer: true},
+    r10: {index: 16, pointer: true},
+    r11: {index: 17, pointer: true},
+    r12: {index: 18, pointer: true},
+    r13: {index: 19, pointer: true},
+    r14: {index: 20, pointer: true},
+    r15: {index: 21, pointer: true},
+
+    rax: {index: 22, pointer: true},
+    rbx: {index: 23, pointer: true},
+    rcx: {index: 24, pointer: true},
+    rdx: {index: 25, pointer: true}
   }
   memView: DataView;
   structView: DataView;
@@ -376,12 +394,13 @@ export default class Blink{
 
   }
 
-  #handle_runException(e){
+  #handle_runException(e:any){
     if(e.name == "ExitStatus"){
       this.stopReason = {
         loadFail: false,
         exitCode: e.status,
-        details: `program terminated with Exit(${e.status})`}
+        details: `program terminated with Exit(${e.status})`
+      }
       this.#setState(this.states.PROGRAM_STOPPED);
     }
     else{

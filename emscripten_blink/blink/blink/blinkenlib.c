@@ -22,12 +22,15 @@
 
 void(*signal_callback)(int, int) = 0;
 
-void setclstruct(struct Machine *m);
+void update_clstruct(struct Machine *m);
 
 /**
  * cross-language struct.
  * This is just a list of wasm 32-bit pointers
- * that will be passed to js
+ * that will be passed to js.
+ * Since passing a struct to js is complicated, we are
+ * passing an array of pointers instead. js will have an hardcoded
+ * list with the meaning of each pointer.
  */
 #define CLSTRUCT_VERSION 1
 struct clstruct{
@@ -41,11 +44,28 @@ struct clstruct{
   uint32_t writeaddr;
   uint32_t writesize; //number
 
+  uint32_t flags;
+
   uint32_t cs__base;
   uint32_t rip;
   uint32_t rsp;
   uint32_t rbp;
+  uint32_t rsi;
+  uint32_t rdi;
+
+  uint32_t r8;
+  uint32_t r9;
+  uint32_t r10;
+  uint32_t r11;
+  uint32_t r12;
+  uint32_t r13;
+  uint32_t r14;
+  uint32_t r15;
+
   uint32_t rax;
+  uint32_t rbx;
+  uint32_t rcx;
+  uint32_t rdx;
 };
 struct clstruct cls;
 
@@ -100,7 +120,7 @@ void TerminateSignal(struct Machine *m, int sig, int code) {
     printf("SIGTRAP received\n");
   }
 
-  setclstruct(m);
+  update_clstruct(m);
   if(signal_callback){
     signal_callback(sig, code);
   }
@@ -263,7 +283,7 @@ void inspect(){
 
 }
 
-void setclstruct(struct Machine *m){
+void update_clstruct(struct Machine *m){
   //memory regions
   int pc = GetPc(m);
   int sp = GetSp();
@@ -285,24 +305,39 @@ void setclstruct(struct Machine *m){
     cls.writesize = (uint32_t) &m->writesize;
   }
 
-  //registers
+  //flags and other useful info
+  cls.flags = (uint32_t) &m->flags;
   cls.cs__base = (uint32_t) &m->cs.base;
+
+  //registers
   cls.rip = (uint32_t) &m->ip;
   cls.rsp = (uint32_t) &m->sp;
   cls.rbp = (uint32_t) &m->bp;
+  cls.rsi = (uint32_t) &m->si;
+  cls.rdi = (uint32_t) &m->di;
+  cls.r8 = (uint32_t) &m->r8;
+  cls.r9 = (uint32_t) &m->r9;
+  cls.r10 = (uint32_t) &m->r10;
+  cls.r11 = (uint32_t) &m->r11;
+  cls.r12 = (uint32_t) &m->r12;
+  cls.r13 = (uint32_t) &m->r13;
+  cls.r14 = (uint32_t) &m->r14;
+  cls.r15 = (uint32_t) &m->r15;
+
   cls.rax = (uint32_t) &m->ax;
+  cls.rcx = (uint32_t) &m->bx;
+  cls.rcx = (uint32_t) &m->cx;
+  cls.rdx = (uint32_t) &m->dx;
+
+  //TODO: other useful data
+  // printf("page tables:\n%s\n", FormatPml4t(m));
+  // u64 entry = FindPageTableEntry(m, (GetPc(m) & -4096));
+  // printf("pagetable %lx: %lx\n", GetPc(m), entry);
 }
 
 
 void runLoop(){
   for(;;){
-    //debug prints
-    // g_high.enabled = false; //disable ansi colors in prints
-    // printf("page tables:\n%s\n", FormatPml4t(m));
-    // u64 entry = FindPageTableEntry(m, (GetPc(m) & -4096));
-    // printf("pagetable %lx: %lx\n", GetPc(m), entry);
-    // inspect();
-
     LoadInstruction(m, GetPc(m));
     ExecuteInstruction(m);
 
@@ -355,7 +390,7 @@ void blinkenlib_loadProgram(){
   SetUp();
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
-  setclstruct(m);
+  update_clstruct(m);
   puts("@@");
   //fix bug with some pages being cached incorrectly as not executable
   //this is not required with the latest patch
@@ -369,6 +404,10 @@ void blinkenlib_loadPlayground(){
   TearDown();
 
   //TODO: write playground program to disk here
+  //The easyest way i can think of to simulate
+  //a fully functional program is to actually load
+  //a program, and then to modify its .text section
+  //on the fly when it's in memory.
 
   char codepath[] = "./playground";
   char *args = 0;
@@ -377,13 +416,8 @@ void blinkenlib_loadPlayground(){
   SetUp();
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
-  setclstruct(m);
+  update_clstruct(m);
   puts("@@");
-
-  //todo: get RIP, return it.
-  //js will overwrite that memory
-  //with the user-written asm.
-
 }
 
 
@@ -419,7 +453,6 @@ EMSCRIPTEN_KEEPALIVE
 int blinkenlib_get_clstruct(){
   return (uint32_t) &cls;
 }
-
 
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {

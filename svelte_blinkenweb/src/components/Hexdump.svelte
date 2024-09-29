@@ -12,7 +12,7 @@ export let unstyled = false;
 let blink = blinkStore.getInstance()
 
 
-let byte_count = 1024
+let byte_count = 512
 let startAddress = 0n;
 let data = Array(byte_count).fill(0)
 //rerender registers on machine step
@@ -21,11 +21,12 @@ $: $blinkStore.state && updateAll();
 let hoveredIndex = -1;
 
   function updateAll(){
-    if(blink.state == blink.states.NOT_READY || blink.state == blink.states.READY){
+    if(!blink.m || blink.state == blink.states.NOT_READY || blink.state == blink.states.READY){
       return
     }
     startAddress = blink.m.readU64("rip");
     for(let i=0; i< byte_count; i++){
+      //todo: check ranges
       let ptr = blink.m.getPtr("codemem");
       data[i] = blink.m.memView.getUint8(ptr + i);
     }
@@ -92,7 +93,7 @@ let hoveredIndex = -1;
   >
     <div class="hexdump__address">
       {#each data as _, i}
-        <div>{("0000000" + (BigInt(i) + startAddress).toString(16)).slice(-8)}</div>
+        <div>{((BigInt(i) + startAddress).toString(16)).padStart(16, "0")}</div>
       {/each}
     </div>
     <div class="hexdump__hex hexdump__responsivecol" on:mouseover={handleHover}>
