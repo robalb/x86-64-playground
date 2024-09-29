@@ -286,9 +286,11 @@ void inspect(){
 void update_clstruct(struct Machine *m){
   //memory regions
   int pc = GetPc(m);
-  int sp = GetSp();
+  // int sp = GetSp();
+  int sp = Read64(m->sp);
   cls.codemem = (uint32_t) SpyAddress(m, pc);
   cls.stackmem = (uint32_t) SpyAddress(m, sp);
+  printf("updated stackmem: %d %d pc:%d sp:%d\n", cls.stackmem, cls.codemem, pc, sp);
 
   //read or writes
   cls.readaddr = 0;

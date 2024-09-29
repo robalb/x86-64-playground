@@ -24,12 +24,13 @@ let hoveredIndex = -1;
     if(!blink.m || blink.state == blink.states.NOT_READY || blink.state == blink.states.READY){
       return
     }
-    startAddress = blink.m.readU64("rip");
+    startAddress = blink.m.readU64("rsp");
     for(let i=0; i< byte_count; i++){
       //todo: check ranges
-      let ptr = blink.m.getPtr("codemem");
+      let ptr = blink.m.getPtr("stackmem");
       data[i] = blink.m.memView.getUint8(ptr + i);
     }
+    data = data;
   }
 
 
