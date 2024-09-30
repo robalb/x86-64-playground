@@ -267,9 +267,13 @@ void inspect(){
 }
 
 
+/**
+* disassemble n lines of code, starting from the current ip.
+* the disassembled lines will be stored in the dis struct.
+*/
 static i64 Disassemble(void) {
+  //TODO: make customizable
   i64 lines = 20; //hardcoded for now
-  // lines = pan.disassembly.bottom - pan.disassembly.top * 2;
   if (Dis(dis, m, GetPc(m), m->ip, lines) != -1) {
     return DisFind(dis, GetPc(m));
   } else {
@@ -277,17 +281,42 @@ static i64 Disassemble(void) {
   }
 }
 
+/**
+* get the index in the dis struct at which
+* the current instruction is stored.
+* if it's not there, the dis struct is repopulated
+* by a new run of the disassembler
+*/
+static i64 GetDisIndex(void) {
+  i64 i;
+  if ((i = DisFind(dis, GetPc(m) - m->oplen)) != -1 ||
+      (i = Disassemble()) != -1) {
+    while (i + 1 < dis->ops.i) {
+      if (!dis->ops.p[i].size) {
+        ++i;
+      } else {
+        break;
+      }
+    }
+  }
+  return i;
+}
+
 
 void disassemble_test(){
   puts("#");
-  i64 found = Disassemble();
-  printf("disops: %d found: %lx\n", dis->ops.i, found);
+  printf("disops: %d found: %lx\n", dis->ops.i, 0);
+
+  u64 lineIndex = GetDisIndex();
+  printf("line : %ld\n", lineIndex);
+
+  //print the dis. lines
   for(int i=0; i< dis->ops.i; i++){
+    if(i == lineIndex){
+      printf(">> ");
+    }
     printf("%s\n", DisGetLine(dis, m, i));
   }
-  //DrawDisassembly draws what has been disass. already in the struct
-
-  //OnBinBase seems to be handling disass.
 }
 
 
@@ -346,9 +375,9 @@ void update_clstruct(struct Machine *m){
 
 void runLoop(){
   for(;;){
-    disassemble_test();
     LoadInstruction(m, GetPc(m));
     ExecuteInstruction(m);
+    disassemble_test();
 
     if(single_stepping){
       TerminateSignal(m, SIGTRAP, 0);
@@ -385,6 +414,7 @@ void PostLoadSetup(){
   m->system->dis = dis;
   m->system->onsymbols = OnSymbols;
   LoadDebugSymbols(m->system);
+  Disassemble();
 }
 
 void TearDown(void) {
