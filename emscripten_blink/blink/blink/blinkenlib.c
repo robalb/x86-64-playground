@@ -303,6 +303,7 @@ static i64 GetDisIndex(void) {
 }
 
 
+//todo: remove this test.
 void disassemble_test(){
   puts("#");
   printf("disops: %d found: %lx\n", dis->ops.i, 0);
@@ -365,6 +366,8 @@ void update_clstruct(struct Machine *m){
   cls.rcx = (u32) &m->bx;
   cls.rcx = (u32) &m->cx;
   cls.rdx = (u32) &m->dx;
+
+  //TODO: disassembly
 
   //TODO: other useful data
   // printf("page tables:\n%s\n", FormatPml4t(m));

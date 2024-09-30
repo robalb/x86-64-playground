@@ -75,3 +75,60 @@ void CommonSetup(void) {
 
 this is where dis is initialized, together with
 debug symbols stuff that we'll clearly need later
+
+
+### ideas on how to pass the dis. to js
+
+var line = $(/*your highlighted line*/);
+var offset = line.offset();
+window.scrollTo(offset.left, offset.top);
+
+
+the blink api provide a list of instructions,
+and the index of the ip in the list.
+they automatically handle the redraw of the list
+when the ip reaches the bottom, or the execution
+jumps outside of the small window we disassembled.
+
+ideally, we could draw each line in the dis list
+in an html line, in a scrollable div.
+on each step, we scroll to the correct line in the html.
+
+we cann pass the line index in our shared struct.
+we only need a lightweight way to render
+js strings from a byteArray
+
+
+## implementing intel dialect
+
+this is what we call:
+
+    disGetLine(){
+      xedd = GetInstruction /*huge magical function*/
+     return DisLineCode()
+     }
+
+
+we need to understand and modify DisLineCode
+if we want the new syntax
+
+it's actually very simple:
+```
+  DisAddr() //the instr address
+  DisRaw() //the raw bytes of the instr.
+  DisCode() //the mnemonic. what we want to change
+```
+
+    disCode():
+      spec = DisSpec()
+      return DisInst(spec)
+
+discCode will generate the instruction
+based on a normalized string spec.
+we can keep the string spec the same,
+and only change the DisInst logic
+
+https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm
+
+
+
