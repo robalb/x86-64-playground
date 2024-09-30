@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","_add","_incr","_get_incr","_iotest","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","_add","_incr","_get_incr","_iotest","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -358,6 +358,7 @@ if (!Module['noFSInit'] && !FS.init.initialized)
 FS.ignorePermissions = false;
 
 TTY.init();
+PIPEFS.root = FS.mount(PIPEFS, {}, null);
   callRuntimeCallbacks(__ATINIT__);
 }
 
@@ -4107,6 +4108,238 @@ function dbg(...args) {
   }
   }
 
+  var PIPEFS = {
+  BUCKET_BUFFER_SIZE:8192,
+  mount(mount) {
+        // Do not pollute the real root directory or its child nodes with pipes
+        // Looks like it is OK to create another pseudo-root node not linked to the FS.root hierarchy this way
+        return FS.createNode(null, '/', 16384 | 511 /* 0777 */, 0);
+      },
+  createPipe() {
+        var pipe = {
+          buckets: [],
+          // refcnt 2 because pipe has a read end and a write end. We need to be
+          // able to read from the read end after write end is closed.
+          refcnt : 2,
+        };
+  
+        pipe.buckets.push({
+          buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+          offset: 0,
+          roffset: 0
+        });
+  
+        var rName = PIPEFS.nextname();
+        var wName = PIPEFS.nextname();
+        var rNode = FS.createNode(PIPEFS.root, rName, 4096, 0);
+        var wNode = FS.createNode(PIPEFS.root, wName, 4096, 0);
+  
+        rNode.pipe = pipe;
+        wNode.pipe = pipe;
+  
+        var readableStream = FS.createStream({
+          path: rName,
+          node: rNode,
+          flags: 0,
+          seekable: false,
+          stream_ops: PIPEFS.stream_ops
+        });
+        rNode.stream = readableStream;
+  
+        var writableStream = FS.createStream({
+          path: wName,
+          node: wNode,
+          flags: 1,
+          seekable: false,
+          stream_ops: PIPEFS.stream_ops
+        });
+        wNode.stream = writableStream;
+  
+        return {
+          readable_fd: readableStream.fd,
+          writable_fd: writableStream.fd
+        };
+      },
+  stream_ops:{
+  poll(stream) {
+          var pipe = stream.node.pipe;
+  
+          if ((stream.flags & 2097155) === 1) {
+            return (256 | 4);
+          }
+          if (pipe.buckets.length > 0) {
+            for (var i = 0; i < pipe.buckets.length; i++) {
+              var bucket = pipe.buckets[i];
+              if (bucket.offset - bucket.roffset > 0) {
+                return (64 | 1);
+              }
+            }
+          }
+  
+          return 0;
+        },
+  ioctl(stream, request, varargs) {
+          return 28;
+        },
+  fsync(stream) {
+          return 28;
+        },
+  read(stream, buffer, offset, length, position /* ignored */) {
+          var pipe = stream.node.pipe;
+          var currentLength = 0;
+  
+          for (var i = 0; i < pipe.buckets.length; i++) {
+            var bucket = pipe.buckets[i];
+            currentLength += bucket.offset - bucket.roffset;
+          }
+  
+          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
+          var data = buffer.subarray(offset, offset + length);
+  
+          if (length <= 0) {
+            return 0;
+          }
+          if (currentLength == 0) {
+            // Behave as if the read end is always non-blocking
+            throw new FS.ErrnoError(6);
+          }
+          var toRead = Math.min(currentLength, length);
+  
+          var totalRead = toRead;
+          var toRemove = 0;
+  
+          for (var i = 0; i < pipe.buckets.length; i++) {
+            var currBucket = pipe.buckets[i];
+            var bucketSize = currBucket.offset - currBucket.roffset;
+  
+            if (toRead <= bucketSize) {
+              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
+              if (toRead < bucketSize) {
+                tmpSlice = tmpSlice.subarray(0, toRead);
+                currBucket.roffset += toRead;
+              } else {
+                toRemove++;
+              }
+              data.set(tmpSlice);
+              break;
+            } else {
+              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
+              data.set(tmpSlice);
+              data = data.subarray(tmpSlice.byteLength);
+              toRead -= tmpSlice.byteLength;
+              toRemove++;
+            }
+          }
+  
+          if (toRemove && toRemove == pipe.buckets.length) {
+            // Do not generate excessive garbage in use cases such as
+            // write several bytes, read everything, write several bytes, read everything...
+            toRemove--;
+            pipe.buckets[toRemove].offset = 0;
+            pipe.buckets[toRemove].roffset = 0;
+          }
+  
+          pipe.buckets.splice(0, toRemove);
+  
+          return totalRead;
+        },
+  write(stream, buffer, offset, length, position /* ignored */) {
+          var pipe = stream.node.pipe;
+  
+          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
+          var data = buffer.subarray(offset, offset + length);
+  
+          var dataLen = data.byteLength;
+          if (dataLen <= 0) {
+            return 0;
+          }
+  
+          var currBucket = null;
+  
+          if (pipe.buckets.length == 0) {
+            currBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: 0,
+              roffset: 0
+            };
+            pipe.buckets.push(currBucket);
+          } else {
+            currBucket = pipe.buckets[pipe.buckets.length - 1];
+          }
+  
+          assert(currBucket.offset <= PIPEFS.BUCKET_BUFFER_SIZE);
+  
+          var freeBytesInCurrBuffer = PIPEFS.BUCKET_BUFFER_SIZE - currBucket.offset;
+          if (freeBytesInCurrBuffer >= dataLen) {
+            currBucket.buffer.set(data, currBucket.offset);
+            currBucket.offset += dataLen;
+            return dataLen;
+          } else if (freeBytesInCurrBuffer > 0) {
+            currBucket.buffer.set(data.subarray(0, freeBytesInCurrBuffer), currBucket.offset);
+            currBucket.offset += freeBytesInCurrBuffer;
+            data = data.subarray(freeBytesInCurrBuffer, data.byteLength);
+          }
+  
+          var numBuckets = (data.byteLength / PIPEFS.BUCKET_BUFFER_SIZE) | 0;
+          var remElements = data.byteLength % PIPEFS.BUCKET_BUFFER_SIZE;
+  
+          for (var i = 0; i < numBuckets; i++) {
+            var newBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: PIPEFS.BUCKET_BUFFER_SIZE,
+              roffset: 0
+            };
+            pipe.buckets.push(newBucket);
+            newBucket.buffer.set(data.subarray(0, PIPEFS.BUCKET_BUFFER_SIZE));
+            data = data.subarray(PIPEFS.BUCKET_BUFFER_SIZE, data.byteLength);
+          }
+  
+          if (remElements > 0) {
+            var newBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: data.byteLength,
+              roffset: 0
+            };
+            pipe.buckets.push(newBucket);
+            newBucket.buffer.set(data);
+          }
+  
+          return dataLen;
+        },
+  close(stream) {
+          var pipe = stream.node.pipe;
+          pipe.refcnt--;
+          if (pipe.refcnt === 0) {
+            pipe.buckets = null;
+          }
+        },
+  },
+  nextname() {
+        if (!PIPEFS.nextname.current) {
+          PIPEFS.nextname.current = 0;
+        }
+        return 'pipe[' + (PIPEFS.nextname.current++) + ']';
+      },
+  };
+  function ___syscall_pipe(fdPtr) {
+  try {
+  
+      if (fdPtr == 0) {
+        throw new FS.ErrnoError(21);
+      }
+  
+      var res = PIPEFS.createPipe();
+  
+      HEAP32[((fdPtr)>>2)] = res.readable_fd;
+      HEAP32[(((fdPtr)+(4))>>2)] = res.writable_fd;
+  
+      return 0;
+    } catch (e) {
+    if (typeof FS == 'undefined' || !(e.name === 'ErrnoError')) throw e;
+    return -e.errno;
+  }
+  }
+
   function ___syscall_poll(fds, nfds, timeout) {
   try {
   
@@ -4607,6 +4840,71 @@ function dbg(...args) {
 
   var _emscripten_sleep = () => {
       throw 'Please compile your program with async support in order to use asynchronous operations like emscripten_sleep';
+    };
+
+  var ENV = {
+  };
+  
+  var getExecutableName = () => {
+      return thisProgram || './this.program';
+    };
+  var getEnvStrings = () => {
+      if (!getEnvStrings.strings) {
+        // Default values.
+        // Browser language detection #8751
+        var lang = ((typeof navigator == 'object' && navigator.languages && navigator.languages[0]) || 'C').replace('-', '_') + '.UTF-8';
+        var env = {
+          'USER': 'web_user',
+          'LOGNAME': 'web_user',
+          'PATH': '/',
+          'PWD': '/',
+          'HOME': '/home/web_user',
+          'LANG': lang,
+          '_': getExecutableName()
+        };
+        // Apply the user-provided values, if any.
+        for (var x in ENV) {
+          // x is a key in ENV; if ENV[x] is undefined, that means it was
+          // explicitly set to be so. We allow user code to do that to
+          // force variables with default values to remain unset.
+          if (ENV[x] === undefined) delete env[x];
+          else env[x] = ENV[x];
+        }
+        var strings = [];
+        for (var x in env) {
+          strings.push(`${x}=${env[x]}`);
+        }
+        getEnvStrings.strings = strings;
+      }
+      return getEnvStrings.strings;
+    };
+  
+  var stringToAscii = (str, buffer) => {
+      for (var i = 0; i < str.length; ++i) {
+        assert(str.charCodeAt(i) === (str.charCodeAt(i) & 0xff));
+        HEAP8[buffer++] = str.charCodeAt(i);
+      }
+      // Null-terminate the string
+      HEAP8[buffer] = 0;
+    };
+  var _environ_get = (__environ, environ_buf) => {
+      var bufSize = 0;
+      getEnvStrings().forEach((string, i) => {
+        var ptr = environ_buf + bufSize;
+        HEAPU32[(((__environ)+(i*4))>>2)] = ptr;
+        stringToAscii(string, ptr);
+        bufSize += string.length + 1;
+      });
+      return 0;
+    };
+
+  var _environ_sizes_get = (penviron_count, penviron_buf_size) => {
+      var strings = getEnvStrings();
+      HEAPU32[((penviron_count)>>2)] = strings.length;
+      var bufSize = 0;
+      strings.forEach((string) => bufSize += string.length + 1);
+      HEAPU32[((penviron_buf_size)>>2)] = bufSize;
+      return 0;
     };
 
 
@@ -5139,6 +5437,8 @@ var wasmImports = {
   /** @export */
   __syscall_openat: ___syscall_openat,
   /** @export */
+  __syscall_pipe: ___syscall_pipe,
+  /** @export */
   __syscall_poll: ___syscall_poll,
   /** @export */
   __syscall_readlinkat: ___syscall_readlinkat,
@@ -5191,6 +5491,10 @@ var wasmImports = {
   /** @export */
   emscripten_sleep: _emscripten_sleep,
   /** @export */
+  environ_get: _environ_get,
+  /** @export */
+  environ_sizes_get: _environ_sizes_get,
+  /** @export */
   exit: _exit,
   /** @export */
   fd_close: _fd_close,
@@ -5223,6 +5527,7 @@ var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blink
 var _blinkenlib_stepi = Module['_blinkenlib_stepi'] = createExportWrapper('blinkenlib_stepi', 0);
 var _blinkenlib_continue = Module['_blinkenlib_continue'] = createExportWrapper('blinkenlib_continue', 0);
 var _blinkenlib_get_clstruct = Module['_blinkenlib_get_clstruct'] = createExportWrapper('blinkenlib_get_clstruct', 0);
+var _blinkenlib_spy_address = Module['_blinkenlib_spy_address'] = createExportWrapper('blinkenlib_spy_address', 2);
 var _main = Module['_main'] = createExportWrapper('__main_argc_argv', 2);
 var _malloc = createExportWrapper('malloc', 1);
 var _strerror = createExportWrapper('strerror', 1);
@@ -5238,6 +5543,7 @@ var _emscripten_stack_get_end = () => (_emscripten_stack_get_end = wasmExports['
 var __emscripten_stack_restore = (a0) => (__emscripten_stack_restore = wasmExports['_emscripten_stack_restore'])(a0);
 var __emscripten_stack_alloc = (a0) => (__emscripten_stack_alloc = wasmExports['_emscripten_stack_alloc'])(a0);
 var _emscripten_stack_get_current = () => (_emscripten_stack_get_current = wasmExports['emscripten_stack_get_current'])();
+var dynCall_iiji = Module['dynCall_iiji'] = createExportWrapper('dynCall_iiji', 5);
 var dynCall_jijj = Module['dynCall_jijj'] = createExportWrapper('dynCall_jijj', 6);
 var dynCall_vijjj = Module['dynCall_vijjj'] = createExportWrapper('dynCall_vijjj', 8);
 var dynCall_jji = Module['dynCall_jji'] = createExportWrapper('dynCall_jji', 4);
@@ -5280,7 +5586,6 @@ var missingLibrarySymbols = [
   'emscriptenLog',
   'readEmAsmArgs',
   'jstoi_q',
-  'getExecutableName',
   'listenOnce',
   'autoResumeAudioContext',
   'dynCallLegacy',
@@ -5303,7 +5608,6 @@ var missingLibrarySymbols = [
   'formatString',
   'intArrayToString',
   'AsciiToString',
-  'stringToAscii',
   'UTF16ToString',
   'stringToUTF16',
   'lengthBytesUTF16',
@@ -5354,7 +5658,6 @@ var missingLibrarySymbols = [
   'jsStackTrace',
   'getCallstack',
   'convertPCtoSourceLocation',
-  'getEnvStrings',
   'checkWasiClock',
   'wasiRightsToMuslOFlags',
   'wasiOFlagsToMuslOFlags',
@@ -5449,6 +5752,7 @@ var unexportedSymbols = [
   'warnOnce',
   'readEmAsmArgsArray',
   'jstoi_s',
+  'getExecutableName',
   'handleException',
   'keepRuntimeAlive',
   'callUserCallback',
@@ -5475,6 +5779,7 @@ var unexportedSymbols = [
   'stringToUTF8',
   'lengthBytesUTF8',
   'intArrayFromString',
+  'stringToAscii',
   'UTF16Decoder',
   'stringToUTF8OnStack',
   'writeArrayToMemory',
@@ -5485,6 +5790,7 @@ var unexportedSymbols = [
   'restoreOldWindowedStyle',
   'UNWIND_CACHE',
   'ExitStatus',
+  'getEnvStrings',
   'doReadv',
   'doWritev',
   'promiseMap',
