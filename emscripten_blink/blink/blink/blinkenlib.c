@@ -26,6 +26,22 @@ void update_clstruct(struct Machine *m);
 
 
 /**
+ * this buffer holds the disassembly strings
+ * that will be passed to js
+ */
+#define DIS_MAX_LINES 20
+#define DIS_MAX_LINE_LEN 100
+char dis_buffer[DIS_MAX_LINES][DIS_MAX_LINE_LEN] = {0};
+
+//todo: use this struct
+struct disassembler{
+  u32 max_lines;
+  u32 max_line_len;
+  u32 current_line;
+  char *buffer;
+};
+
+/**
  * cross-language struct.
  * This is just a list of wasm 32-bit pointers
  * that will be passed to js.
@@ -67,6 +83,12 @@ struct clstruct{
   u32 rbx;
   u32 rcx;
   u32 rdx;
+
+  //disassembly buffer
+  u32 dis__max_lines;    //number
+  u32 dis__max_line_len; //number
+  u32 dis__current_line;  //number
+  u32 dis__buffer;
 };
 struct clstruct cls;
 
@@ -272,8 +294,7 @@ void inspect(){
 * the disassembled lines will be stored in the dis struct.
 */
 static i64 Disassemble(void) {
-  //TODO: make customizable
-  i64 lines = 20; //hardcoded for now
+  i64 lines = DIS_MAX_LINES;
   if (Dis(dis, m, GetPc(m), m->ip, lines) != -1) {
     return DisFind(dis, GetPc(m));
   } else {
@@ -303,6 +324,19 @@ static i64 GetDisIndex(void) {
 }
 
 
+u64 updateDisassembler(){
+  u64 lineIndex = GetDisIndex();
+  for(int i=0; i < dis->ops.i && i<DIS_MAX_LINES; i++){
+    const char* curr = DisGetLine(dis, m, i);
+    int len = strlen(curr);
+    if(len > DIS_MAX_LINE_LEN){
+      len = DIS_MAX_LINE_LEN;
+    }
+    memcpy(dis_buffer[i], curr, strlen(curr));
+  }
+  return lineIndex;
+}
+
 //todo: remove this test.
 void disassemble_test(){
   puts("#");
@@ -312,11 +346,19 @@ void disassemble_test(){
   printf("line : %ld\n", lineIndex);
 
   //print the dis. lines
-  for(int i=0; i< dis->ops.i; i++){
+  for(int i=0; i< dis->ops.i &&i<DIS_MAX_LINES; i++){
     if(i == lineIndex){
       printf(">> ");
     }
-    printf("%s\n", DisGetLine(dis, m, i));
+    const char* curr = DisGetLine(dis, m, i);
+    puts(curr);
+    int len = strlen(curr);
+    if(len > DIS_MAX_LINE_LEN){
+      memcpy(dis_buffer[i], "too long!", 10);
+    }else{
+      memcpy(dis_buffer[i], curr, strlen(curr));
+    }
+    printf("%s\n", curr);
   }
 }
 
@@ -367,7 +409,15 @@ void update_clstruct(struct Machine *m){
   cls.rcx = (u32) &m->cx;
   cls.rdx = (u32) &m->dx;
 
-  //TODO: disassembly
+  //disassembled code buffer
+  //TODO: all this data should be in a global
+  //disassembler struct, this function should
+  //only copy pointers.
+  cls.dis__max_lines = DIS_MAX_LINES;
+  cls.dis__max_line_len = DIS_MAX_LINE_LEN;
+  cls.dis__current_line = updateDisassembler();
+  cls.dis__buffer = (u32) &dis_buffer;
+
 
   //TODO: other useful data
   // printf("page tables:\n%s\n", FormatPml4t(m));
@@ -380,7 +430,9 @@ void runLoop(){
   for(;;){
     LoadInstruction(m, GetPc(m));
     ExecuteInstruction(m);
-    disassemble_test();
+    //TODO: update global disassember struct with 
+    //a function call. both the struct and fcall dont 
+    //exist right now
 
     if(single_stepping){
       TerminateSignal(m, SIGTRAP, 0);

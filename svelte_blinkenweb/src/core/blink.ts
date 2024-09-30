@@ -44,7 +44,13 @@ class M_CLStruct{
     rax: {index: 22, pointer: true},
     rbx: {index: 23, pointer: true},
     rcx: {index: 24, pointer: true},
-    rdx: {index: 25, pointer: true}
+    rdx: {index: 25, pointer: true},
+
+  //disassembly buffer
+    dis__max_lines: {index: 26, pointer: false},
+    dis__max_line_len: {index: 27, pointer: false},
+    dis__current_line: {index: 28, pointer: false},
+    dis__buffer: {index: 29, pointer: true},
   }
   memView: DataView;
   structView: DataView;

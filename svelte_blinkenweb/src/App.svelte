@@ -7,6 +7,7 @@
   import GdbEmbed from './components/GdbEmbed.svelte'
   import Registers from './components/Registers.svelte'
   import Hexdump from './components/Hexdump.svelte'
+  import Disassembler from './components/Disassembler.svelte'
 
   import {blinkStore} from './core/blinkSvelte'
   import {fetchBinaryFile} from './core/utils'
@@ -68,6 +69,10 @@
 </div>
 
 </section>
+
+<section class="dis">
+    <Disassembler/>
+</section>
 <section class="regs">
     <Registers/>
 </section>
@@ -102,6 +107,10 @@
   .regs{
     max-width: 400px;
     border: 1px solid gray;
+  }
+  .dis{
+    border: 1px solid gray;
+    width: 400px;
   }
   .hex{
     border: 1px solid gray;

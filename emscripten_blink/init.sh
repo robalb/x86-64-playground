@@ -5,13 +5,9 @@
 # cp -rd /home/al/projects/blinkenlights/blink/ .
 
 exported_runtime_methods="\
-\"ccall\",\
-\"cwrap\",\
-\"mmapAlloc\",\
-\"setValue\",\
-\"getValue\",\
 \"UTF8ToString\",\
 \"stringToNewUTF8\",\
+\"AsciiToString\",\
 \"FS\",\
 \"callMain\",\
 \"addFunction\",\
