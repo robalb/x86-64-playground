@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # todo: import git repo/submodule from pinned commit, if not done already.
-# todo: setup symlinks
-# cp -rd /home/al/projects/blinkenlights/blink/ .
 
 exported_runtime_methods="\
 \"UTF8ToString\",\
