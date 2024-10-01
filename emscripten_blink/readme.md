@@ -109,11 +109,5 @@ VIM commands like `gd`, `gD` et all.
 
 move the blinkenlights fork in a dedicated repo, use git submodules from here
 
-## roadmap
-
-- figure out bytes transfer between asm and js (endianness in js?)
-- create demo where bytes are sent from js to c, and vice versa
-- figure out how to run elf from bytearray in blinkelib
-
 
 
