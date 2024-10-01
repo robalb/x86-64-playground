@@ -46,7 +46,7 @@ The resulting binary will be in `blink/o/blink/blinkenlights`
 
 The additions I made are:
 - added a new entry point: `blink/blink/blinkelib.c`
-- added a new compilation target for that entrypoint: `o//blink/blinkenlights` and `o//blink/blinkenlights.js` 
+- added a new target in make for that entrypoint: `o//blink/blinkenlights` and `o//blink/blinkenlights.js` 
   you can find it in the makefile `blink/blink/blink.mk`
 
 If you want to compile that entrypoint in a regular, non-wasm executable, run:
