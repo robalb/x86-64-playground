@@ -244,8 +244,13 @@ export default class Blink{
     let signal_callback_llvm_signature = "vii"
     let fp_1 = this.Module.addFunction(signal_callback, signal_callback_llvm_signature);
 
+    let exit_callback = this.#extern_c__exit_callback.bind(this)
+    let exit_callback_llvm_signature = "vi"
+    let fp_2 = this.Module.addFunction(exit_callback, exit_callback_llvm_signature);
+
     this.Module.callMain([
       fp_1.toString(), /* signal_callback */
+      fp_2.toString(), /* exit_callback */
     ])
 
     //init memory
@@ -267,7 +272,7 @@ export default class Blink{
 
   /**
   * This callback is called from the wasm code
-  * whenever a terminating signal is raised
+  * when the guest process is stopped by a terminating signal
   *
   * SIGTRAP is the only signal that does not indicate
   * a program stop.
@@ -275,7 +280,7 @@ export default class Blink{
   #extern_c__signal_callback(sig: number, code: number){
     if(sig != signals.SIGTRAP){
       let exitCode = 128 + sig
-      let details = `Program terminated with Exit($($exitCode)) Due to signal ${sig}`
+      let details = `Program terminated with Exit(${exitCode}) Due to signal ${sig}`
       if(signals_info.hasOwnProperty(sig)){
         let sigString = signals_info[sig].name
         let sigDescr = signals_info[sig].description
@@ -286,6 +291,20 @@ export default class Blink{
     }
     this.#signalHandler(sig, code);
   }
+
+  /**
+  * This callback is called from the wasm code
+  * when the guest process calls the exit syscall
+  */
+  #extern_c__exit_callback(code: number){
+    this.stopReason = {
+      loadFail: false,
+      exitCode: code,
+      details: `program terminated with Exit(${code})`
+    }
+    this.#setState(this.states.PROGRAM_STOPPED);
+  }
+
 
   setCallbacks(
     stdinHandler?: ()=>number,
@@ -401,17 +420,13 @@ export default class Blink{
   }
 
   #handle_runException(e:any){
-    if(e.name == "ExitStatus"){
-      this.stopReason = {
-        loadFail: false,
-        exitCode: e.status,
-        details: `program terminated with Exit(${e.status})`
-      }
-      this.#setState(this.states.PROGRAM_STOPPED);
+    this.stopReason = {
+      loadFail: false,
+      exitCode: 128,
+      details: `Unexpected emulator exception (${e.toString()})`
     }
-    else{
-      console.log(e)
-    }
+    console.log(e)
+    this.#setState(this.states.PROGRAM_STOPPED);
   }
 
   #default_signalHandler(sig: number, code: number){

@@ -8,19 +8,16 @@
 #include "blink/loader.h"
 #include "blink/high.h"
 #include "blink/dis.h"
+#include "blink/syscall.h"
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#else
-#define EMSCRIPTEN_KEEPALIVE
-#endif
 
 void(*signal_callback)(int, int) = 0;
+void(*exit_callback)(int) = 0;
 
 void update_clstruct(struct Machine *m);
 
@@ -41,55 +38,6 @@ struct disassembler{
   char *buffer;
 };
 
-/**
- * cross-language struct.
- * This is just a list of wasm 32-bit pointers
- * that will be passed to js.
- * Since passing a struct to js is complicated, we are
- * passing an array of pointers instead. js will have an hardcoded
- * list with the meaning of each pointer.
- */
-#define CLSTRUCT_VERSION 1
-struct clstruct{
-  u32 version; //number
-
-  u32 codemem;
-  u32 stackmem;
-
-  u32 readaddr;
-  u32 readsize; //number
-  u32 writeaddr;
-  u32 writesize; //number
-
-  u32 flags;
-
-  u32 cs__base;
-  u32 rip;
-  u32 rsp;
-  u32 rbp;
-  u32 rsi;
-  u32 rdi;
-
-  u32 r8;
-  u32 r9;
-  u32 r10;
-  u32 r11;
-  u32 r12;
-  u32 r13;
-  u32 r14;
-  u32 r15;
-
-  u32 rax;
-  u32 rbx;
-  u32 rcx;
-  u32 rdx;
-
-  //disassembly buffer
-  u32 dis__max_lines;    //number
-  u32 dis__max_line_len; //number
-  u32 dis__current_line;  //number
-  u32 dis__buffer;
-};
 struct clstruct cls;
 
 
@@ -125,7 +73,6 @@ void iotest(){
 
 struct System *s;
 struct Machine *m;
-struct XedDecodedInst xedd;//TODO remove, unused
 static struct Dis dis[1];
 bool single_stepping = false;
 bool running = false;//TODO; remove, use system state instead
@@ -150,6 +97,9 @@ void TerminateSignal(struct Machine *m, int sig, int code) {
   }
 }
 
+////////////////////////
+///utility functions
+////////////////////////
 
 /**
  * Returns true if 𝑣 is a shadow memory virtual address.
@@ -157,137 +107,6 @@ void TerminateSignal(struct Machine *m, int sig, int code) {
 static bool IsShadow(i64 v) {
   return 0x7fff8000 <= v && v < 0x100080000000;
 }
-
-static int GetPointerWidth(void) {
-  return 2 << m->mode.omode;
-}
-
-static i64 GetSp(void) {
-  switch (GetPointerWidth()) {
-    default:
-    case 8:
-      return Read64(m->sp);
-    case 4:
-      return m->ss.base + Read32(m->sp);
-    case 2:
-      return m->ss.base + Read16(m->sp);
-  }
-}
-
-void DumpHex(const void* data, size_t size) {
-	char ascii[17];
-	size_t i, j;
-	ascii[16] = '\0';
-	for (i = 0; i < size; ++i) {
-		printf("%02X ", ((unsigned char*)data)[i]);
-		if (((unsigned char*)data)[i] >= ' ' && ((unsigned char*)data)[i] <= '~') {
-			ascii[i % 16] = ((unsigned char*)data)[i];
-		} else {
-			ascii[i % 16] = '.';
-		}
-		if ((i+1) % 8 == 0 || i+1 == size) {
-			printf(" ");
-			if ((i+1) % 16 == 0) {
-				printf("|  %s \n", ascii);
-			} else if (i+1 == size) {
-				ascii[(i+1) % 16] = '\0';
-				if ((i+1) % 16 <= 8) {
-					printf(" ");
-				}
-				for (j = (i+1) % 16; j < 16; ++j) {
-					printf("   ");
-				}
-				printf("|  %s \n", ascii);
-			}
-		}
-	}
-}
-
-
-void snippets(void){
-  // uint8_t op[] = {0x8d, 0x04, 0x03}; /* lea (%rbx,%rax,1),%eax */
-  // uint8_t op[] = {0x48, 0xff, 0xc0}; // inc rax
-  // Write64(m->bx, 0x3);
-  // Write64(m->ax, 0x2);
-  // uint64_t out = Read64(m->ax);
-
-  // printf("rax: %ld\n", (long) out);
-  // printf("rax: %ld\n", (long) out);
-
-  // GetPc(m);
-  // GetSp(m);
-  // SpyAddress(m,v); //machine m, i64 virtual_address v
-  // ResetCpu(m);
-
-  //this is how the stack mem page is allocated in loader.c>loadprogram
-  // stack = HasLinearMapping() && FLAG_vabits <= 47 && !kSkew
-  //             ? 0
-  //             : kStackTop - kStackSize;
-  // if ((stack = ReserveVirtual(
-  //          m->system, stack, kStackSize,
-  //          PAGE_FILE | PAGE_U | PAGE_RW | (execstack ? 0 : PAGE_XD), -1, 0, 0,
-  //          0)) != -1) {
-  //   unassert(AddFileMap(m->system, stack, kStackSize, "[stack]", -1));
-  //   Put64(m->sp, stack + kStackSize);
-  // } else {
-  //   LOGF("failed to reserve stack memory");
-  //   exit(127);
-  // }
-
-  //execution loop:
-  // LoadInstruction(m, GetPc(m));
-  //
-  // APPEND(" PC %" PRIx64 " %s\n\t"
-  //        " AX %016" PRIx64 " "
-  //        " CX %016" PRIx64 " "
-  //        " DX %016" PRIx64 " "
-  //        " BX %016" PRIx64 "\n\t"
-  //        " SP %016" PRIx64 " "
-  //        " BP %016" PRIx64 " "
-  //        " SI %016" PRIx64 " "
-  //        " DI %016" PRIx64 "\n\t"
-  //        " R8 %016" PRIx64 " "
-  //        " R9 %016" PRIx64 " "
-  //        "R10 %016" PRIx64 " "
-  //        "R11 %016" PRIx64 "\n\t"
-  //        "R12 %016" PRIx64 " "
-  //        "R13 %016" PRIx64 " "
-  //        "R14 %016" PRIx64 " "
-  //        "R15 %016" PRIx64 "\n\t"
-  //        " FS %016" PRIx64 " "
-  //        " GS %016" PRIx64 " "
-  //        "OPS %-16ld "
-  //        "FLG %s\n\t"
-  //        "%s\n\t",
-  //        m->cs.base + MaskAddress(m->mode.omode, m->ip),
-  //        DescribeOp(m, GetPc(m)), Get64(m->ax), Get64(m->cx), Get64(m->dx),
-  //        Get64(m->bx), Get64(m->sp), Get64(m->bp), Get64(m->si), Get64(m->di),
-  //        Get64(m->r8), Get64(m->r9), Get64(m->r10), Get64(m->r11),
-  //        Get64(m->r12), Get64(m->r13), Get64(m->r14), Get64(m->r15), m->fs.base,
-  //        m->gs.base, GET_COUNTER(instructions_decoded),
-  //        DescribeCpuFlags(m->flags), g_progname);
-}
-
-//TODO: remove
-void inspect(){
-  int pc = GetPc(m);
-  printf("pc: %x\n", pc);
-  int sp = GetSp();
-  printf("sp: %x\n", sp);
-
-  u8 * codemem = SpyAddress(m, pc);
-  u8 * stackmem = SpyAddress(m, sp);
-
-  if(codemem){
-    printf("code mem: %p \n", codemem);
-    DumpHex(codemem, 40);
-  }
-  if(stackmem){
-    printf("stack mem: %p \n", stackmem);
-    DumpHex(stackmem, 40);
-  }
-}
-
 
 /**
 * disassemble n lines of code, starting from the current ip.
@@ -323,9 +142,8 @@ static i64 GetDisIndex(void) {
   return i;
 }
 
-
 /**
-* Populate an buffer with the ascii disassembly listing relevant to
+* Populate a buffer with the ascii disassembly listing updated to
 * the current ip.
 * The buffer is designed to be read from js, and parsed into html.
 */
@@ -434,7 +252,6 @@ void update_clstruct(struct Machine *m){
 void runLoop(){
   int interrupt;
   m->nofault = false;
-  m->system->trapexit = true;
 
   //TODO: update global disassember struct with 
   //a function call. both the struct and fcall dont 
@@ -461,20 +278,21 @@ void runLoop(){
     //the thread
   }
   else{
-    printf("handling Halt.\n");
     // if sigsetjmp fake-returned 1, the actual trap number might have been
     // either 1 or 0; this should have been stored in m->trapno
     if (interrupt == 1) interrupt = m->trapno;
+    printf("handling machine interrupt: %d \n", interrupt);
+    puts("@");
     if(interrupt == kMachineExitTrap){
       puts("Exit trap found! \n");
+      if(signal_callback){
+        update_clstruct(m);
+        exit_callback(m->system->exitcode);
+      }
     }
   }
   m->canhalt = false;
 }
-
-//====================
-//      actual code
-//====================
 
 void SetUp(void) {
   InitMap();
@@ -482,12 +300,15 @@ void SetUp(void) {
   s = NewSystem(XED_MACHINE_MODE_LONG);
   m = g_machine = NewMachine(s, 0);
   m->metal = false;
-      //TODO: from blinkenlights. define these callbacks
-      // m->system->redraw = Redraw;
-      // m->system->onbinbase = OnBinbase;
-      // m->system->onlongbranch = OnLongBranch;
-  // m->system->trapexit = true;
+  // when true, guest exit syscalls will generate an interrupt that
+  // can be handled via sigsetjmp, instead of calling the native _exit().
+  // see: blinkenlib.c:runLoop()
+  m->system->trapexit = true;
 
+  //TODO: from blinkenlights. define these callbacks
+  // m->system->redraw = Redraw;
+  // m->system->onbinbase = OnBinbase;
+  // m->system->onlongbranch = OnLongBranch;
 }
 
 
@@ -499,10 +320,10 @@ void OnSymbols(struct System *s) {
 }
 
 void PostLoadSetup(){
-    //TODO: from blinkenlights
-    // AddStdFd(&m->system->fds, 0);
-    // AddStdFd(&m->system->fds, 1);
-    // AddStdFd(&m->system->fds, 2);
+  //TODO: from blinkenlights. Test
+  AddStdFd(&m->system->fds, 0);
+  AddStdFd(&m->system->fds, 1);
+  AddStdFd(&m->system->fds, 2);
   //initialize the disassembler
   m->system->dis = dis;
   m->system->onsymbols = OnSymbols;
@@ -516,6 +337,9 @@ void TearDown(void) {
   FreeMachine(m);
 }
 
+////////////////////////
+///exported api
+////////////////////////
 
 
 EMSCRIPTEN_KEEPALIVE
@@ -607,18 +431,29 @@ void *blinkenlib_get_clstruct(){
 
 EMSCRIPTEN_KEEPALIVE
 u8 *blinkenlib_spy_address(u64 virtual_address){
+  BEGIN_NO_PAGE_FAULTS;
   return SpyAddress(m, virtual_address);
+  END_NO_PAGE_FAULTS;
 }
 
 EMSCRIPTEN_KEEPALIVE
 int main(int argc, char *argv[]) {
+#ifndef __EMSCRIPTEN__
+  puts("This program is designed to run in emscripten");
+  return 1;
+#endif
+
   puts("blinkenlib main starting...\n");
-  if(argc != 2){
-    abort();
+  if(argc != 3){
+    puts("Error. main expected 2 args");
+    return 1;
   }
   int signal_callback_num = atoi(argv[1]);
+  int exit_callback_num = atoi(argv[2]);
   signal_callback = (void(*)(int, int))signal_callback_num;
+  exit_callback = (void(*)(int))exit_callback_num;
   printf("fp1: %d\n", signal_callback_num);
+  printf("fp2: %d\n", exit_callback_num);
 
   //initialize the cross-language struct
   cls.version = CLSTRUCT_VERSION;

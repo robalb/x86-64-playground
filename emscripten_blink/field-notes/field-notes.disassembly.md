@@ -223,6 +223,72 @@ ok, false positive.
 i was just setting nofault to the wrong value, in runLoop.
 
 
+## snippets
+
+```
+  // uint8_t op[] = {0x8d, 0x04, 0x03}; /* lea (%rbx,%rax,1),%eax */
+  // uint8_t op[] = {0x48, 0xff, 0xc0}; // inc rax
+  // Write64(m->bx, 0x3);
+  // Write64(m->ax, 0x2);
+  // uint64_t out = Read64(m->ax);
+
+  // printf("rax: %ld\n", (long) out);
+  // printf("rax: %ld\n", (long) out);
+
+  // GetPc(m);
+  // GetSp(m);
+  // SpyAddress(m,v); //machine m, i64 virtual_address v
+  // ResetCpu(m);
+
+  //this is how the stack mem page is allocated in loader.c>loadprogram
+  // stack = HasLinearMapping() && FLAG_vabits <= 47 && !kSkew
+  //             ? 0
+  //             : kStackTop - kStackSize;
+  // if ((stack = ReserveVirtual(
+  //          m->system, stack, kStackSize,
+  //          PAGE_FILE | PAGE_U | PAGE_RW | (execstack ? 0 : PAGE_XD), -1, 0, 0,
+  //          0)) != -1) {
+  //   unassert(AddFileMap(m->system, stack, kStackSize, "[stack]", -1));
+  //   Put64(m->sp, stack + kStackSize);
+  // } else {
+  //   LOGF("failed to reserve stack memory");
+  //   exit(127);
+  // }
+
+  //execution loop:
+  // LoadInstruction(m, GetPc(m));
+  //
+  // APPEND(" PC %" PRIx64 " %s\n\t"
+  //        " AX %016" PRIx64 " "
+  //        " CX %016" PRIx64 " "
+  //        " DX %016" PRIx64 " "
+  //        " BX %016" PRIx64 "\n\t"
+  //        " SP %016" PRIx64 " "
+  //        " BP %016" PRIx64 " "
+  //        " SI %016" PRIx64 " "
+  //        " DI %016" PRIx64 "\n\t"
+  //        " R8 %016" PRIx64 " "
+  //        " R9 %016" PRIx64 " "
+  //        "R10 %016" PRIx64 " "
+  //        "R11 %016" PRIx64 "\n\t"
+  //        "R12 %016" PRIx64 " "
+  //        "R13 %016" PRIx64 " "
+  //        "R14 %016" PRIx64 " "
+  //        "R15 %016" PRIx64 "\n\t"
+  //        " FS %016" PRIx64 " "
+  //        " GS %016" PRIx64 " "
+  //        "OPS %-16ld "
+  //        "FLG %s\n\t"
+  //        "%s\n\t",
+  //        m->cs.base + MaskAddress(m->mode.omode, m->ip),
+  //        DescribeOp(m, GetPc(m)), Get64(m->ax), Get64(m->cx), Get64(m->dx),
+  //        Get64(m->bx), Get64(m->sp), Get64(m->bp), Get64(m->si), Get64(m->di),
+  //        Get64(m->r8), Get64(m->r9), Get64(m->r10), Get64(m->r11),
+  //        Get64(m->r12), Get64(m->r13), Get64(m->r14), Get64(m->r15), m->fs.base,
+  //        m->gs.base, GET_COUNTER(instructions_decoded),
+  //        DescribeCpuFlags(m->flags), g_progname);
+
+```
 
 
 
