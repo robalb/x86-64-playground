@@ -296,9 +296,9 @@ i was just setting nofault to the wrong value, in runLoop.
 
 ## TODO:
 
-- understand exit and signals, fix exit
+-[x] understand exit and signals, fix exit
 
-- clean files, and extra stuff that is not needed, even in blinkenlib.c
+-[x] clean files, and extra stuff that is not needed, even in blinkenlib.c
 
 - conceptually separate load and start.
   load should only write the elf in the vfs.
@@ -307,6 +307,8 @@ i was just setting nofault to the wrong value, in runLoop.
   the m->running flags, not our own.
 
 - design good wasm-side api, write stuff in header file.
+
+- clean notes, paste design doc
 
 
 

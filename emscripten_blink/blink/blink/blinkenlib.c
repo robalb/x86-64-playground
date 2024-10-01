@@ -30,52 +30,11 @@ void update_clstruct(struct Machine *m);
 #define DIS_MAX_LINE_LEN 100
 char dis_buffer[DIS_MAX_LINES][DIS_MAX_LINE_LEN] = {0};
 
-//todo: use this struct
-struct disassembler{
-  u32 max_lines;
-  u32 max_line_len;
-  u32 current_line;
-  char *buffer;
-};
-
 struct clstruct cls;
-
-
-
-////////////////////////
-///test functions, remove
-////////////////////////
-int test_accumulator = 0;
-EMSCRIPTEN_KEEPALIVE 
-int add(int a){
-  return a + 1;
-}
-EMSCRIPTEN_KEEPALIVE
-int incr(){
-  test_accumulator++;
-  return test_accumulator;
-}
-EMSCRIPTEN_KEEPALIVE
-int* get_incr(){
-  return &test_accumulator;
-}
-EMSCRIPTEN_KEEPALIVE
-void iotest(){
-  puts("@@@@@@@");
-  //intentionally not checking nullptr ref
-  signal_callback(1,2);
-}
-
-
-
-
-
-
 struct System *s;
 struct Machine *m;
 static struct Dis dis[1];
 bool single_stepping = false;
-bool running = false;//TODO; remove, use system state instead
 
 /**
  * Signals handler.
@@ -83,8 +42,8 @@ bool running = false;//TODO; remove, use system state instead
  * SIGTRAP will not terminate the program
  */
 void TerminateSignal(struct Machine *m, int sig, int code) {
+
   if(sig != SIGTRAP){
-    running = false;
     printf("Terminate signal received! %d : %d \n", sig, code);
   }
   else{
@@ -159,32 +118,6 @@ u64 updateDisassembler(){
   }
   return lineIndex;
 }
-
-//todo: remove this test.
-void disassemble_test(){
-  puts("#");
-  printf("disops: %d found: %lx\n", dis->ops.i, 0);
-
-  u64 lineIndex = GetDisIndex();
-  printf("line : %ld\n", lineIndex);
-
-  //print the dis. lines
-  for(int i=0; i< dis->ops.i &&i<DIS_MAX_LINES; i++){
-    if(i == lineIndex){
-      printf(">> ");
-    }
-    const char* curr = DisGetLine(dis, m, i);
-    puts(curr);
-    int len = strlen(curr);
-    if(len > DIS_MAX_LINE_LEN){
-      memcpy(dis_buffer[i], "too long!", 10);
-    }else{
-      memcpy(dis_buffer[i], curr, strlen(curr));
-    }
-    printf("%s\n", curr);
-  }
-}
-
 
 
 void update_clstruct(struct Machine *m){
@@ -262,13 +195,11 @@ void runLoop(){
     for(;;){
       LoadInstruction(m, GetPc(m));//not really needed like this
       ExecuteInstruction(m);
-      printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
 
       //this check should be replaced with actual breakpoints logic
       //when breakpoints are implemented
       if(single_stepping){
         TerminateSignal(m, SIGTRAP, 0);
-        puts("single stepping SIGTRAP\n");
         break;
       }
     }
@@ -345,7 +276,6 @@ void TearDown(void) {
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_loadProgram(){
   //close previous instances
-  running = false;
   TearDown();
 
   //TODO: all this must be received as arg.
@@ -373,7 +303,6 @@ void blinkenlib_loadProgram(){
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_loadPlayground(){
   //close previous instances
-  running = false;
   TearDown();
 
   //TODO: write playground program to disk here
@@ -398,18 +327,17 @@ void blinkenlib_loadPlayground(){
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_start(bool step){
-  if(running){
-    abort();
+  if(s->exited){
+    unassert(!"Invalid state");
   }
   single_stepping = step;
-  running = true;
   runLoop();
 }
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_stepi(){
-  if(!running){
-    abort();
+  if(s->exited){
+    unassert(!"Invalid state");
   }
   single_stepping = true;
   runLoop();
@@ -417,8 +345,8 @@ void blinkenlib_stepi(){
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_continue(){
-  if(!running){
-    abort();
+  if(s->exited){
+    unassert(!"Invalid state");
   }
   single_stepping = false;
   runLoop();

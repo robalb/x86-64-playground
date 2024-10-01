@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","_add","_incr","_get_incr","_iotest","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","___indirect_function_table","_blinkenlib_loadProgram","_blinkenlib_loadPlayground","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5451,10 +5451,6 @@ var wasmImports = {
 };
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
-var _add = Module['_add'] = createExportWrapper('add', 1);
-var _incr = Module['_incr'] = createExportWrapper('incr', 0);
-var _get_incr = Module['_get_incr'] = createExportWrapper('get_incr', 0);
-var _iotest = Module['_iotest'] = createExportWrapper('iotest', 0);
 var _blinkenlib_loadProgram = Module['_blinkenlib_loadProgram'] = createExportWrapper('blinkenlib_loadProgram', 0);
 var _blinkenlib_loadPlayground = Module['_blinkenlib_loadPlayground'] = createExportWrapper('blinkenlib_loadPlayground', 0);
 var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blinkenlib_start', 1);
@@ -5496,17 +5492,6 @@ function invoke_vi(index,a1) {
   }
 }
 
-function invoke_iii(index,a1,a2) {
-  var sp = stackSave();
-  try {
-    return getWasmTableEntry(index)(a1,a2);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_ii(index,a1) {
   var sp = stackSave();
   try {
@@ -5522,6 +5507,17 @@ function invoke_vii(index,a1,a2) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)(a1,a2);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iii(index,a1,a2) {
+  var sp = stackSave();
+  try {
+    return getWasmTableEntry(index)(a1,a2);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
