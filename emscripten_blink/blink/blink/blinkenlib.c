@@ -125,10 +125,10 @@ void iotest(){
 
 struct System *s;
 struct Machine *m;
-struct XedDecodedInst xedd;
+struct XedDecodedInst xedd;//TODO remove, unused
 static struct Dis dis[1];
 bool single_stepping = false;
-bool running = false;
+bool running = false;//TODO; remove, use system state instead
 
 /**
  * Signals handler.
@@ -324,6 +324,11 @@ static i64 GetDisIndex(void) {
 }
 
 
+/**
+* Populate an buffer with the ascii disassembly listing relevant to
+* the current ip.
+* The buffer is designed to be read from js, and parsed into html.
+*/
 u64 updateDisassembler(){
   u64 lineIndex = GetDisIndex();
   for(int i=0; i < dis->ops.i && i<DIS_MAX_LINES; i++){
@@ -427,22 +432,44 @@ void update_clstruct(struct Machine *m){
 
 
 void runLoop(){
-  for(;;){
-    LoadInstruction(m, GetPc(m));
-    ExecuteInstruction(m);
-    //TODO: update global disassember struct with 
-    //a function call. both the struct and fcall dont 
-    //exist right now
+  int interrupt;
+  m->nofault = false;
+  m->system->trapexit = true;
 
-    if(single_stepping){
-      TerminateSignal(m, SIGTRAP, 0);
-      break;
+  //TODO: update global disassember struct with 
+  //a function call. both the struct and fcall dont 
+  //exist right now
+
+  if (!(interrupt = sigsetjmp(m->onhalt, 1))) {
+    m->canhalt = true;
+    for(;;){
+      LoadInstruction(m, GetPc(m));//not really needed like this
+      ExecuteInstruction(m);
+      printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
+
+      //this check should be replaced with actual breakpoints logic
+      //when breakpoints are implemented
+      if(single_stepping){
+        TerminateSignal(m, SIGTRAP, 0);
+        puts("single stepping SIGTRAP\n");
+        break;
+      }
+    }
+    //TODO: make the loop run a fixed num of instructions,
+    //then from here use the emscripten loop features
+    //to schedule a recursive call to runLoop that won't block
+    //the thread
+  }
+  else{
+    printf("handling Halt.\n");
+    // if sigsetjmp fake-returned 1, the actual trap number might have been
+    // either 1 or 0; this should have been stored in m->trapno
+    if (interrupt == 1) interrupt = m->trapno;
+    if(interrupt == kMachineExitTrap){
+      puts("Exit trap found! \n");
     }
   }
-  //TODO: make the loop run a fixed num of instructions,
-  //then from here use the emscripten loop features
-  //to schedule a recursive call to runLoop that won't block
-  //the thread
+  m->canhalt = false;
 }
 
 //====================
@@ -455,6 +482,12 @@ void SetUp(void) {
   s = NewSystem(XED_MACHINE_MODE_LONG);
   m = g_machine = NewMachine(s, 0);
   m->metal = false;
+      //TODO: from blinkenlights. define these callbacks
+      // m->system->redraw = Redraw;
+      // m->system->onbinbase = OnBinbase;
+      // m->system->onlongbranch = OnLongBranch;
+  // m->system->trapexit = true;
+
 }
 
 
@@ -466,6 +499,11 @@ void OnSymbols(struct System *s) {
 }
 
 void PostLoadSetup(){
+    //TODO: from blinkenlights
+    // AddStdFd(&m->system->fds, 0);
+    // AddStdFd(&m->system->fds, 1);
+    // AddStdFd(&m->system->fds, 2);
+  //initialize the disassembler
   m->system->dis = dis;
   m->system->onsymbols = OnSymbols;
   LoadDebugSymbols(m->system);
@@ -473,6 +511,8 @@ void PostLoadSetup(){
 }
 
 void TearDown(void) {
+  //TODO: from blinkenlights
+  // DisFree(dis);
   FreeMachine(m);
 }
 
@@ -493,8 +533,10 @@ void blinkenlib_loadProgram(){
   char *bios = 0;
 
   SetUp();
+  printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
   LoadProgram(m, codepath, codepath, &args, &vars, bios);
   puts("@");
+  printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
   PostLoadSetup();
   puts("##");
   update_clstruct(m);

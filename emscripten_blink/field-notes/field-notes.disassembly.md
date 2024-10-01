@@ -132,3 +132,116 @@ https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm
 
 
 
+
+## handling exit
+
+this is an annoying issue:
+we handle all out data update on sigtrap,
+but the exit syscall does not
+generate that trap, so
+when continue is run the ui does not update
+
+possible solution: m->system->trapexit
+
+
+syscall.c>SysExitGroup:369
+
+    if (m->system->trapexit && !m->system->exited) {
+      m->system->exited = true;
+      m->system->exitcode = rc;
+      HaltMachine(m, kMachineExitTrap);
+
+blinkenlights.c
+also does something interesting:
+it registers an `OnHalt` listener.
+since it also sets m->system->trapexit = true,
+
+it will detect an exit call from there.
+
+
+blinkenlights.c:2693
+```
+static bool OnHalt(int interrupt) {
+  switch (interrupt) {
+    ...
+    case kMachineExitTrap:
+      OnExitTrap();
+      return true;
+```
+
+the exit code will be set in:
+m->system->exitcode;
+
+
+
+At this point we must step back, and really understand signal handling
+in blinkenlights:
+
+TerminateSignal()
+  calls exit
+
+Exec does something weird
+with sigsetjmp:
+blinkenlights.c:3211,3277
+
+
+## Tui and Exec compared
+(in blinkenlights.c)
+
+
+```c
+
+m->nofault = false;
+m->system->trapexit = true; //TUI only
+GetDisIndex() //TUI only
+
+if (!(interrupt = sigsetjmp(m->onhalt, 1))) {
+  m->canhalt = true;
+
+  ... loadInstruction, then execute
+  }
+  else{
+
+    if (interrupt == 1) interrupt = m->trapno;
+    OnHalt(interrupt)
+    
+  }
+
+```
+
+## investigating crash when m->trapexit is true
+
+crash happens in OpSyscall:
+
+it's caused by the line at the beginning:
+unassert(!m->nofault);
+
+it's clear that i need to understand better how nofault is used, and
+when it's set.
+
+ok, false positive.
+i was just setting nofault to the wrong value, in runLoop.
+
+
+
+
+
+
+
+## TODO:
+
+- understand exit and signals, fix exit
+
+- clean files, and extra stuff that is not needed, even in blinkenlib.c
+
+- conceptually separate load and start.
+  load should only write the elf in the vfs.
+  start should call loadelf.
+  running status should be checked against
+  the m->running flags, not our own.
+
+- design good wasm-side api, write stuff in header file.
+
+
+
+

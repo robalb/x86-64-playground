@@ -17,7 +17,7 @@ function updateDis(){
   let current_line = blink.m.getPtr("dis__current_line");
   let mem = blink.m.memView;
 
-  let str = '';
+  let str = ''
   for(let i=0; i< lines; i++){
     if(i == current_line){
       str += "--- "
@@ -30,16 +30,7 @@ function updateDis(){
     }
     str += "</span><br/>"
   }
-
-
-  console.log("start ptr")
-  console.log(startPtr)
-
-
-
   elem.innerHTML = str;
-
-  
 }
 
 //rerender registers on machine step
