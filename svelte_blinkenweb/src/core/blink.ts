@@ -389,44 +389,15 @@ export default class Blink{
   starti(){
     let single_stepping = true;
     this.#setState(this.states.PROGRAM_RUNNING)
-    try{
-      this.Module._blinkenlib_start(single_stepping);
-    }
-    catch(e){
-      this.#handle_runException(e)
-    }
+    this.Module._blinkenlib_start(single_stepping);
   }
 
   stepi(){
-    try{
-      this.Module._blinkenlib_stepi()
-    }
-    catch(e){
-      this.#handle_runException(e)
-    }
+    this.Module._blinkenlib_stepi()
   }
 
   continue(){
-    try{
-      this.Module._blinkenlib_continue()
-    }
-    catch(e){
-      this.#handle_runException(e)
-    }
-  }
-
-  setBreakpoint(){
-
-  }
-
-  #handle_runException(e:any){
-    this.stopReason = {
-      loadFail: false,
-      exitCode: 128,
-      details: `Unexpected emulator exception (${e.toString()})`
-    }
-    console.log(e)
-    this.#setState(this.states.PROGRAM_STOPPED);
+    this.Module._blinkenlib_continue()
   }
 
   #default_signalHandler(sig: number, code: number){
