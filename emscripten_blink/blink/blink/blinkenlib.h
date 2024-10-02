@@ -62,7 +62,9 @@ struct clstruct{
 
 void blinkenlib_loadProgram();
 void blinkenlib_loadPlayground();
-void blinkenlib_start(bool step);
+void blinkenlib_run();
+void blinkenlib_start();
+void blinkenlib_starti();
 void blinkenlib_stepi();
 void blinkenlib_continue();
 void *blinkenlib_get_clstruct();

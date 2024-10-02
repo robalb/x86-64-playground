@@ -268,13 +268,7 @@ void TearDown(void) {
   FreeMachine(m);
 }
 
-////////////////////////
-///exported api
-////////////////////////
-
-
-EMSCRIPTEN_KEEPALIVE
-void blinkenlib_loadProgram(){
+void setupProgram(){
   //close previous instances
   TearDown();
 
@@ -295,42 +289,48 @@ void blinkenlib_loadProgram(){
   puts("##");
   update_clstruct(m);
   puts("@@");
-  //fix bug with some pages being cached incorrectly as not executable
-  //this is not required with the latest patch
-  // ResetTlb(m);
+}
+
+////////////////////////
+///exported api
+////////////////////////
+
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_loadProgram(){
+  //this is currently fully implemented in js.
+  //the elf is fetched js-side, and put in the 
+  //vfs at the path ./program
 }
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_loadPlayground(){
-  //close previous instances
-  TearDown();
-
-  //TODO: write playground program to disk here
+  //TODO: write playground program to the vfs path ./program.
   //The easyest way i can think of to simulate
   //a fully functional program is to actually load
   //a program, and then to modify its .text section
   //on the fly when it's in memory.
-
-  char codepath[] = "./playground";
-  char *args = 0;
-  char *vars = 0;
-  char *bios = 0;
-  SetUp();
-  LoadProgram(m, codepath, codepath, &args, &vars, bios);
-  puts("@");
-  PostLoadSetup();
-  puts("##");
-  update_clstruct(m);
-  puts("@@");
 }
 
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_run(){
+  setupProgram();
+  //run the program to the end
+  single_stepping = false;
+  runLoop();
+}
 
 EMSCRIPTEN_KEEPALIVE
-void blinkenlib_start(bool step){
-  if(s->exited){
-    unassert(!"Invalid state");
-  }
-  single_stepping = step;
+void blinkenlib_starti(){
+  setupProgram();
+  //don't run any instruction
+}
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_start(){
+  setupProgram();
+  //TODO: set breakpoint at main
+  single_stepping = false;
   runLoop();
 }
 
@@ -339,6 +339,7 @@ void blinkenlib_stepi(){
   if(s->exited){
     unassert(!"Invalid state");
   }
+  //run a single step
   single_stepping = true;
   runLoop();
 }
@@ -371,7 +372,7 @@ int main(int argc, char *argv[]) {
   return 1;
 #endif
 
-  puts("blinkenlib main starting...\n");
+  puts("blinkenlib setup starting...");
   if(argc != 3){
     puts("Error. main expected 2 args");
     return 1;

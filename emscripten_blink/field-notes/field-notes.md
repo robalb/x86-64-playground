@@ -399,7 +399,7 @@ i was just setting nofault to the wrong value, in runLoop.
 ```
 
 
-## the new api js-wasm api:
+## the new js-wasm api:
 
 //elf mode
 

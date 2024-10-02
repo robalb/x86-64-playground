@@ -303,6 +303,7 @@ export default class Blink{
       details: `program terminated with Exit(${code})`
     }
     this.#setState(this.states.PROGRAM_STOPPED);
+    console.log("exit callback called")
   }
 
 
@@ -337,7 +338,7 @@ export default class Blink{
   }
 
   /**
-  * Will close previous processes,
+  * close previous processes,
   * reset the emaulator state,
   * and load the given elf file
   */
@@ -369,7 +370,7 @@ export default class Blink{
   }
 
   /**
-  * Will close previous processes,
+  * close previous processes,
   * reset the emaulator state,
   * and load the given asm bytes in a minimalistic elf
   */
@@ -380,16 +381,31 @@ export default class Blink{
     //TODO: figure this out
   }
 
-  start(){
-    let single_stepping = false;
-    this.Module._blinkenlib_start(single_stepping);
+
+  /**
+  * start the program normally and execute it until
+  * a breakpoint or end.
+  */
+  run(){
     this.#setState(this.states.PROGRAM_RUNNING)
+    this.Module._blinkenlib_run();
   }
 
-  starti(){
-    let single_stepping = true;
+  /**
+  * start the program and stop at the beginning of the
+  * main function.
+  */
+  start(){
     this.#setState(this.states.PROGRAM_RUNNING)
-    this.Module._blinkenlib_start(single_stepping);
+    this.Module._blinkenlib_start();
+  }
+  /**
+  * start the program and stop at the very first 
+  * instruction (before main)
+  */
+  starti(){
+    this.#setState(this.states.PROGRAM_RUNNING)
+    this.Module._blinkenlib_starti();
   }
 
   stepi(){

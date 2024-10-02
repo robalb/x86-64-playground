@@ -12,7 +12,7 @@
 
 - design good wasm-side api, write stuff in header file.
 
-- clean notes, paste design doc
+-[x] clean notes, paste design doc
 
 
 

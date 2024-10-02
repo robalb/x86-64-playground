@@ -21,7 +21,7 @@ $: $blinkStore.state && updateAll();
 let hoveredIndex = -1;
 
   function updateAll(){
-    if(!blink.m || blink.state == blink.states.NOT_READY || blink.state == blink.states.READY){
+    if(!blink.m || !(blink.state == blink.states.PROGRAM_RUNNING || blink.state == blink.states.PROGRAM_STOPPED)){
       return
     }
     startAddress = blink.m.readU64("rsp");
