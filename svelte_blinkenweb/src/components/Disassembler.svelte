@@ -8,8 +8,8 @@ let elem;
 function updateDis(){
   if(!blink.m)return;
   if(!elem)return;
-  if( !(blink.state == blink.states.PROGRAM_RUNNING) &&
-    !(blink.state == blink.states.PROGRAM_STOPPED)) return;
+  if(!(blink.state == blink.states.PROGRAM_RUNNING ||
+    blink.state == blink.states.PROGRAM_STOPPED)) return;
 
   let startPtr = blink.m.getPtr("dis__buffer");
   let lines = blink.m.getPtr("dis__max_lines");

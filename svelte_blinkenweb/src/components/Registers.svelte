@@ -27,9 +27,8 @@ let registers = [
 ]
 
 function updateRegisters(){
-  if(!(blink.state == blink.states.PROGRAM_RUNNING) && !(blink.state == blink.states.PROGRAM_STOPPED)){
-    return
-  }
+  if(!(blink.state == blink.states.PROGRAM_RUNNING ||
+    blink.state == blink.states.PROGRAM_STOPPED)) return;
 
   let m = blink.m
   registers = [
