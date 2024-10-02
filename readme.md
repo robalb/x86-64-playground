@@ -77,7 +77,10 @@ looks promising. the wasm file is 5Mib unfortunately, which is a lot compared to
 
 <br/><br/>
 
-**wasm - js interface**: To be defined
+**wasm - js interface**: 
+the running program is passed to wasm via the emscripten VFS api. this adds a significant weight to the emscripten js wrapper.
+In the future we could pass the program bytes to wasm via a simple malloc+arraybuffer copy. and write the file to the vfs in the wasm side.
+With some extra work, should be able to remobe the js wrapper completely.
 
 <br/><br/>
 
