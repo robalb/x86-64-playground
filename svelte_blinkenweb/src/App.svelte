@@ -1,150 +1,90 @@
-
-<script>
-  import './styles/style.css';
-  import './styles/light-theme.css';
-  import './styles/dark-theme.css';
-
-  import GdbEmbed from './components/GdbEmbed.svelte'
-  import Registers from './components/Registers.svelte'
-  import Hexdump from './components/Hexdump.svelte'
-  import Disassembler from './components/Disassembler.svelte'
-
-  import {blinkStore} from './core/blinkSvelte'
-  import {fetchBinaryFile} from './core/utils'
-  import demo1_url from './assets/example.elf?url'
-  // import demo1_url from './assets/demo_programs/argv.elf?url'
-
-  console.log(demo1_url)
-
-  let blink = blinkStore.getInstance()
-  window["blink"] = blink;
-
-  async function handle_demo(){
-    let filedata = await fetchBinaryFile(demo1_url)
-    // console.log(filedata)
-    blink.loadElf(filedata);
-  }
-  
-  //handle terminal scroll
-  let termref;
-  function scroll(){
-    if(termref){
-      setTimeout(()=>{
-        termref.scrollTop = termref.scrollHeight; // focus on bottom
-      },1)
-    }
-  }
-  $: $blinkStore.state && scroll()
-
+<script lang="ts">
+import './styles/style.css';
+	import { PaneGroup, Pane, PaneResizer } from "paneforge";
 </script>
 
-<main>
-
-<section class="controls">
-
-<h1>Emulator Properties</h1>
-
-<p><strong>State:</strong> {$blinkStore.state}</p>
-
-
-  <button on:click={handle_demo}>load demo</button>
-  <button on:click={()=>blink.starti()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
-  > starti </button>
-
-  <button on:click={()=>blink.run()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
-  > run </button>
-  <button on:click={()=>blink.stepi()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
-  > stepi </button>
-  <button on:click={()=>blink.continue()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
-  > continue </button>
-
-<div class="term" bind:this={termref}>
-<p><strong>stdout:</strong><br/></p>
-<code >{$blinkStore.term_buffer}</code>
-{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
-  <div class="stopInfo">
-    <p>{blink.stopReason.details}</p>
-  </div>
-{/if}
-</div>
-
-</section>
-
-<section class="dis">
-    <Disassembler/>
-</section>
-<section class="regs">
-    <Registers/>
-</section>
-
-<section class="hex">
-    <Hexdump/>
-</section>
-  <!-- <GdbEmbed -->
-  <!--     on:runClick={()=>console.log("run clicked")} -->
-  <!--     on:resetClick={()=>console.log("reset clicked")} -->
-  <!--     {data} -->
-  <!--     showAscii={true} -->
-  <!--     {startAddress} -->
-  <!--     {registers} -->
-  <!--     colorRegions={colorRegions} -->
-  <!-- > -->
-  <!-- push rax -->
-  <!-- xor rbx rbx -->
-  <!-- mov [rax] rbx -->
-  <!-- </GdbEmbed> -->
-</main>
+<PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal pf__panegroup--main">
+	<Pane defaultSize={50} class="pf__pane">
+		<div class="t1 t1bis">
+          <div class="t2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+		</div>
+	</Pane>
+	<PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={50} class="pf__pane">
+		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
+			<Pane defaultSize={25} class="pf__pane">
+				<div class="t1">
+          <div class="t2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+				</div>
+			</Pane>
+			<PaneResizer class="pf__resizer pf__resizer--horizontal" />
+			<Pane defaultSize={75} class="pf__pane">
+				<div class="t1">
+          <div class="t2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+				</div>
+			</Pane>
+		</PaneGroup>
+	</Pane>
+	<PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={50} class="pf__pane">
+		<div class="t1 t1bis">
+          <div class="t2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+		</div>
+	</Pane>
+</PaneGroup>
 
 <style>
-  main{
-    display: flex;
-    flex-direction:row;
-    width: 100%;
-  }
-  .controls{
-    flex-grow:1;
-  }
-  .regs{
-    max-width: 400px;
-    border: 1px solid gray;
-  }
-  .dis{
-    border: 1px solid gray;
-    width: 400px;
-  }
-  .hex{
-    border: 1px solid gray;
-    width: 600px;
-
-  }
-  button{
-    border: 1px solid gray;
-    color: white;
-    padding: .3rem;
-  }
-  button:disabled{
-    color: gray;
-  }
-  .term{
-    height: calc(100vh - 200px);
-    border: 1px solid gray;
-    overflow: auto;
-    font-family: 'Lucida Console', Monaco, monospace;
-    background-color: rgb(0,0,0,0.4);
-    margin: .5rem;
-    padding: .5rem;
-  }
-  .term code {
-    background-color: transparent!important;
-  }
-  .term .stopInfo{
-    background-color: darkred;
-    color: white;
+  .t1{
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 0.5rem; 
+    height: 100%; 
   }
 
+  .t1.t1bis{
+    height: 100vh;
+  }
+
+  .t2{
+    overflow: auto; 
+    padding: 1.5rem; 
+    height: 100%; 
+  }
 </style>
-

@@ -430,6 +430,17 @@ run, start, starti:
 
 
 
+## shared struct ideas
+
+in the disassembly struct, save
+the address of the first line in the disass.
+In the frontend, we can trigger a full redraw only when that address
+changes, and perform a normal scroll in all other situations
+
+
+## additional best practices:
+
+https://emscripten.org/docs/compiling/Deploying-Pages.html#reserving-memory-for-compiled-code
 
 
 
