@@ -5,12 +5,13 @@ import ThemeDebug from './components/ThemeDebug.svelte';
 import Hexdump from './components/Hexdump.svelte';
 import Editor from './components/Editor.svelte';
 import Registers from './components/Registers.svelte';
+import Disassembler from './components/Disassembler.svelte';
 
 let col = true;
 </script>
 
 <PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal">
-	<Pane defaultSize={50} class="pf__pane">
+	<Pane defaultSize={25} class="pf__pane">
 		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
 			<Pane defaultSize={25} class="pf__pane">
         <div class="pane">
@@ -33,10 +34,23 @@ let col = true;
 			</Pane>
 		</PaneGroup>
 	</Pane>
+
 	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={50} class="pf__pane pf__pane--h100">
+	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
+		<div class="pane">
+          <div class="pane__bar">
+            <p>Disassembly</p>
+          </div>
+          <div class="pane__content">
+            <Disassembler />
+          </div>
+		</div>
+	</Pane>
+
+	<PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
 		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
-			<Pane defaultSize={25} class="pf__pane">
+			<Pane defaultSize={50} class="pf__pane">
         <div class="pane">
           <div class="pane__bar">
             <p>Registers</p>
@@ -47,7 +61,7 @@ let col = true;
 				</div>
 			</Pane>
 			<PaneResizer class="pf__resizer pf__resizer--horizontal" />
-			<Pane defaultSize={75} class="pf__pane">
+			<Pane defaultSize={50} class="pf__pane">
         <div class="pane">
           <div class="pane__bar">
             <p>Content</p>
@@ -60,8 +74,9 @@ let col = true;
 		</PaneGroup>
 	</Pane>
   {#if col}
-	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={50} class="pf__pane pf__pane--h100">
+	<PaneResizer class="pf__resizer pf__resizer--vertical" >
+  </PaneResizer>
+	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">
             <p>Stack memory</p>

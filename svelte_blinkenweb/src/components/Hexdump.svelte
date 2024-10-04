@@ -1,5 +1,5 @@
 <script>
-// import {blinkStore} from '../core/blinkSvelte'
+import {blinkStore} from '../core/blinkSvelte'
 
 //TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
 export let centered = false;
@@ -8,29 +8,29 @@ export let colorRegions = {}
 export let showAscii = true;
 
 
-// let blink = blinkStore.getInstance()
+let blink = blinkStore.getInstance()
 
 
 let byte_count = 512
 let startAddress = 0n;
 let data = Array(byte_count).fill(0)
 //rerender registers on machine step
-// $: $blinkStore.state && updateAll();
+$: $blinkStore.state && updateAll();
 
 let hoveredIndex = -1;
 
-  // function updateAll(){
-  //   if(!blink.m || !(blink.state == blink.states.PROGRAM_RUNNING || blink.state == blink.states.PROGRAM_STOPPED)){
-  //     return
-  //   }
-  //   startAddress = blink.m.readU64("rsp");
-  //   for(let i=0; i< byte_count; i++){
-  //     //todo: check ranges
-  //     let ptr = blink.m.getPtr("stackmem");
-  //     data[i] = blink.m.memView.getUint8(ptr + i);
-  //   }
-  //   data = data;
-  // }
+  function updateAll(){
+    if(!blink.m || !(blink.state == blink.states.PROGRAM_RUNNING || blink.state == blink.states.PROGRAM_STOPPED)){
+      return
+    }
+    startAddress = blink.m.readU64("rsp");
+    for(let i=0; i< byte_count; i++){
+      //todo: check ranges
+      let ptr = blink.m.getPtr("stackmem");
+      data[i] = blink.m.memView.getUint8(ptr + i);
+    }
+    data = data;
+  }
 
 
   function ascii(number) {
