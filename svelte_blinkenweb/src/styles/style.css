@@ -37,6 +37,7 @@
   --color-gray-0: var(--color-white);
   --color-gray-50: #eee;
   --color-gray-100: #d0d5df;
+  --color-gray-150: #b3b9c5;
   --color-gray-200: #818a9d;
   --color-gray-300: #393e4b;
   --color-gray-400: #282c38;
@@ -76,10 +77,25 @@
   --theme-panel-border: var(--color-gray-t); /* ex controls border color */
   --theme-focus: var(--theme-primary);
 
+  /* hexdump hex numbers */
   --theme-hex-zero: var(--color-gray-200);
   --theme-hex-small: var(--color-gray-0);
   --theme-hex-large: var(--color-yellow);
   --theme-hex-ff: var(--color-green);
+  --theme-hex-bg: transparent;
+  /* hexdump ascii preview */
+  --theme-hexascii-valid: var(--color-gray-0);
+  --theme-hexascii-invalid: var(--color-gray-150);
+  --theme-hexascii-bg: transparent;
+  /* hexdump address */
+  --theme-hexaddr-fg: var(--color-gray-0);
+  --theme-hexaddr-bg: transparent;
+  /* hexdump highlighted sections */
+  --theme-hex-section-blue: var(--color-violet-100);
+  --theme-hex-section-red: var(--color-plum-100);
+  --theme-hex-section-green: green; /*TODO: al define a dark green in the palette */
+  --theme-hex-section-border: gray;
+
 }
 
 

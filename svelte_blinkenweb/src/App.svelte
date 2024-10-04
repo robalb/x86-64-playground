@@ -1,9 +1,10 @@
 <script lang="ts">
 import './styles/style.css';
-	import { PaneGroup, Pane, PaneResizer } from "paneforge";
-  import ThemeDebug from './components/ThemeDebug.svelte';
+import { PaneGroup, Pane, PaneResizer } from "paneforge";
+import ThemeDebug from './components/ThemeDebug.svelte';
+import Hexdump from './components/Hexdump.svelte';
 
-let col = false;
+let col = true;
 </script>
 
 <PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal">
@@ -92,51 +93,19 @@ let col = false;
             <p>Content</p>
           </div>
           <div class="pane__content">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-            beatae debitis autem animi qui, quas aspernatur impedit!
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-            beatae debitis autem animi qui, quas aspernatur impedit!
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-            beatae debitis autem animi qui, quas aspernatur impedit!
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-            beatae debitis autem animi qui, quas aspernatur impedit!
+            <Hexdump />
           </div>
 		</div>
 	</Pane>
 {/if}
 </PaneGroup>
 
-
 <style>
   .pane{
     display: flex; 
     justify-content: center; 
-    align-items: center; 
     flex-direction:column;
+    align-items: stretch;
     height: 100%; 
     border-left: 2px solid var(--theme-panel-border);
     border: 1px solid var(--theme-panel-border);
@@ -157,6 +126,5 @@ let col = false;
   .pane__content{
     overflow: auto; 
     height: 100%;
-    padding: 1rem; /*TODO: al temporary. padding will be set by the content component*/
   }
 </style>
