@@ -148,12 +148,14 @@ body {
 }
 .pf__panegroup--vertical{
 }
-.pf__panegroup--main{
-  width: 100%;
-  height: 100%;
-}
 .pf__pane{
 }
+.pf__pane--h100{
+  /*important! panels that are as tall as the window
+  * need this class to avoid overflows */
+  height: 100vh;
+}
+
 .pf__resizer{
   display: flex; 
   position: relative; 

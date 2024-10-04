@@ -2,29 +2,50 @@
 import './styles/style.css';
 	import { PaneGroup, Pane, PaneResizer } from "paneforge";
   import ThemeDebug from './components/ThemeDebug.svelte';
+
+let col = false;
 </script>
 
-<PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal pf__panegroup--main">
-	<Pane defaultSize={50} minSize={10} class="pf__pane">
-    <div class="pane pane--h100">
-      <div class="pane__bar">
-        <p>Content</p>
-      </div>
-      <div class="pane__content">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-        facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-        repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-        possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-        aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-        doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-        beatae debitis autem animi qui, quas aspernatur impedit!
-        <ThemeDebug />
-      </div>
-    </div>
+<PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal">
+	<Pane defaultSize={50} class="pf__pane">
+		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
+			<Pane defaultSize={25} class="pf__pane">
+        <div class="pane">
+          <div class="pane__content">
+            <button on:click={()=>col = !col}>aaaa</button>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+				</div>
+			</Pane>
+			<PaneResizer class="pf__resizer pf__resizer--horizontal" />
+			<Pane defaultSize={75} class="pf__pane">
+        <div class="pane">
+          <div class="pane__bar">
+            <p>Content</p>
+          </div>
+          <div class="pane__content">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
+            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
+            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
+            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
+            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
+            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
+            beatae debitis autem animi qui, quas aspernatur impedit!
+          </div>
+        </div>
+			</Pane>
+		</PaneGroup>
 	</Pane>
 	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={50} class="pf__pane">
+	<Pane defaultSize={50} class="pf__pane pf__pane--h100">
 		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
 			<Pane defaultSize={25} class="pf__pane">
         <div class="pane">
@@ -63,9 +84,10 @@ import './styles/style.css';
 			</Pane>
 		</PaneGroup>
 	</Pane>
+  {#if col}
 	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={50} class="pf__pane">
-		<div class="pane pane--h100">
+	<Pane defaultSize={50} class="pf__pane pf__pane--h100">
+		<div class="pane">
           <div class="pane__bar">
             <p>Content</p>
           </div>
@@ -105,7 +127,9 @@ import './styles/style.css';
           </div>
 		</div>
 	</Pane>
+{/if}
 </PaneGroup>
+
 
 <style>
   .pane{
@@ -117,10 +141,6 @@ import './styles/style.css';
     border-left: 2px solid var(--theme-panel-border);
     border: 1px solid var(--theme-panel-border);
   }
-  .pane--h100{
-    height: 100vh;
-  }
-
   .pane__bar{
     height: 2rem;
     padding-left: 1rem;
@@ -136,28 +156,7 @@ import './styles/style.css';
 
   .pane__content{
     overflow: auto; 
-
-    /* height: calc(100% - 2rem);  */
     height: 100%;
-    padding: 1rem; /*TODO: al temporary*/
+    padding: 1rem; /*TODO: al temporary. padding will be set by the content component*/
   }
-
-  /* TODO al: remove */
-  /* .t1{ */
-  /*   display: flex;  */
-  /*   justify-content: center;  */
-  /*   align-items: center;  */
-  /*   border-radius: 0.5rem;  */
-  /*   height: 100%;  */
-  /* } */
-
-  /* .t1.t1bis{ */
-  /*   height: 100vh; */
-  /* } */
-
-  /* .t2{ */
-  /*   overflow: auto;  */
-  /*   /* padding: 1.5rem;  */ 
-  /*   height: 100%;  */
-  /* } */
 </style>
