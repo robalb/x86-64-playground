@@ -1,10 +1,11 @@
 <script lang="ts">
 import './styles/style.css';
 	import { PaneGroup, Pane, PaneResizer } from "paneforge";
+  import ThemeDebug from './components/ThemeDebug.svelte';
 </script>
 
 <PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal pf__panegroup--main">
-	<Pane defaultSize={50} class="pf__pane">
+	<Pane defaultSize={50} minSize={10} class="pf__pane">
 		<div class="t1 t1bis">
           <div class="t2">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
@@ -15,6 +16,7 @@ import './styles/style.css';
             aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
             doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
             beatae debitis autem animi qui, quas aspernatur impedit!
+          <ThemeDebug />
           </div>
 		</div>
 	</Pane>
