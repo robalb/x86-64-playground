@@ -135,28 +135,8 @@ let hoveredIndex = -1;
     --columns-padding: 0.5rem;
     --hex-spacing: 0.4rem;
     --ascii-spacing: 0rem;
-    /* --default-bg-color: #1c1e24; */
-
-    /* --addr-text-color: white; */
-    /* --addr-bg-color: var(--default-bg-color); */
-
-    /* --section-blue-color: #3e296c; */
-    /* --section-red-color: #640054; */
-    /* --section-green-color: green; */
-
     --section-border-radius: 6px;
     --section-border-color: var(--theme-hex-section-border);
-
-    /* --hex-text-color: #b3b9c5; */
-    /* --hex-zero-color: #818a9d; */
-    /* --hex-ff-color: #92d192; */
-    /* --hex-small-color: white; */
-    /* --hex-large-color: #ffeead; */
-    /* --hex-bg-color: var(--default-bg-color); */
-
-    /* --ascii-valid-color: white; */
-    /* --ascii-invalid-color: #b3b9c5; */
-    /* --ascii-bg-color: var(--default-bg-color); */
   }
 
   .hexdump {
@@ -259,15 +239,6 @@ let hoveredIndex = -1;
 
   /* hover states */
   .hexdump .highlight {
-    outline: 1px solid gold;
-  }
-  .hexdump__hex span:hover {
-    outline: 1px solid gold;
-  }
-  .hexdump__ascii span:hover {
-    outline: 1px solid gold;
-  }
-  .hexdump__address div:hover {
     outline: 1px solid gold;
   }
 
