@@ -3,6 +3,7 @@ import './styles/style.css';
 import { PaneGroup, Pane, PaneResizer } from "paneforge";
 import ThemeDebug from './components/ThemeDebug.svelte';
 import Hexdump from './components/Hexdump.svelte';
+import Editor from './components/Editor.svelte';
 
 let col = true;
 </script>
@@ -29,17 +30,10 @@ let col = true;
 			<Pane defaultSize={75} class="pf__pane">
         <div class="pane">
           <div class="pane__bar">
-            <p>Content</p>
+            <p>Code editor</p>
           </div>
           <div class="pane__content">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga quaerat eos, saepe doloribus
-            facere fugiat! Magni consequatur a veniam quia. Exercitationem recusandae facilis cupiditate
-            repellendus quaerat tenetur minima veniam quia! Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Excepturi totam voluptates eveniet vel ab velit quas repudiandae quae
-            possimus ad, eligendi commodi perspiciatis nisi tempora vitae ratione non! Praesentium,
-            aliquam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia fuga harum odit
-            doloribus ea. Atque expedita repudiandae, provident suscipit dignissimos cupiditate itaque
-            beatae debitis autem animi qui, quas aspernatur impedit!
+            <Editor />
           </div>
         </div>
 			</Pane>
@@ -90,7 +84,7 @@ let col = true;
 	<Pane defaultSize={50} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">
-            <p>Content</p>
+            <p>Stack memory</p>
           </div>
           <div class="pane__content">
             <Hexdump />
