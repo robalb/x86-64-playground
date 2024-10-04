@@ -46,7 +46,6 @@
   --color-gray-900: var(--color-black);
 
   --color-gray-t: rgba(255,255,255,.2); /* this color is still to be properly defined */
-  /* --color-gray-t: #454545; */
 
   --color-gold-50: #ffd479;
   --color-gold-100: #fdb54a;
@@ -93,8 +92,14 @@
   /* hexdump highlighted sections */
   --theme-hex-section-blue: var(--color-violet-100);
   --theme-hex-section-red: var(--color-plum-100);
-  --theme-hex-section-green: green; /*TODO: al define a dark green in the palette */
-  --theme-hex-section-border: gray;
+  --theme-hex-section-green: green; /*TODO al: define a dark green in the palette */
+  --theme-hex-section-border: gray; /* todo al: test and define properly */
+
+  /* registers view */
+  --theme-reg-value-int: var(--color-gray-0);
+  --theme-reg-name: var(--color-blue);
+  --theme-reg-name-updated: var(--color-orange);
+
 
 }
 
