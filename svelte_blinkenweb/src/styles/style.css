@@ -45,7 +45,7 @@
   --color-gray-900: var(--color-black);
 
   --color-gray-t: rgba(255,255,255,.2); /* this color is still to be properly defined */
-  --color-gray-t: #454545;
+  /* --color-gray-t: #454545; */
 
   --color-gold-50: #ffd479;
   --color-gold-100: #fdb54a;
@@ -63,7 +63,6 @@
 }
 
 :root{
-  /* dark Ui theme Colors */
 	color-scheme: dark;
   --theme-primary: var(--color-gold-100); /* ex primary */
   --theme-bg: var(--color-gray-400); /*ex background-color*/
@@ -74,7 +73,7 @@
   --theme-inline-code-bg: var(--color-gray-300); /* ex inline code background color */
   --theme-panel-bg: var(--color-gray-500); /* ex panel bg color */
   --theme-panel-controls-bg: var(--color-gray-600);
-  --theme-panel-borders: var(--color-gray-t); /* ex controls border color */
+  --theme-panel-border: var(--color-gray-t); /* ex controls border color */
   --theme-focus: var(--theme-primary);
 
   --theme-hex-zero: var(--color-gray-200);
@@ -166,19 +165,19 @@ body {
   height: 0.5rem; 
   /*1px line in the middle of the div*/
     /* TODO al: custom theme */
-    background: linear-gradient(180deg, black 1px, transparent 1px);
-    background-position: 0 100%;
-    background-repeat: repeat-x;
-    background-size: 100% 50%;
+    /* background: linear-gradient(180deg, black 1px, transparent 1px); */
+    /* background-position: 0 100%; */
+    /* background-repeat: repeat-x; */
+    /* background-size: 100% 50%; */
 }
 .pf__resizer--vertical{
   width: 0.5rem; 
   /*1px line in the middle of the div*/
     /* TODO al: custom theme */
-    background: linear-gradient(90deg, black 1px, transparent 1px);
-    background-position: 100% 0;
-    background-repeat: repeat-y;
-    background-size: 50%;
+    /* background: linear-gradient(90deg, black 1px, transparent 1px); */
+    /* background-position: 100% 0; */
+    /* background-repeat: repeat-y; */
+    /* background-size: 50%; */
 }
 .pf__resizer[data-active]{
   background-color: var(--theme-focus);
