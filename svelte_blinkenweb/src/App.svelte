@@ -74,8 +74,10 @@ let col = true;
 		</PaneGroup>
 	</Pane>
   {#if col}
-	<PaneResizer class="pf__resizer pf__resizer--vertical" >
-  </PaneResizer>
+  <div class="pf__resizerT">
+    <PaneResizer class="pf__resizer pf__resizer--vertical" >
+    </PaneResizer>
+  </div>
 	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">
@@ -96,8 +98,7 @@ let col = true;
     flex-direction:column;
     align-items: stretch;
     height: 100%; 
-    border-left: 2px solid var(--theme-panel-border);
-    border: 1px solid var(--theme-panel-border);
+    /* border: 1px solid var(--theme-panel-border); */
   }
   .pane__bar{
     height: 2rem;

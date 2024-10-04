@@ -177,7 +177,18 @@ body {
   height: 100vh;
 }
 
+.pf__resizerT{
+  position:relative;
+  background-color:red;
+  background-color: var(--theme-panel-border);
+  width: 2px;
+}
+
 .pf__resizer{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
   display: flex; 
   position: relative; 
   justify-content: center; 
