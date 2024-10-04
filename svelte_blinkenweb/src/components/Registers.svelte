@@ -13,10 +13,10 @@ let registers = [
   {name: "rbp", color: "blue", str: "0x00"},
   {name: "rsi", color: "blue", str: "0x00"},
   {name: "rdi", color: "blue", str: "0x00"},
-  {name: "rip", color: "blue", str: "0x00"},
+  {name: "rip", color: "red", str: "0x00"},
 
-  {name: "r8", color: "blue", str: "0x00"},
-  {name: "r9", color: "blue", str: "0x00"},
+  {name: "r8_", color: "blue", str: "0x00"},
+  {name: "r9_", color: "blue", str: "0x00"},
   {name: "r10", color: "blue", str: "0x00"},
   {name: "r11", color: "blue", str: "0x00"},
   {name: "r12", color: "blue", str: "0x00"},
@@ -60,11 +60,9 @@ $: $blinkStore.state && updateRegisters();
 
 </script>
 
-<h1>registers</h1>
-
 <section class="registers">
 {#each registers as r}
-  <a><span class={"name " + r.color}>{r.name}</span>  : <span class="int">{r.str}</span> </a><br/>
+  <p><span class={"name " + r.color}>{r.name}</span>  : <span class="int">{r.str}</span> </p>
 {/each}
 
 </section>
@@ -72,7 +70,8 @@ $: $blinkStore.state && updateRegisters();
 
 <style>
 .registers {
-  padding: 1rem;
+  padding: .5rem;
+  padding-left: 1rem;
   --drag-line-color: transparent;
   --controls-bg-color: #1c1e24;
   --controls-fg-color: #d0d5df;
@@ -85,6 +84,13 @@ $: $blinkStore.state && updateRegisters();
   --reg-red-color: #fca369;
   --reg-hexdump-color: #818a9d;
   --reg-int-color: white;
+
+  color: var(--code-font-color);
+  font-family: var(--code-font-family);
+  font-size: .9rem;
+}
+.registers p{
+  margin: 0;
 }
 
 .registers {
