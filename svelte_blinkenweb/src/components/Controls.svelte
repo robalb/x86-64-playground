@@ -1,68 +1,61 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import {blinkStore} from '../core/blinkSvelte'
+  import {fetchBinaryFile} from '../core/utils'
+  import demo1_url from '../assets/example.elf?url'
 
-	const dispatch = createEventDispatcher();
-	function onRun() {
-		dispatch('runClick', 'button1')
-	}
-	function onReset() {
-		dispatch('resetClick', 'button2');
-	}
+  let blink = blinkStore.getInstance()
+
+  async function handle_demo(){
+    let filedata = await fetchBinaryFile(demo1_url)
+    blink.loadElf(filedata);
+  }
+
 </script>
 
-<div class="controls">
-  <div class="controls__header">
-    <h1 class="logo">x86-64 playground</h1>
-    <a href="#">about</a><br/>
-    <a href="#">settings</a>
-    <br/>
-    <br/>
-    <br/>
-  </div>
+<section>
+  <h2>X86-64 playground</h2>
+  <p><strong>State:</strong> {$blinkStore.state}</p>
+  <button on:click={handle_demo}>load demo</button>
+  <button on:click={()=>blink.starti()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
+  > starti </button>
 
+  <button on:click={()=>blink.run()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
+  > run </button>
+  <button on:click={()=>blink.stepi()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+  > stepi </button>
+  <button on:click={()=>blink.continue()}
+    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+  > continue </button>
+</section>
 
-  <div class="controls__buttonbar">
-    <button>start | stop</button>
-    <button>step</button>
-    <button>reverse-step</button>
-  </div>
-</div>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Neuton&display=swap');
-  .controls {
-    display: flex;
-    flex-direction:column;
-    justify-content:space-between;
-    height: 100%;
+  /*
+  TODO: al: make the whole design. This is a placeholder
+  */
+  section{
+    padding: 3rem;
+    padding-top: 2rem;
   }
-  .controls__header{
-    margin-left: 1rem;
-
-    & a{
-      color: white;
-      text-decoration:underline;
-    }
-
-    & h1{
-      font-family: "Neuton", serif;
-      margin: .2rem;
-      font-weight: 400;
-      font-style: normal;
-      font-size:28px;
-    }
+  h2{
+    color: var(--color-blue);
+    font-family: var(--code-font-family);
+    padding: 0;
+    margin: 0;
   }
-  .controls__buttonbar{
-    display: flex;
-    justify-content:center;
-  }
-
   button{
+    border: 1px solid var(--color-gray-t);
+    /* border: transparent; */
     color: white;
-    background-color: rgba(255,255,255,.1);
-    padding: .5rem;
-    border: 1px solid rgba(255,255,255, .4);
-    border-radius: 5px;
+    padding: .2rem 0.6rem;
+    border-radius: 4px;
+    background-color: #1c1e24;
+    cursor: pointer;
   }
-
+  button:disabled{
+    color: gray;
+  }
 </style>

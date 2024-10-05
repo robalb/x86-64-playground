@@ -177,18 +177,8 @@ body {
   height: 100vh;
 }
 
-.pf__resizerT{
-  position:relative;
-  background-color:red;
-  background-color: var(--theme-panel-border);
-  width: 1px;
-}
-
 .pf__resizer{
   position: relative; 
-  /* display: flex;  */
-  /* justify-content: center;  */
-  /* align-items: center;  */
   background-color: var(--theme-panel-border);
 }
 .pf__resizer:after{

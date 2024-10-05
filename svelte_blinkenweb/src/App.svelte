@@ -6,6 +6,8 @@ import Hexdump from './components/Hexdump.svelte';
 import Editor from './components/Editor.svelte';
 import Registers from './components/Registers.svelte';
 import Disassembler from './components/Disassembler.svelte';
+import Terminal from './components/Terminal.svelte';
+import Controls from './components/Controls.svelte';
 
 let col = true;
 </script>
@@ -16,8 +18,8 @@ let col = true;
 			<Pane defaultSize={25} class="pf__pane">
         <div class="pane">
           <div class="pane__content">
-            <button on:click={()=>col = !col}>aaaa</button>
-
+            <!-- <button on:click={()=>col = !col}>aaaa</button> -->
+            <Controls/>
           </div>
 				</div>
 			</Pane>
@@ -64,10 +66,10 @@ let col = true;
 			<Pane defaultSize={50} class="pf__pane">
         <div class="pane">
           <div class="pane__bar">
-            <p>Content</p>
+            <p>Terminal</p>
           </div>
           <div class="pane__content">
-
+            <Terminal/>
           </div>
         </div>
 			</Pane>
