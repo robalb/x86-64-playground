@@ -5,6 +5,16 @@
 
   let blink = blinkStore.getInstance()
 
+  let canstart = false;
+  let canstep = false;
+  $: canstart = (
+    $blinkStore.state == blink.states.PROGRAM_LOADED ||
+    $blinkStore.state == blink.states.PROGRAM_STOPPED
+  )
+  $: canstep = (
+    $blinkStore.state == blink.states.PROGRAM_RUNNING
+  )
+
   async function handle_demo(){
     let filedata = await fetchBinaryFile(demo1_url)
     blink.loadElf(filedata);
@@ -17,17 +27,16 @@
   <p><strong>State:</strong> {$blinkStore.state}</p>
   <button on:click={handle_demo}>load demo</button>
   <button on:click={()=>blink.starti()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
+    disabled={!canstart}
   > starti </button>
-
   <button on:click={()=>blink.run()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
+    disabled={!canstart}
   > run </button>
   <button on:click={()=>blink.stepi()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+    disabled={!canstep}
   > stepi </button>
   <button on:click={()=>blink.continue()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
+    disabled={!canstep}
   > continue </button>
 </section>
 

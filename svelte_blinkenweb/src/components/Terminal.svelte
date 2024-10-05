@@ -8,7 +8,7 @@
   function scroll(){
     if(termref){
       setTimeout(()=>{
-        termref.scrollTop = termref.scrollHeight; // focus on bottom
+        termref.parentElement.scrollTop = termref.parentElement.scrollHeight; // focus on bottom
       },1)
     }
   }
@@ -17,29 +17,43 @@
 </script>
 
 <div class="term" bind:this={termref}>
-<code >{$blinkStore.term_buffer}</code>
-{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
-  <div class="stopInfo">
-    <p>{blink.stopReason.details}</p>
+  <div class="term__codewrap">
+    <code >{$blinkStore.term_buffer}</code>
   </div>
+{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
+    <p class="stopinfo">{blink.stopReason.details}</p>
 {/if}
 </div>
 
 
 <style>
   .term{
-    /* height: calc(100vh - 200px); */
-    overflow: auto;
     background-color: rgb(0,0,0,0.4);
+    background-color: var(--theme-panel-bg);
     padding: .5rem;
+    padding-left: 0;
+    font-family: var(--code-font-family);
+  }
+  .term__codewrap{
     padding-left: 1rem;
+    flex-grow: 1;
   }
   .term code {
-    font-family: var(--code-font-family);
-    /* background-color: transparent; */
+    font-size: .9rem;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
   }
-  .term .stopInfo{
-    background-color: darkred;
+ .stopinfo{
+    /*TODO al: customize colors, find proper design */
+    background-color: rgb(224, 73, 35);
+    background-color: rgb(96, 48, 36);
     color: white;
+    border: 1px solid rgb(245, 127, 97);
+
+    padding-left: 1rem;
   }
 </style>
