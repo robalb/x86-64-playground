@@ -99,6 +99,8 @@ let col = true;
   }
   .pane__bar{
     height: 2rem;
+    flex-shrink: 0;
+
     padding-left: 1rem;
     background-color: var(--theme-panel-controls-bg);
     border-bottom: 1px solid var(--theme-panel-border);
