@@ -74,10 +74,7 @@ let col = true;
 		</PaneGroup>
 	</Pane>
   {#if col}
-  <div class="pf__resizerT">
-    <PaneResizer class="pf__resizer pf__resizer--vertical" >
-    </PaneResizer>
-  </div>
+  <PaneResizer class="pf__resizer pf__resizer--vertical" />
 	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">

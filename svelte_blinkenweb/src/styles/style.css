@@ -181,41 +181,43 @@ body {
   position:relative;
   background-color:red;
   background-color: var(--theme-panel-border);
-  width: 2px;
+  width: 1px;
 }
 
 .pf__resizer{
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 100%;
-  display: flex; 
   position: relative; 
-  justify-content: center; 
-  align-items: center; 
-  transition: background-color .1s ease-out;
+  /* display: flex;  */
+  /* justify-content: center;  */
+  /* align-items: center;  */
+  background-color: var(--theme-panel-border);
 }
+.pf__resizer:after{
+  transition: background-color .1s ease-out;
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 10;
+}
+
 .pf__resizer--horizontal{
-  height: 0.5rem; 
-  /*1px line in the middle of the div*/
-    /* TODO al: custom theme */
-    /* background: linear-gradient(180deg, black 1px, transparent 1px); */
-    /* background-position: 0 100%; */
-    /* background-repeat: repeat-x; */
-    /* background-size: 100% 50%; */
+  height: 1px; 
+}
+.pf__resizer--horizontal:after{
+  height: 8px;
+  width: 100%;
+  top: -3px;
 }
 .pf__resizer--vertical{
-  width: 0.5rem; 
-  /*1px line in the middle of the div*/
-    /* TODO al: custom theme */
-    /* background: linear-gradient(90deg, black 1px, transparent 1px); */
-    /* background-position: 100% 0; */
-    /* background-repeat: repeat-y; */
-    /* background-size: 50%; */
+  width: 1px; 
 }
-.pf__resizer[data-active]{
+.pf__resizer--vertical:after{
+  width: 8px;
+  height: 100%;
+  left: -3px;
+}
+
+.pf__resizer[data-active]:after{
   background-color: var(--theme-focus);
-  background-size: 0;
   outline: none;
 }
 
