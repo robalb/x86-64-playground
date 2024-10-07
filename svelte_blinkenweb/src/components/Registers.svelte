@@ -43,8 +43,8 @@ function updateRegisters(){
 {name: "rdi", updated: false, str: m.stringReadU64("rdi")},
 {name: "rip", updated: false, str: m.stringReadU64("rip")},
 
-{name: "r8",  updated: false, str: m.stringReadU64("r8")},
-{name: "r9",  updated: false, str: m.stringReadU64("r9")},
+{name: "r8 ",  updated: false, str: m.stringReadU64("r8")},
+{name: "r9 ",  updated: false, str: m.stringReadU64("r9")},
 {name: "r10", updated: false, str: m.stringReadU64("r10")},
 {name: "r11", updated: false, str: m.stringReadU64("r11")},
 {name: "r12", updated: false, str: m.stringReadU64("r12")},

@@ -438,6 +438,16 @@ In the frontend, we can trigger a full redraw only when that address
 changes, and perform a normal scroll in all other situations
 
 
+## assembler ideas
+
+- run the gnu assembler inside the blink emulator! (this would be very cool)
+- use an external wasm module, and create scaffolding code
+that copies the output into the blink FS
+
+https://github.com/emscripten-core/emscripten/issues/12074
+
+
+
 ## additional best practices:
 
 https://emscripten.org/docs/compiling/Deploying-Pages.html#reserving-memory-for-compiled-code

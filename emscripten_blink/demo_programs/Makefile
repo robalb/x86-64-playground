@@ -1,4 +1,4 @@
-CC=gcc
+CC=musl-gcc
 AS=as
 LD=ld
 

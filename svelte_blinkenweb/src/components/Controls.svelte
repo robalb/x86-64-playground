@@ -1,7 +1,8 @@
 <script>
   import {blinkStore} from '../core/blinkSvelte'
   import {fetchBinaryFile} from '../core/utils'
-  import demo1_url from '../assets/example.elf?url'
+  // import demo1_url from '../assets/example.elf?url'
+  import demo1_url from '../assets/demo_programs/argv.elf?url'
 
   let blink = blinkStore.getInstance()
 
