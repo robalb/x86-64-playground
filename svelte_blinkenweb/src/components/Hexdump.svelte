@@ -2,11 +2,10 @@
 import {blinkStore} from '../core/blinkSvelte'
 
 //TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
-export let centered = true;
-export let bytesPerRow = 8;
+export let centered = false;
+export let bytesPerRow = 16;
 export let colorRegions = {}
 export let showAscii = true;
-export let unstyled = false;
 
 
 let blink = blinkStore.getInstance()
@@ -80,12 +79,10 @@ let hoveredIndex = -1;
   }
 </script>
 
-
 <div>
   <div
     class="hexdump"
     class:hexdump--center={centered}
-    class:hexdump--unstyled={unstyled}
     class:hexdump--bytes-16={bytesPerRow === 16}
     class:hexdump--bytes-8={bytesPerRow === 8}
     class:hexdump--bytes-4={bytesPerRow === 4}
@@ -138,37 +135,8 @@ let hoveredIndex = -1;
     --columns-padding: 0.5rem;
     --hex-spacing: 0.4rem;
     --ascii-spacing: 0rem;
-    --default-bg-color: #1c1e24;
-
-    --addr-text-color: white;
-    --addr-bg-color: var(--default-bg-color);
-
-    --section-blue-color: #3e296c;
-    --section-red-color: #640054;
-    --section-green-color: green;
     --section-border-radius: 6px;
-    --section-border-color: gray;
-
-    --hex-text-color: #b3b9c5;
-    --hex-zero-color: #818a9d;
-    --hex-ff-color: #92d192;
-    --hex-small-color: white;
-    --hex-large-color: #ffeead;
-    --hex-bg-color: var(--default-bg-color);
-
-    --ascii-valid-color: #6ab0f3;
-    --ascii-valid-color: white;
-    --ascii-invalid-color: #b3b9c5;
-    --ascii-bg-color: var(--default-bg-color);
-
-    --divider-bar-color: #818a9d;
-    --border-color: var(--light-border-color);
-  }
-  .hexdump--unstyled {
-    --addr-bg-color: transparent;
-    --hex-bg-color: transparent;
-    --ascii-bg-color: transparent;
-    --border-color: transparent;
+    --section-border-color: var(--theme-hex-section-border);
   }
 
   .hexdump {
@@ -194,31 +162,33 @@ let hoveredIndex = -1;
   .hexdump__address {
     display: flex;
     flex-direction: column;
-    background-color: var(--addr-bg-color);
+    flex-shrink: 0;
+    background-color: var(--theme-hexaddr-bg);
   }
   .hexdump__address div {
     display: none;
-    color: var(--addr-text-color);
+    color: var(--theme-hexaddr-fg);
   }
 
   /* hex element*/
   .hexdump__hex {
-    background-color: var(--hex-bg-color);
+    background-color: var(--theme-hex-bg);
+    flex-shrink: 0;
   }
   .hexdump__hex span {
-    color: var(--hex-text-color);
+    color: var(--theme-hex-fg);
   }
   .hexdump__hex span[data-range="00"] {
-    color: var(--hex-zero-color);
+    color: var(--theme-hex-zero);
   }
   .hexdump__hex span[data-range="ff"] {
-    color: var(--hex-ff-color);
+    color: var(--theme-hex-ff);
   }
   .hexdump__hex span[data-range="small"] {
-    color: var(--hex-small-color);
+    color: var(--theme-hex-small);
   }
   .hexdump__hex span[data-range="large"] {
-    color: var(--hex-large-color);
+    color: var(--theme-hex-large);
   }
   .hexdump__hex span {
     padding: 0 var(--hex-spacing);
@@ -226,47 +196,30 @@ let hoveredIndex = -1;
 
   /* ascii element*/
   .hexdump__ascii {
-    background-color: var(--ascii-bg-color);
+    background-color: var(--theme-hexascii-bg);
+    flex-shrink: 100;
   }
   .hexdump__ascii span {
     padding: 0 var(--ascii-spacing);
-    color: var(--ascii-invalid-color);
+    color: var(--theme-hexascii-invalid);
   }
   .hexdump__ascii span[data-ascii="true"] {
-    color: var(--ascii-valid-color);
-  }
-
-  /*border*/
-  .hexdump__address {
-    border-radius: 8px 0 0 8px;
-    border-left: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-  }
-  .hexdump__hex {
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-  }
-  .hexdump__ascii {
-    border-radius: 0 8px 8px 0;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
+    color: var(--theme-hexascii-valid);
   }
 
   /*custom section colors */
   .hexdump span[data-color="blue"] {
-    background-color: var(--section-blue-color);
+    background-color: var(--theme-hex-section-blue);
     border-top: 1px solid var(--section-border-color);
     border-bottom: 1px solid var(--section-border-color);
   }
   .hexdump span[data-color="green"] {
-    background-color: var(--section-green-color);
+    background-color: var(--theme-hex-section-green);
     border-top: 1px solid var(--section-border-color);
     border-bottom: 1px solid var(--section-border-color);
   }
   .hexdump span[data-color="red"] {
-    background-color: var(--section-red-color);
+    background-color: var(--theme-hex-section-red);
     border-top: 1px solid var(--section-border-color);
     border-bottom: 1px solid var(--section-border-color);
   }
@@ -286,15 +239,6 @@ let hoveredIndex = -1;
 
   /* hover states */
   .hexdump .highlight {
-    outline: 1px solid gold;
-  }
-  .hexdump__hex span:hover {
-    outline: 1px solid gold;
-  }
-  .hexdump__ascii span:hover {
-    outline: 1px solid gold;
-  }
-  .hexdump__address div:hover {
     outline: 1px solid gold;
   }
 
@@ -339,7 +283,7 @@ let hoveredIndex = -1;
     display: block;
   }
 
-  @container (width <= 430px) {
+  @container (width <= 500px) {
     /* 8 bytes on this size is disabled, behaves exaclty like 4 bytes */
     .hexdump--bytes-8 .hexdump__responsivecol span:nth-child(4n):after {
       content: "\a";
@@ -356,7 +300,7 @@ let hoveredIndex = -1;
     }
   }
 
-  @container (430px < width < 760px) {
+  @container (500px < width < 830px) {
     /* enable 8 bytes on this size */
     .hexdump--bytes-8 .hexdump__responsivecol span:nth-child(8n):after {
       content: "\a";
@@ -374,7 +318,7 @@ let hoveredIndex = -1;
     }
   }
 
-  @container (min-width: 760px) {
+  @container (min-width: 830px) {
     /* enables 16 bytes on this size*/
     .hexdump--bytes-16 .hexdump__responsivecol span:nth-child(16n):after {
       content: "\a";

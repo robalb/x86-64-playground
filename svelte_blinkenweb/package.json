@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -14,6 +14,7 @@
     "vite": "^5.3.4"
   },
   "dependencies": {
+    "paneforge": "^0.0.6",
     "prism-code-editor": "^3.4.0"
   }
 }

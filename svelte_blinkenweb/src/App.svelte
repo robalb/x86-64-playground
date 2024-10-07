@@ -1,150 +1,121 @@
+<script lang="ts">
+import './styles/style.css';
+import { PaneGroup, Pane, PaneResizer } from "paneforge";
+import ThemeDebug from './components/ThemeDebug.svelte';
+import Hexdump from './components/Hexdump.svelte';
+import Editor from './components/Editor.svelte';
+import Registers from './components/Registers.svelte';
+import Disassembler from './components/Disassembler.svelte';
+import Terminal from './components/Terminal.svelte';
+import Controls from './components/Controls.svelte';
 
-<script>
-  import './styles/style.css';
-  import './styles/light-theme.css';
-  import './styles/dark-theme.css';
-
-  import GdbEmbed from './components/GdbEmbed.svelte'
-  import Registers from './components/Registers.svelte'
-  import Hexdump from './components/Hexdump.svelte'
-  import Disassembler from './components/Disassembler.svelte'
-
-  import {blinkStore} from './core/blinkSvelte'
-  import {fetchBinaryFile} from './core/utils'
-  import demo1_url from './assets/example.elf?url'
-  // import demo1_url from './assets/demo_programs/argv.elf?url'
-
-  console.log(demo1_url)
-
-  let blink = blinkStore.getInstance()
-  window["blink"] = blink;
-
-  async function handle_demo(){
-    let filedata = await fetchBinaryFile(demo1_url)
-    // console.log(filedata)
-    blink.loadElf(filedata);
-  }
-  
-  //handle terminal scroll
-  let termref;
-  function scroll(){
-    if(termref){
-      setTimeout(()=>{
-        termref.scrollTop = termref.scrollHeight; // focus on bottom
-      },1)
-    }
-  }
-  $: $blinkStore.state && scroll()
-
+let col = true;
 </script>
 
-<main>
+<PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal">
+	<Pane defaultSize={25} class="pf__pane">
+		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
+			<Pane defaultSize={25} class="pf__pane">
+        <div class="pane">
+          <div class="pane__content">
+            <!-- <button on:click={()=>col = !col}>aaaa</button> -->
+            <Controls/>
+          </div>
+				</div>
+			</Pane>
+			<PaneResizer class="pf__resizer pf__resizer--horizontal" />
+			<Pane defaultSize={75} class="pf__pane">
+        <div class="pane">
+          <div class="pane__bar">
+            <p>Code editor</p>
+          </div>
+          <div class="pane__content">
+            <Editor />
+          </div>
+        </div>
+			</Pane>
+		</PaneGroup>
+	</Pane>
 
-<section class="controls">
+	<PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
+		<div class="pane">
+          <div class="pane__bar">
+            <p>Disassembly</p>
+          </div>
+          <div class="pane__content">
+            <Disassembler />
+          </div>
+		</div>
+	</Pane>
 
-<h1>Emulator Properties</h1>
-
-<p><strong>State:</strong> {$blinkStore.state}</p>
-
-
-  <button on:click={handle_demo}>load demo</button>
-  <button on:click={()=>blink.starti()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
-  > starti </button>
-
-  <button on:click={()=>blink.run()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_LOADED}
-  > run </button>
-  <button on:click={()=>blink.stepi()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
-  > stepi </button>
-  <button on:click={()=>blink.continue()}
-    disabled={$blinkStore.state != blink.states.PROGRAM_RUNNING}
-  > continue </button>
-
-<div class="term" bind:this={termref}>
-<p><strong>stdout:</strong><br/></p>
-<code >{$blinkStore.term_buffer}</code>
-{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
-  <div class="stopInfo">
-    <p>{blink.stopReason.details}</p>
-  </div>
+	<PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
+		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
+			<Pane defaultSize={50} class="pf__pane">
+        <div class="pane">
+          <div class="pane__bar">
+            <p>Registers</p>
+          </div>
+          <div class="pane__content">
+            <Registers />
+          </div>
+				</div>
+			</Pane>
+			<PaneResizer class="pf__resizer pf__resizer--horizontal" />
+			<Pane defaultSize={50} class="pf__pane">
+        <div class="pane">
+          <div class="pane__bar">
+            <p>Terminal</p>
+          </div>
+          <div class="pane__content">
+            <Terminal/>
+          </div>
+        </div>
+			</Pane>
+		</PaneGroup>
+	</Pane>
+  {#if col}
+  <PaneResizer class="pf__resizer pf__resizer--vertical" />
+	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
+		<div class="pane">
+          <div class="pane__bar">
+            <p>Stack memory</p>
+          </div>
+          <div class="pane__content">
+            <Hexdump />
+          </div>
+		</div>
+	</Pane>
 {/if}
-</div>
-
-</section>
-
-<section class="dis">
-    <Disassembler/>
-</section>
-<section class="regs">
-    <Registers/>
-</section>
-
-<section class="hex">
-    <Hexdump/>
-</section>
-  <!-- <GdbEmbed -->
-  <!--     on:runClick={()=>console.log("run clicked")} -->
-  <!--     on:resetClick={()=>console.log("reset clicked")} -->
-  <!--     {data} -->
-  <!--     showAscii={true} -->
-  <!--     {startAddress} -->
-  <!--     {registers} -->
-  <!--     colorRegions={colorRegions} -->
-  <!-- > -->
-  <!-- push rax -->
-  <!-- xor rbx rbx -->
-  <!-- mov [rax] rbx -->
-  <!-- </GdbEmbed> -->
-</main>
+</PaneGroup>
 
 <style>
-  main{
-    display: flex;
-    flex-direction:row;
+  .pane{
+    display: flex; 
+    justify-content: center; 
+    flex-direction:column;
+    align-items: stretch;
+    height: 100%; 
+    /* border: 1px solid var(--theme-panel-border); */
+  }
+  .pane__bar{
+    height: 2rem;
+    flex-shrink: 0;
+
+    padding-left: 1rem;
+    background-color: var(--theme-panel-controls-bg);
+    border-bottom: 1px solid var(--theme-panel-border);
     width: 100%;
+    display: flex;
   }
-  .controls{
-    flex-grow:1;
-  }
-  .regs{
-    max-width: 400px;
-    border: 1px solid gray;
-  }
-  .dis{
-    border: 1px solid gray;
-    width: 400px;
-  }
-  .hex{
-    border: 1px solid gray;
-    width: 600px;
-
-  }
-  button{
-    border: 1px solid gray;
-    color: white;
-    padding: .3rem;
-  }
-  button:disabled{
-    color: gray;
-  }
-  .term{
-    height: calc(100vh - 200px);
-    border: 1px solid gray;
-    overflow: auto;
-    font-family: 'Lucida Console', Monaco, monospace;
-    background-color: rgb(0,0,0,0.4);
-    margin: .5rem;
-    padding: .5rem;
-  }
-  .term code {
-    background-color: transparent!important;
-  }
-  .term .stopInfo{
-    background-color: darkred;
-    color: white;
+  .pane__bar p{
+    font-size: 1.1rem;
+    margin: 0;
   }
 
+  .pane__content{
+    overflow: auto; 
+    height: 100%;
+  }
 </style>
-

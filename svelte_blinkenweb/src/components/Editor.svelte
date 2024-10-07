@@ -25,15 +25,12 @@ onMount(() => {
 
 <style>
   .editor{
-    display: grid;
-    width: 100%;
-    height: 65vh;
-    overflow: scroll;
-    /* min-width: 10rem; */
+    padding-bottom: 1.5rem;
   }
   .container{
     overflow: auto;
     max-height: 100%;
     height: 100%;
+    background-color: #0d1117;
   }
 </style>
