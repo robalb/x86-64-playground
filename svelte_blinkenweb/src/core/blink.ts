@@ -52,17 +52,15 @@ class M_CLStruct{
     dis__current_line: {index: 28, pointer: false},
     dis__buffer: {index: 29, pointer: true},
   }
+  memory: WebAssembly.Memory
   memView: DataView;
   structView: DataView;
+  struct_pointer: number;
 
-  constructor(memory: ArrayBuffer, struct_pointer: number){
-    let struct_size = Object.keys(this.keys).length *this.sizeof_key;
-    this.memView = new DataView(memory);
-    this.structView = new DataView(
-      memory,
-      struct_pointer,
-      struct_size
-    );
+  constructor(memory: WebAssembly.Memory, struct_pointer: number){
+    this.memory = memory;
+    this.struct_pointer = struct_pointer;
+    this.growMemory();
     //check shared struct version
     let js_version =this.version;
     let wasm_version = this.getPtr("version");
@@ -70,6 +68,16 @@ class M_CLStruct{
       throw new Error("shared struct version mismatch")
     }
 
+  }
+
+  growMemory(){
+    let struct_size = Object.keys(this.keys).length *this.sizeof_key;
+    this.memView = new DataView(this.memory.buffer);
+    this.structView = new DataView(
+      this.memory.buffer,
+      this.struct_pointer,
+      struct_size
+    );
   }
 
   stringReadBytes(key: keyof typeof this.keys, num: number): string{
@@ -99,6 +107,10 @@ class M_CLStruct{
   }
 
   getPtr(key: keyof typeof this.keys): number{
+    if(!this.structView.buffer.byteLength){
+      console.log("memory grew")
+      this.growMemory()
+    }
     let index = this.keys[key].index * this.sizeof_key;
     let little_endian = true;
     return this.structView.getUint32(index, little_endian);
@@ -202,7 +214,7 @@ export default class Blink{
   } as const;
 
   Module: any;/*Emscripten Module object*/
-  memory: ArrayBuffer;
+  memory: WebAssembly.Memory;
   state: typeof this.states[keyof typeof this.states] =
     this.states.NOT_READY;
   stopReason: null|{loadFail: boolean, exitCode: number, details: string};
@@ -254,7 +266,7 @@ export default class Blink{
     ])
 
     //init memory
-    this.memory = this.Module.wasmExports.memory.buffer;
+    this.memory = this.Module.wasmExports.memory;
     //initialize the cross language struct
     let cls_pointer = this.Module._blinkenlib_get_clstruct();
     this.m = new M_CLStruct(this.memory, cls_pointer);
@@ -396,16 +408,16 @@ export default class Blink{
   * main function.
   */
   start(){
-    this.#setState(this.states.PROGRAM_RUNNING)
     this.Module._blinkenlib_start();
+    this.#setState(this.states.PROGRAM_RUNNING)
   }
   /**
   * start the program and stop at the very first 
   * instruction (before main)
   */
   starti(){
-    this.#setState(this.states.PROGRAM_RUNNING)
     this.Module._blinkenlib_starti();
+    this.#setState(this.states.PROGRAM_RUNNING)
   }
 
   stepi(){

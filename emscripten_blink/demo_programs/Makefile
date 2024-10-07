@@ -7,7 +7,10 @@ ASFLAGS=
 LDFLAGS= --no-dynamic-linker #-z noexecstack -z stack-size=4096
 
 .PHONY: all
-all: hang.elf argv.elf exit.elf nop.elf err.elf stdout.elf
+all: hang.elf argv.elf exit.elf nop.elf err.elf stdout.elf hello_dynamic.elf
+
+hello_dynamic.elf: hello_dynamic.c
+	$(CC) -o $@ $<
 
 hang.elf: hang.c
 	$(CC) $(CFLAGS) -o $@ $<

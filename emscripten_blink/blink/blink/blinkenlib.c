@@ -276,7 +276,7 @@ void setupProgram(){
   //remember to free these strings after they are used, since
   //they will be allocated dynamically from js
   char codepath[] = "./program";
-  char *args = 0;
+  char *args[] = {"./program", "--help", 0};
   char *vars = 0;
   char *bios = 0;
 
