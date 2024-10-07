@@ -5452,7 +5452,7 @@ var wasmImports = {
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
 var _blinkenlib_loadProgram = Module['_blinkenlib_loadProgram'] = createExportWrapper('blinkenlib_loadProgram', 0);
-var _blinkenlib_loadPlayground = Module['_blinkenlib_loadPlayground'] = createExportWrapper('blinkenlib_loadPlayground', 0);
+var _blinkenlib_loadPlayground = Module['_blinkenlib_loadPlayground'] = createExportWrapper('blinkenlib_loadPlayground', 1);
 var _blinkenlib_run = Module['_blinkenlib_run'] = createExportWrapper('blinkenlib_run', 0);
 var _blinkenlib_starti = Module['_blinkenlib_starti'] = createExportWrapper('blinkenlib_starti', 0);
 var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blinkenlib_start', 0);

@@ -1,4 +1,7 @@
 import blinkenlib from '../assets/blinkenlib.js'
+import as_elf_url from '../assets/as-new.elf?url'
+import ld_elf_url from '../assets/ld-new.elf?url'
+import assembly_url from '../assets/helloworld.s?url'
 
 
 /**
@@ -248,6 +251,14 @@ export default class Blink{
           this.#stdoutHandler,
           this.#stderrHandler,
         );
+        //TODO: only if playground active
+        if(true){
+          M.FS.createPreloadedFile("/", "as", as_elf_url, true, true);
+          M.FS.createPreloadedFile("/", "ld", ld_elf_url, true, true);
+          // M.FS.createPreloadedFile("/", "assembly.s", assembly_url, true, true);
+          // M.FS.chmod('/as', 0o777);
+          // M.FS.chmod('/ld', 0o777);
+        }
       }
     });
 
@@ -391,6 +402,37 @@ export default class Blink{
       return false
     }
     //TODO: figure this out
+    let FS = this.Module.FS
+    // FS.chmod('/as', 0o777);
+    // FS.chmod('/ld', 0o777);
+    let content = `
+.intel_syntax noprefix
+
+.global _start
+.text
+
+_start:
+  mov rax, 0x0a21646c726f5720
+  push rax
+  mov rax, 0x6f6c6c6548
+  push rax
+
+  mov rax, 1
+  mov rdi, 1
+  mov rsi, rsp
+  mov rdx, 14
+  syscall
+
+  mov rax, 60
+  xor rdi, rdi
+  syscall
+
+`;
+    FS.writeFile("/assembly.s", content);
+    // FS.close(stream);
+    this.Module._blinkenlib_loadPlayground(1);
+    this.Module._blinkenlib_loadPlayground(2);
+    FS.chmod('/program', 0o777);
   }
 
 

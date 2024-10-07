@@ -268,21 +268,15 @@ void TearDown(void) {
   FreeMachine(m);
 }
 
-void setupProgram(){
+
+void setupProgramWithArgs(char* programpath, char **args){
   //close previous instances
   TearDown();
-
-  //TODO: all this must be received as arg.
-  //remember to free these strings after they are used, since
-  //they will be allocated dynamically from js
-  char codepath[] = "./program";
-  char *args[] = {"./program", "--help", 0};
-  char *vars = 0;
   char *bios = 0;
-
+  char *vars = 0;
   SetUp();
   printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
-  LoadProgram(m, codepath, codepath, &args, &vars, bios);
+  LoadProgram(m, programpath, programpath, args, &vars, bios);
   puts("@");
   printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
   PostLoadSetup();
@@ -290,6 +284,16 @@ void setupProgram(){
   update_clstruct(m);
   puts("@@");
 }
+
+void setupProgram(){
+  //TODO: all this must be received as arg.
+  //remember to free these strings after they are used, since
+  //they will be allocated dynamically from js
+  char codepath[] = "/program";
+  char *args[] = {"/program", "--help", 0};
+  setupProgramWithArgs(codepath, args);
+}
+
 
 ////////////////////////
 ///exported api
@@ -304,12 +308,29 @@ void blinkenlib_loadProgram(){
 }
 
 EMSCRIPTEN_KEEPALIVE
-void blinkenlib_loadPlayground(){
+void blinkenlib_loadPlayground(int stage){
   //TODO: write playground program to the vfs path ./program.
   //The easyest way i can think of to simulate
   //a fully functional program is to actually load
   //a program, and then to modify its .text section
   //on the fly when it's in memory.
+  if(stage == 1){
+    puts("/as -o /program /assembly.s");
+    char codepath[] = "/as";
+    char *args[] = {"/as", "-o", "/program.o", "/assembly.s", 0};
+    setupProgramWithArgs(codepath, args);
+    single_stepping = false;
+    runLoop();
+  }
+  else{
+    puts("/ld -o /program /program.o");
+    char codepath2[] = "/ld";
+    char *args2[] = {"/ld", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
+    setupProgramWithArgs(codepath2, args2);
+    single_stepping = false;
+    runLoop();
+  }
+
 }
 
 EMSCRIPTEN_KEEPALIVE

@@ -61,7 +61,7 @@ struct clstruct{
 };
 
 void blinkenlib_loadProgram();
-void blinkenlib_loadPlayground();
+void blinkenlib_loadPlayground(int stage);
 void blinkenlib_run();
 void blinkenlib_start();
 void blinkenlib_starti();
