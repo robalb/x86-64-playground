@@ -449,6 +449,7 @@ https://github.com/emscripten-core/emscripten/issues/12074
 ### idea 1: running gas inside blink
 - It would be very cool to have full access to the gas assembler: defining sections, etch, and see the resulting elf.
 - The binary could be downloaded separately only when it's needed.
+- there are smaller alternatives to gas, such as https://github.com/tyfkda/xcc
 
 there are three issues with this:
 - gas will generate object files, we also need an linker
@@ -473,11 +474,19 @@ the issues:
   the object file will contain, so most user written code will not work as expected.
 
 
+
 ### in conclusion:
 
 idea 2 seems like the easiest path. good for an initial mvp.
 idea 1 is worth a quick try: can i compile gas and ld in a static musl binary?
 idea 3 is worth a quick try: do the existing libraries already provide what i need?
+
+
+### attempting idea1: running gas in blink.
+
+seems to work. but the binary is very large:
+3Mb for gas, 3Mb for ld.
+6Mb total of x86_64 elfs
 
 
 
