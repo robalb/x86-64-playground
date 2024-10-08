@@ -23,36 +23,23 @@ let registers = [
   {name: "r13", updated: false, str: "0x00"},
   {name: "r14", updated: false, str: "0x00"},
   {name: "r15", updated: false, str: "0x00"},
-  {name: "eflags", color: "blue", str: "[ ]"},
 ]
 
 function updateRegisters(){
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
     blink.state == blink.states.PROGRAM_STOPPED)) return;
 
-  let m = blink.m
-  registers = [
-{name: "rax", updated: false, str: m.stringReadU64("rax")},
-{name: "rbx", updated: false, str: m.stringReadU64("rbx")},
-{name: "rcx", updated: false, str: m.stringReadU64("rcx")},
-{name: "rdx", updated: false, str: m.stringReadU64("rdx")},
-
-{name: "rsp", updated: false, str: m.stringReadU64("rsp")},
-{name: "rbp", updated: false, str: m.stringReadU64("rbp")},
-{name: "rsi", updated: false, str: m.stringReadU64("rsi")},
-{name: "rdi", updated: false, str: m.stringReadU64("rdi")},
-{name: "rip", updated: false, str: m.stringReadU64("rip")},
-
-{name: "r8 ",  updated: false, str: m.stringReadU64("r8")},
-{name: "r9 ",  updated: false, str: m.stringReadU64("r9")},
-{name: "r10", updated: false, str: m.stringReadU64("r10")},
-{name: "r11", updated: false, str: m.stringReadU64("r11")},
-{name: "r12", updated: false, str: m.stringReadU64("r12")},
-{name: "r13", updated: false, str: m.stringReadU64("r13")},
-{name: "r14", updated: false, str: m.stringReadU64("r14")},
-{name: "r15", updated: false, str: m.stringReadU64("r15")},
-{name: "eflags", color: "blue", str: "[]"},
-  ]
+  for(let reg of registers){
+    let new_str = blink.m.stringReadU64(reg.name.trim())
+    if(new_str == reg.str){
+      reg.updated = false;
+    }
+    else{
+      reg.updated = true;
+      reg.str = new_str
+    }
+  }
+  registers = registers; //force svelte rendering
 }
 
 //rerender registers on machine step
@@ -67,6 +54,10 @@ $: $blinkStore.render && updateRegisters();
       <span class="int">{r.str}</span>
     </p>
 {/each}
+    <p>
+      <span class="name" class:updated={false}>eflags</span> : 
+      <span class="int">[]</span>
+    </p>
 
 </section>
 
