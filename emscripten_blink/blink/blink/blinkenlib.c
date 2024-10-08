@@ -264,7 +264,7 @@ void PostLoadSetup(){
 
 void TearDown(void) {
   //TODO: from blinkenlights
-  // DisFree(dis);
+  DisFree(dis);
   FreeMachine(m);
 }
 

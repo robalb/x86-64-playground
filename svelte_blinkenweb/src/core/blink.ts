@@ -222,6 +222,8 @@ export default class Blink{
     this.states.NOT_READY;
   stopReason: null|{loadFail: boolean, exitCode: number, details: string};
 
+  loadASM_state: number;
+
   /**
   * Initialize the emscripten blink module.
   */
@@ -320,6 +322,13 @@ export default class Blink{
   * when the guest process calls the exit syscall
   */
   #extern_c__exit_callback(code: number){
+    if(this.state == this.states.READY){
+      //this return code is not from a regular guest program,
+      //it's from the assembler or the loader, that are
+      //running in the emulator
+      this.loadASM_returnhandler(code);
+      return
+    }
     this.stopReason = {
       loadFail: false,
       exitCode: code,
@@ -401,10 +410,11 @@ export default class Blink{
     if(this.state == this.states.NOT_READY){
       return false
     }
-    //TODO: figure this out
-    let FS = this.Module.FS
-    // FS.chmod('/as', 0o777);
-    // FS.chmod('/ld', 0o777);
+    this.loadASM_stage1();
+  }
+
+  loadASM_stage1(){
+    this.loadASM_state = 1
     let content = `
 .intel_syntax noprefix
 
@@ -412,29 +422,54 @@ export default class Blink{
 .text
 
 _start:
-  mov rax, 0x0a21646c726f5720
-  push rax
-  mov rax, 0x6f6c6c6548
-  push rax
+mov rax, 0x0a21646c726f5720
+push rax
+mov rax, 0x6f6c6c6548
+push rax
 
-  mov rax, 1
-  mov rdi, 1
-  mov rsi, rsp
-  mov rdx, 14
-  syscall
+mov rax, 1
+mov rdi, 1
+mov rsi, rsp
+mov rdx, 14
+syscall
 
-  mov rax, 60
-  xor rdi, rdi
-  syscall
+mov rax, 60
+xor rdi, rdi
+syscall
 
 `;
+    // content = document.querySelector("textarea").value
+    // console.log(content)
+    this.#setState(this.states.READY);
+    let FS = this.Module.FS
     FS.writeFile("/assembly.s", content);
-    // FS.close(stream);
     this.Module._blinkenlib_loadPlayground(1);
-    this.Module._blinkenlib_loadPlayground(2);
-    FS.chmod('/program', 0o777);
   }
-
+  loadASM_stage2(stage1_exitcode: number){
+    if(stage1_exitcode != 0){
+      console.log("stage 1 failed");
+      return;
+    }
+    this.loadASM_state = 2;
+    this.Module._blinkenlib_loadPlayground(2);
+  }
+  loadASM_stage3(stage2_exitcode: number){
+    this.loadASM_state = 1;
+    if(stage2_exitcode != 0){
+      console.log("stage 1 failed");
+      return;
+    }
+    let FS = this.Module.FS
+    FS.chmod('/program', 0o777);
+    this.#setState(this.states.PROGRAM_LOADED);
+  }
+  loadASM_returnhandler(code){
+    if(this.loadASM_state == 1){
+      this.loadASM_stage2(code);
+    }else{
+      this.loadASM_stage3(code);
+    }
+  }
 
   /**
   * start the program normally and execute it until
