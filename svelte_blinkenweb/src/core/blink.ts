@@ -406,43 +406,15 @@ export default class Blink{
   * reset the emaulator state,
   * and load the given asm bytes in a minimalistic elf
   */
-  loadASM(asmBytes): boolean{
+  loadASM(asmString): boolean{
     if(this.state == this.states.NOT_READY){
       return false
     }
-    this.loadASM_stage1();
-  }
-
-  loadASM_stage1(){
     this.loadASM_state = 1
-    let content = `
-.intel_syntax noprefix
-
-.global _start
-.text
-
-_start:
-mov rax, 0x0a21646c726f5720
-push rax
-mov rax, 0x6f6c6c6548
-push rax
-
-mov rax, 1
-mov rdi, 1
-mov rsi, rsp
-mov rdx, 14
-syscall
-
-mov rax, 60
-xor rdi, rdi
-syscall
-
-`;
-    // content = document.querySelector("textarea").value
-    // console.log(content)
     this.#setState(this.states.READY);
     let FS = this.Module.FS
-    FS.writeFile("/assembly.s", content);
+    console.log(asmString)
+    FS.writeFile("/assembly.s", asmString);
     this.Module._blinkenlib_loadPlayground(1);
   }
   loadASM_stage2(stage1_exitcode: number){

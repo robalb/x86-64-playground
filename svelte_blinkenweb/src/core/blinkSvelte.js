@@ -7,6 +7,7 @@ function createBlinkStore(){
     term_buffer: "",
     state: "",
     signal: "",
+    asm: ""
   });
 
   let stdinHander=()=>{
@@ -47,6 +48,9 @@ function createBlinkStore(){
     subscribe,
     getInstance(){
       return blink;
+    },
+    updateAsm(asm){
+      update((store) => ({...store, asm}))
     }
   }
 

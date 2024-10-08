@@ -2,10 +2,13 @@
 import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
 // Importing Prism grammars
 import "prism-code-editor/prism/languages/nasm"
+import {blinkStore} from '../core/blinkSvelte'
 import {onMount} from 'svelte'
+
+let blink = blinkStore.getInstance()
+
 let editor_elem;
 
-let template_old =  "; welcome\n; this editor executes intel assembly\n; by emulating it in your browser.\n; This process is completely offline! \n \n mov rax, 1337\n push rax\n mov rbx 12\n syscall\n\n\n\n\n\n\n\n\n\n";
 let template =`
 .intel_syntax noprefix
 
@@ -13,6 +16,9 @@ let template =`
 .text
 
 _start:
+  ;#---------------------
+  ;# write your code here
+  ;#---------------------
   mov rrax, 0x0a21646c726f5720
   push rax
   mov rax, 0x6f6c6c6548
@@ -38,6 +44,9 @@ onMount(() => {
       language: "nasm",
       theme: "github-dark",
       value: template,
+      onUpdate: content=>{
+        blinkStore.updateAsm(content)
+      },
     },
     () => console.log("ready"),
   )
@@ -57,5 +66,6 @@ onMount(() => {
     max-height: 100%;
     height: 100%;
     background-color: #0d1117;
+    display: grid;
   }
 </style>

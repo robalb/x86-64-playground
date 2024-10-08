@@ -19,9 +19,9 @@
   )
 
   async function handle_demo(){
-    let filedata = await fetchBinaryFile(demo1_url)
+    // let filedata = await fetchBinaryFile(demo1_url)
     // blink.loadElf(filedata);
-    blink.loadASM(filedata);
+    blink.loadASM($blinkStore.asm);
   }
 
 </script>
@@ -29,7 +29,7 @@
 <section>
   <h2>X86-64 playground</h2>
   <p><strong>State:</strong> {$blinkStore.state}</p>
-  <button on:click={handle_demo}>load demo</button>
+  <button on:click={handle_demo}>compile</button>
   <button on:click={()=>blink.starti()}
     disabled={!canstart}
   > starti </button>
