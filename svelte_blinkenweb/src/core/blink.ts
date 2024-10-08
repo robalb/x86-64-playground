@@ -211,6 +211,8 @@ export default class Blink{
   states = {
     'NOT_READY': 'NOT_READY',
     'READY': 'READY',
+    'ASSEMBLING': 'ASSEMBLING',
+    'LINKING': 'LINKING',
     'PROGRAM_LOADED': 'PROGRAM_LOADED',
     'PROGRAM_RUNNING': 'PROGRAM_RUNNING',
     'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
@@ -221,8 +223,6 @@ export default class Blink{
   state: typeof this.states[keyof typeof this.states] =
     this.states.NOT_READY;
   stopReason: null|{loadFail: boolean, exitCode: number, details: string};
-
-  loadASM_state: number;
 
   /**
   * Initialize the emscripten blink module.
@@ -257,9 +257,6 @@ export default class Blink{
         if(true){
           M.FS.createPreloadedFile("/", "as", as_elf_url, true, true);
           M.FS.createPreloadedFile("/", "ld", ld_elf_url, true, true);
-          // M.FS.createPreloadedFile("/", "assembly.s", assembly_url, true, true);
-          // M.FS.chmod('/as', 0o777);
-          // M.FS.chmod('/ld', 0o777);
         }
       }
     });
@@ -291,6 +288,7 @@ export default class Blink{
     if(this.state == state){
       return;
     }
+    console.log("blink: "+state)
     this.#stateChangeHandler(state, this.state);
     this.state = state;
   }
@@ -322,13 +320,18 @@ export default class Blink{
   * when the guest process calls the exit syscall
   */
   #extern_c__exit_callback(code: number){
-    if(this.state == this.states.READY){
-      //this return code is not from a regular guest program,
-      //it's from the assembler or the loader, that are
-      //running in the emulator
-      this.loadASM_returnhandler(code);
+    //Handle separately the return codes tha are generated from the
+    //assembler or linker running in the emulator, and not
+    //from a regular program
+    if(this.state == this.states.ASSEMBLING){
+      this.loadASM_assembler_exit_callback(code);
       return
     }
+    if(this.state == this.states.LINKING){
+      this.loadASM_linker_exit_callback(code);
+      return
+    }
+    
     this.stopReason = {
       loadFail: false,
       exitCode: code,
@@ -402,45 +405,50 @@ export default class Blink{
   }
 
   /**
-  * close previous processes,
-  * reset the emaulator state,
-  * and load the given asm bytes in a minimalistic elf
+  * Launch a multi stage process where:
+  * - the assembly asmString is written to a file in the virtual FS.
+  * - an assembler is emulated in blink
+  * - a linker is emulated in blink
+  * The state of this operation is kept via this.state.
+  * If successful, it will be possible to launch the compiled program
+  * via this.starti(), or this.run()
   */
-  loadASM(asmString): boolean{
+  loadASM(asmString: string): boolean{
     if(this.state == this.states.NOT_READY){
       return false
     }
-    this.loadASM_state = 1
-    this.#setState(this.states.READY);
+    this.#setState(this.states.ASSEMBLING);
     let FS = this.Module.FS
-    console.log(asmString)
     FS.writeFile("/assembly.s", asmString);
-    this.Module._blinkenlib_loadPlayground(1);
+    let stage = 1;
+    //this hack ensures that the function is called after a browser render pass
+    setTimeout(()=>{
+      this.Module._blinkenlib_loadPlayground(stage);
+    },0)
   }
-  loadASM_stage2(stage1_exitcode: number){
-    if(stage1_exitcode != 0){
-      console.log("stage 1 failed");
-      return;
+
+  loadASM_assembler_exit_callback(code: number){
+    if(code != 0){
+      console.log("assembler failed");
+      this.#setState(this.states.READY);
+      return
     }
-    this.loadASM_state = 2;
+    this.#setState(this.states.LINKING);
+    //this hack ensures that the function is called after a browser render pass
+    setTimeout(()=>{
     this.Module._blinkenlib_loadPlayground(2);
+    },0)
   }
-  loadASM_stage3(stage2_exitcode: number){
-    this.loadASM_state = 1;
-    if(stage2_exitcode != 0){
-      console.log("stage 1 failed");
-      return;
+
+  loadASM_linker_exit_callback(code: number){
+    if(code != 0){
+      console.log("linker failed");
+      this.#setState(this.states.READY);
+      return
     }
     let FS = this.Module.FS
     FS.chmod('/program', 0o777);
     this.#setState(this.states.PROGRAM_LOADED);
-  }
-  loadASM_returnhandler(code){
-    if(this.loadASM_state == 1){
-      this.loadASM_stage2(code);
-    }else{
-      this.loadASM_stage3(code);
-    }
   }
 
   /**

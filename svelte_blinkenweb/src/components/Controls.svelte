@@ -10,12 +10,18 @@
 
   let canstart = false;
   let canstep = false;
+  let cancompile = false;
   $: canstart = (
     $blinkStore.state == blink.states.PROGRAM_LOADED ||
     $blinkStore.state == blink.states.PROGRAM_STOPPED
   )
   $: canstep = (
     $blinkStore.state == blink.states.PROGRAM_RUNNING
+  )
+  $: cancompile = (
+    $blinkStore.state != blink.states.NOT_READY &&
+    $blinkStore.state != blink.states.ASSEMBLING &&
+    $blinkStore.state != blink.states.LINKING
   )
 
   async function handle_demo(){
@@ -29,7 +35,7 @@
 <section>
   <h2>X86-64 playground</h2>
   <p><strong>State:</strong> {$blinkStore.state}</p>
-  <button on:click={handle_demo}>compile</button>
+  <button disabled={!cancompile} on:click={handle_demo}>compile</button>
   <button on:click={()=>blink.starti()}
     disabled={!canstart}
   > starti </button>
