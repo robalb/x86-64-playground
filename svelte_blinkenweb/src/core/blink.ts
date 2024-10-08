@@ -1,6 +1,6 @@
 import blinkenlib from '../assets/blinkenlib.js'
-import as_elf_url from '../assets/as-new.elf?url'
-import ld_elf_url from '../assets/ld-new.elf?url'
+import as_elf_url from '../assets/gnu-as.elf?url'
+import ld_elf_url from '../assets/gnu-ld.elf?url'
 import assembly_url from '../assets/helloworld.s?url'
 
 

@@ -21,8 +21,8 @@ svelte web project
 
     ```
 1. the blinkenlights fork is currently stored in `blink/`
-1. run `./init.sh` to initialize the project
-1. run `./compile.sh` to compile the wasm file, and copy it into the svelte project assets folder
+1. run `./init_blink.sh` to initialize the project
+1. run `./compile_blink.sh` to compile the wasm file, and copy it into the svelte project assets folder
 
 
 ## A tour of the project
