@@ -205,6 +205,7 @@ export default class Blink{
   #stderrHandler: (charCode: number)=>void;
   #signalHandler: (signal: number, code: number)=>void;
   #stateChangeHandler: (state: string, oldState: string)=>void;
+  #renderHandler: (id: number)=>void;
 
   m: M_CLStruct;
 
@@ -232,7 +233,8 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
-    stateChangeHandler?: (state: string, oldState: string)=>void
+    stateChangeHandler?: (state: string, oldState: string)=>void,
+    renderHandler?: (id: number)=>void,
   ){
     this.setCallbacks(
       stdinHandler,
@@ -240,6 +242,7 @@ export default class Blink{
       stderrHandler,
       signalHandler,
       stateChangeHandler,
+      renderHandler,
     );
     this.#initEmscripten();
   }
@@ -312,6 +315,7 @@ export default class Blink{
       this.stopReason = {loadFail: false, exitCode: exitCode, details: details}
       this.#setState(this.states.PROGRAM_STOPPED);
     }
+    this.#renderHandler(Date.now())
     this.#signalHandler(sig, code);
   }
 
@@ -339,6 +343,7 @@ export default class Blink{
     }
     this.#setState(this.states.PROGRAM_STOPPED);
     console.log("exit callback called")
+    this.#renderHandler(Date.now())
   }
 
 
@@ -347,7 +352,8 @@ export default class Blink{
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
-    stateChangeHandler?: (state: string, oldState: string)=>void
+    stateChangeHandler?: (state: string, oldState: string)=>void,
+    renderHandler?: (id: number)=>void,
   ){
     if(stdinHandler)
       this.#stdinHandler = stdinHandler
@@ -359,6 +365,8 @@ export default class Blink{
       this.#signalHandler = signalHandler
     if(stateChangeHandler)
       this.#stateChangeHandler = stateChangeHandler
+    if(renderHandler)
+      this.#renderHandler = renderHandler
 
     if(!this.#stdinHandler)
       this.#stdinHandler = this.#default_stdinHandler
@@ -370,6 +378,8 @@ export default class Blink{
       this.#signalHandler = this.#default_signalHandler
     if(!this.#stateChangeHandler)
       this.#stateChangeHandler = this.#default_stateChangeHandler
+    if(!this.#renderHandler)
+      this.#renderHandler = this.#default_renderHander
   }
 
   /**
@@ -501,6 +511,8 @@ export default class Blink{
   #default_stateChangeHandler(state: string, oldState: string){
     console.log(`state change: ${oldState} -> ${state}`)
   }
-
+  #default_renderHander(id: number){
+    console.log(`update ID: ${id}`)
+  }
 
 }

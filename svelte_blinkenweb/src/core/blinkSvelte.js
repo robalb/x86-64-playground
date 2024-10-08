@@ -7,7 +7,8 @@ function createBlinkStore(){
     term_buffer: "",
     state: "",
     signal: "",
-    asm: ""
+    asm: "",
+    render: 0,
   });
 
   let stdinHander=()=>{
@@ -33,13 +34,17 @@ function createBlinkStore(){
   let stateChangeHander=(state, oldstate)=>{
     update((store) => ({ ...store, state:state}))
   }
+  let renderHandler=(id)=>{
+    update((store) => ({ ...store, render:id}))
+  }
 
   const blink = new Blink(
     stdinHander,
     stdoutHandler,
     stderrHander,
     signalHander,
-    stateChangeHander
+    stateChangeHander,
+    renderHandler
   )
 
   update((store) => ({ ...store, state:blink.state}))

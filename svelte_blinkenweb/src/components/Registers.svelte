@@ -56,7 +56,7 @@ function updateRegisters(){
 }
 
 //rerender registers on machine step
-$: $blinkStore.state && updateRegisters();
+$: $blinkStore.render && updateRegisters();
 
 </script>
 

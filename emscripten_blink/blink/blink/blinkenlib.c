@@ -42,14 +42,14 @@ bool single_stepping = false;
  * SIGTRAP will not terminate the program
  */
 void TerminateSignal(struct Machine *m, int sig, int code) {
-
+#ifdef DEBUG
   if(sig != SIGTRAP){
     printf("Terminate signal received! %d : %d \n", sig, code);
   }
   else{
     printf("SIGTRAP received\n");
   }
-
+#endif
   update_clstruct(m);
   if(signal_callback){
     signal_callback(sig, code);
@@ -212,10 +212,14 @@ void runLoop(){
     // if sigsetjmp fake-returned 1, the actual trap number might have been
     // either 1 or 0; this should have been stored in m->trapno
     if (interrupt == 1) interrupt = m->trapno;
+#ifdef DEBUG
     printf("handling machine interrupt: %d \n", interrupt);
-    puts("@");
+    puts("--");
+#endif
     if(interrupt == kMachineExitTrap){
+#ifdef DEBUG
       puts("Exit trap found! \n");
+#endif
       if(signal_callback){
         update_clstruct(m);
         exit_callback(m->system->exitcode);
@@ -247,7 +251,6 @@ void SetUp(void) {
 void OnSymbols(struct System *s) {
   // ResolveBreakpoints();
   // ResolveWatchpoints();
-  puts("symbols ready. you can now find your breakpoints");
 }
 
 void PostLoadSetup(){
@@ -275,14 +278,12 @@ void setupProgramWithArgs(char* programpath, char **args){
   char *bios = 0;
   char *vars = 0;
   SetUp();
-  printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
   LoadProgram(m, programpath, programpath, args, &vars, bios);
-  puts("@");
+#ifdef DEBUG
   printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
+#endif
   PostLoadSetup();
-  puts("##");
   update_clstruct(m);
-  puts("@@");
 }
 
 void setupProgram(){
@@ -315,7 +316,7 @@ void blinkenlib_loadPlayground(int stage){
   //a program, and then to modify its .text section
   //on the fly when it's in memory.
   if(stage == 1){
-    puts("/as -o /program /assembly.s");
+    puts("\n/as -o /program /assembly.s");
     char codepath[] = "/as";
     char *args[] = {"/as", "-o", "/program.o", "/assembly.s", 0};
     setupProgramWithArgs(codepath, args);
@@ -323,12 +324,13 @@ void blinkenlib_loadPlayground(int stage){
     runLoop();
   }
   else{
-    puts("/ld -o /program /program.o");
+    puts("\n/ld -o /program /program.o");
     char codepath2[] = "/ld";
     char *args2[] = {"/ld", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
     setupProgramWithArgs(codepath2, args2);
     single_stepping = false;
     runLoop();
+    puts("Program ready.");
   }
 
 }
@@ -392,8 +394,7 @@ int main(int argc, char *argv[]) {
   puts("This program is designed to run in emscripten");
   return 1;
 #endif
-
-  puts("blinkenlib setup starting...");
+  puts("Initializing blink emulator...");
   if(argc != 3){
     puts("Error. main expected 2 args");
     return 1;
@@ -402,17 +403,15 @@ int main(int argc, char *argv[]) {
   int exit_callback_num = atoi(argv[2]);
   signal_callback = (void(*)(int, int))signal_callback_num;
   exit_callback = (void(*)(int))exit_callback_num;
+#ifdef DEBUG
   printf("fp1: %d\n", signal_callback_num);
   printf("fp2: %d\n", exit_callback_num);
-
-  //initialize the cross-language struct
-  cls.version = CLSTRUCT_VERSION;
-
-  //overlays setup goes here
-  //vfs setup goes here
-
+#endif
   //disable ansi colors in prints
   g_high.enabled = false; 
-
-  puts("setup done!\n");
+  //initialize the cross-language struct
+  cls.version = CLSTRUCT_VERSION;
+  //overlays setup goes here
+  //vfs setup goes here
+  puts("blink ready!");
 }

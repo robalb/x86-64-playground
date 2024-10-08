@@ -4,37 +4,9 @@ import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-co
 import "prism-code-editor/prism/languages/nasm"
 import {blinkStore} from '../core/blinkSvelte'
 import {onMount} from 'svelte'
-
-let blink = blinkStore.getInstance()
+import { snippets } from "../core/snippets";
 
 let editor_elem;
-
-let template =`
-.intel_syntax noprefix
-
-.global _start
-.text
-
-_start:
-  ;#---------------------
-  ;# write your code here
-  ;#---------------------
-  mov rrax, 0x0a21646c726f5720
-  push rax
-  mov rax, 0x6f6c6c6548
-  push rax
-
-  mov rax, 1
-  mov rdi, 1
-  mov rsi, rsp
-  mov rdx, 14
-  syscall
-
-  mov rax, 60
-  xor rdi, rdi
-  syscall
-
-`;
 
 onMount(() => {
 
@@ -43,7 +15,7 @@ onMount(() => {
     {
       language: "nasm",
       theme: "github-dark",
-      value: template,
+      value: snippets["functions"],
       onUpdate: content=>{
         blinkStore.updateAsm(content)
       },

@@ -14,8 +14,8 @@ let blink = blinkStore.getInstance()
 let byte_count = 512
 let startAddress = 0n;
 let data = Array(byte_count).fill(0)
-//rerender registers on machine step
-$: $blinkStore.state && updateAll();
+//rerender hexdata on machine step
+$: $blinkStore.render && updateAll();
 
 let hoveredIndex = -1;
 
