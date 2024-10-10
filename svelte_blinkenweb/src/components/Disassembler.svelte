@@ -17,18 +17,19 @@ function updateDis(){
   let current_line = blink.m.getPtr("dis__current_line");
   let mem = blink.m.memView;
 
-  let str = '<tr'
+  let str = ''
   for(let i=0; i< lines; i++){
+    str += '<tr '
     if(i == current_line){
       str += ' class="current"'
     }
-    str += "/> <td>"
+    str += ">"
     for(let j=0; j<line_len; j++){
       let ch = mem.getUint8(startPtr+i*line_len + j);
       if(!ch) break;
       str += String.fromCharCode(ch);
     }
-    str += "</td><tr/>"
+    str += "<tr/>"
   }
   elem.innerHTML = str;
 }
@@ -37,28 +38,8 @@ function updateDis(){
 $: $blinkStore.state && updateDis();
 </script>
 
+<div class="disass">
 <table bind:this={elem}>
-</table>
-
-<!-- <div class="disass"> -->
-<!--   <p> -->
-<!--     <span class="addr">004000b0</span> -->
-<!--     <span class="hex" >90</span> -->
-<!--     <span class="str" >nop</span> -->
-<!--   </p> -->
-<!--   <p> -->
-<!--     <span class="addr">004000b0</span> -->
-<!--     <span class="hex" >54</span> -->
-<!--     <span class="str" >push rsp</span> -->
-<!--   </p> -->
-<!--   <p> -->
-<!--     <span class="addr">004000b1</span> -->
-<!--     <span class="hex" >ba 14 00 00 00</span> -->
-<!--     <span class="str" >mov $0x14,%edx%esi</span> -->
-<!--   </p> -->
-<!-- </div> -->
-<div class="disass2">
-<table >
   <tr>
     <td class="addr">004000b0</td>
     <td class="hex">90</td>
@@ -95,66 +76,5 @@ $: $blinkStore.state && updateDis();
 </div>
 
 <style>
-.disass2{
-    padding: .5rem;
-    padding-left: 0;
-    font-family: var(--code-font-family);
-    font-size: .9rem;
-    overflow-x: auto;
-  }
-/* Remove default styles from the table */
-table, th, td {
-  border: none;
-  margin: 0;
-  padding: 0;
-  border-collapse: collapse;
-}
-
-table {
-  width: 100%;
-}
-
-tr.current{
-  border: 1px solid gray;
-  background-color: rgba(255,255,255,0.1);
-}
-
-th, td {
-  text-align: left;
-}
-
-td {
-    padding-right: 1rem;
-  }
-
-.addr{
-  color: var(--theme-disaddr-fg);
-  width: 100px; /* Adjust as needed */
-  text-align:right;
-  padding-left: 1rem;
-  }
-.hex {
-  color: var(--theme-dishex-fg);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100px; /* Adjust as needed */
-}
-.str{
-  white-space: nowrap;
-  color: white;
-}
-
-span.red{
-  color: #ffa657;
-}
-span.brown{
-  color: #ff7b72;
-}
-span.blue{
-  color: #a5d6ff;
-  color: #79c0ff;
-}
-
 
 </style>

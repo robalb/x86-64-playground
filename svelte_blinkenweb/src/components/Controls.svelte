@@ -3,7 +3,7 @@
   import {fetchBinaryFile} from '../core/utils'
   // import demo1_url from '../assets/example.elf?url'
   // import demo1_url from '../assets/ld-new.elf?url'
-  // import demo1_url from '../assets/demo_programs/argv.elf?url'
+  import demo1_url from '../assets/demo_programs/argv.elf?url'
 
   let blink = blinkStore.getInstance()
   window['blink'] = blink;
@@ -25,9 +25,9 @@
   )
 
   async function handle_demo(){
-    // let filedata = await fetchBinaryFile(demo1_url)
-    // blink.loadElf(filedata);
-    blink.loadASM($blinkStore.asm);
+    let filedata = await fetchBinaryFile(demo1_url)
+    blink.loadElf(filedata);
+    // blink.loadASM($blinkStore.asm);
   }
 
 </script>

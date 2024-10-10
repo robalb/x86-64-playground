@@ -26,7 +26,7 @@ void update_clstruct(struct Machine *m);
  * this buffer holds the disassembly strings
  * that will be passed to js
  */
-#define DIS_MAX_LINES 20
+#define DIS_MAX_LINES 200
 #define DIS_MAX_LINE_LEN 200
 char dis_buffer[DIS_MAX_LINES][DIS_MAX_LINE_LEN] = {0};
 

@@ -216,3 +216,70 @@ body {
 }
 
 
+
+/** disassembly panel */
+/*TODO: add disass prefix to all styles, to avoid
+* polluting the cascade. set proper colors.*/
+
+.disass{
+    padding: .5rem;
+    padding-left: 0;
+    font-family: var(--code-font-family);
+    font-size: .9rem;
+    overflow-x: auto;
+  }
+/* Remove default styles from the table */
+table, td {
+  border: none;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+table {
+  width: 100%;
+}
+
+tr.current{
+  border: 1px solid gray;
+  background-color: rgba(255,255,255,0.1);
+}
+
+td {
+  text-align: left;
+  padding-right: 1rem;
+}
+
+.addr{
+  color: var(--theme-disaddr-fg);
+  width: 100px; /* Adjust as needed */
+  text-align:right;
+  padding-left: 1rem;
+  }
+.hex {
+  color: var(--theme-dishex-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px; /* Adjust as needed */
+}
+.str{
+  white-space: nowrap;
+  color: white;
+}
+.label{
+  color: var(--color-orange);
+}
+
+span.red{
+  color: #ffa657;
+}
+span.brown{
+  color: #ff7b72;
+}
+span.blue{
+  color: #a5d6ff;
+  color: #79c0ff;
+}
+
+
