@@ -492,7 +492,9 @@ update: it works. but it's 6Mb, and compilation takes ~5 seconds
 on the main thread, blocking the ui
 
 are there lightweight versions of gas and ld i could use?
-https://github.com/tyfkda/xcc
+- https://github.com/tyfkda/xcc (tried, too simple/broken)
+- yasm (it can directly generate an elf) https://github.com/yasm/yasm/
+- fasm https://www.jdoodle.com/execute-fasm-online
 
 
 
