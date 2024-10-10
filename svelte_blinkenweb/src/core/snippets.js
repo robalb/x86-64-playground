@@ -1,6 +1,4 @@
-
-export let snippets={
-"syscall": `.intel_syntax noprefix
+let syscall_gdb =`.intel_syntax noprefix
 
 .global _start
 .text
@@ -24,9 +22,38 @@ _start:
 
 hello_string:
         .asciz  "Hello, world!\\n"
-`,
+`;
 
-"functions": `.intel_syntax noprefix
+let syscall_fasm=`
+; fasm demonstration of writing 64-bit ELF executable,
+; from the fasm examples repository.
+; (thanks to František Gábriš)
+
+format ELF64 executable 3
+
+segment readable executable
+
+entry $
+
+  push rsp
+	mov	edx,msg_siz
+	lea	rsi,[msg]
+	mov	edi,1		; STDOUT
+	mov	eax,1		; sys_write
+	syscall
+
+	xor	edi,edi 	; exit code 0
+	mov	eax,60		; sys_exit
+	syscall
+
+segment readable writeable
+
+msg db 'Hello 64-bit world!',0xA
+msg_size = $-msg
+  
+`
+
+let functions_gdb= `.intel_syntax noprefix
 
 .global _start
 .text
@@ -73,6 +100,23 @@ exit:
   pop rbp
   ret
   
-`,
+`;
 
+let functions_fasm =`
+`;
+
+
+
+
+
+export let snippets={
+"syscall":{
+    "gdb":syscall_gdb,
+    "fasm": syscall_fasm
+  },
+  "functions":{
+    "gdb": functions_gdb,
+    "fasm": functions_fasm
+  }
 }
+

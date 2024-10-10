@@ -38,7 +38,9 @@ function createBlinkStore(){
     update((store) => ({ ...store, render:id}))
   }
 
+  const mode = "FASM"
   const blink = new Blink(
+    mode,
     stdinHander,
     stdoutHandler,
     stderrHander,

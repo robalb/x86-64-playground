@@ -496,6 +496,7 @@ are there lightweight versions of gas and ld i could use?
 - yasm (it can directly generate an elf) https://github.com/yasm/yasm/
 - fasm https://www.jdoodle.com/execute-fasm-online
 
+gold, lld, rust-lld are worth a try.
 
 
 ## additional best practices:

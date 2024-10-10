@@ -15,7 +15,7 @@ onMount(() => {
     {
       language: "nasm",
       theme: "github-dark",
-      value: snippets["functions"],
+      value: snippets["syscall"]["fasm"],
       onUpdate: content=>{
         blinkStore.updateAsm(content)
       },

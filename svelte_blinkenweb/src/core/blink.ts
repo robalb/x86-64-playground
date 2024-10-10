@@ -1,4 +1,5 @@
 import blinkenlib from '../assets/blinkenlib.js'
+import fasm_elf_url from '../assets/fasm.elf?url'
 import as_elf_url from '../assets/gnu-as.elf?url'
 import ld_elf_url from '../assets/gnu-ld.elf?url'
 import assembly_url from '../assets/helloworld.s?url'
@@ -191,6 +192,11 @@ let signals_info = {
     31: {"name": "SIGSYS", "description": "Bad system call."}
 }
 
+export let blink_modes = {
+  'GNU': 'GNU',
+  'FASM': 'FASM'
+} as const;
+
 
 /**
 * A javascript wrapper for the blink x86-64 emulator.
@@ -219,6 +225,8 @@ export default class Blink{
     'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
   } as const;
 
+  mode: typeof blink_modes[keyof typeof blink_modes];
+
   Module: any;/*Emscripten Module object*/
   memory: WebAssembly.Memory;
   state: typeof this.states[keyof typeof this.states] =
@@ -229,6 +237,7 @@ export default class Blink{
   * Initialize the emscripten blink module.
   */
   constructor(
+    mode: typeof blink_modes[keyof typeof blink_modes],
     stdinHandler?: ()=>number,
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
@@ -244,10 +253,11 @@ export default class Blink{
       stateChangeHandler,
       renderHandler,
     );
-    this.#initEmscripten();
+    this.#initEmscripten(mode);
   }
 
-  async #initEmscripten(){
+  async #initEmscripten(mode?: typeof blink_modes[keyof typeof blink_modes]){
+    this.mode = mode;
     this.Module = await blinkenlib({
       noInitialRun: true,
       preRun: (M: any) =>{
@@ -256,10 +266,12 @@ export default class Blink{
           this.#stdoutHandler,
           this.#stderrHandler,
         );
-        //TODO: only if playground active
-        if(true){
+        if(mode == blink_modes.GNU){
           M.FS.createPreloadedFile("/", "as", as_elf_url, true, true);
           M.FS.createPreloadedFile("/", "ld", ld_elf_url, true, true);
+        }
+        else if(mode == blink_modes.FASM){
+          M.FS.createPreloadedFile("/", "fasm", fasm_elf_url, true, true);
         }
       }
     });
@@ -430,10 +442,15 @@ export default class Blink{
     this.#setState(this.states.ASSEMBLING);
     let FS = this.Module.FS
     FS.writeFile("/assembly.s", asmString);
-    let stage = 1;
+    let STEP_ASSEMBLE_AND_LINK = 0;
+    let STEP_ASSEMBLE = 1;
+    let STEP_LINK = 2;
+    let step: number;
+    if(this.mode == blink_modes.FASM){step = STEP_ASSEMBLE_AND_LINK;}
+    if(this.mode == blink_modes.GNU){step = STEP_ASSEMBLE;}
     //this hack ensures that the function is called after a browser render pass
     setTimeout(()=>{
-      this.Module._blinkenlib_loadPlayground(stage);
+      this.Module._blinkenlib_loadPlayground(step);
     },0)
   }
 
@@ -443,11 +460,19 @@ export default class Blink{
       this.#setState(this.states.READY);
       return
     }
-    this.#setState(this.states.LINKING);
-    //this hack ensures that the function is called after a browser render pass
-    setTimeout(()=>{
-    this.Module._blinkenlib_loadPlayground(2);
-    },0)
+    if(this.mode == blink_modes.FASM){
+      let FS = this.Module.FS
+      FS.chmod('/program', 0o777);
+      this.#setState(this.states.PROGRAM_LOADED);
+    }else{
+      //the gnu mode requires a separate linking step
+      this.#setState(this.states.LINKING);
+      //this hack ensures that the function is called after a browser render pass
+      setTimeout(()=>{
+      this.Module._blinkenlib_loadPlayground(2);
+      },0)
+
+    }
   }
 
   loadASM_linker_exit_callback(code: number){

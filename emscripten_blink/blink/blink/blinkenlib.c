@@ -309,21 +309,27 @@ void blinkenlib_loadProgram(){
 }
 
 EMSCRIPTEN_KEEPALIVE
-void blinkenlib_loadPlayground(int stage){
-  //TODO: write playground program to the vfs path ./program.
-  //The easyest way i can think of to simulate
-  //a fully functional program is to actually load
-  //a program, and then to modify its .text section
-  //on the fly when it's in memory.
-  if(stage == 1){
-    puts("\n/as -o /program /assembly.s");
+void blinkenlib_loadPlayground(int step){
+  #define STEP_ASSEMBLE_AND_LINK 0
+  #define STEP_ASSEMBLE 1
+  #define STEP_LINK 2
+  if(step == STEP_ASSEMBLE_AND_LINK){
+    puts("\n/fasm /assembly.s /program");
+    char codepath[] = "/fasm";
+    char *args[] = {"/fasm", "/assembly.s", "/program", 0};
+    setupProgramWithArgs(codepath, args);
+    single_stepping = false;
+    runLoop();
+  }
+  else if(step == STEP_ASSEMBLE){
+    puts("\n/as -o /program.o /assembly.s");
     char codepath[] = "/as";
     char *args[] = {"/as", "-o", "/program.o", "/assembly.s", 0};
     setupProgramWithArgs(codepath, args);
     single_stepping = false;
     runLoop();
   }
-  else{
+  else if(step == STEP_LINK){
     puts("\n/ld -o /program /program.o");
     char codepath2[] = "/ld";
     char *args2[] = {"/ld", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
@@ -332,7 +338,6 @@ void blinkenlib_loadPlayground(int stage){
     runLoop();
     puts("Program ready.");
   }
-
 }
 
 EMSCRIPTEN_KEEPALIVE
