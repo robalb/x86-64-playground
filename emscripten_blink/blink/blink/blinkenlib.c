@@ -27,7 +27,7 @@ void update_clstruct(struct Machine *m);
  * that will be passed to js
  */
 #define DIS_MAX_LINES 20
-#define DIS_MAX_LINE_LEN 100
+#define DIS_MAX_LINE_LEN 200
 char dis_buffer[DIS_MAX_LINES][DIS_MAX_LINE_LEN] = {0};
 
 struct clstruct cls;
@@ -110,11 +110,13 @@ u64 updateDisassembler(){
   u64 lineIndex = GetDisIndex();
   for(int i=0; i < dis->ops.i && i<DIS_MAX_LINES; i++){
     const char* curr = DisGetLine(dis, m, i);
-    int len = strlen(curr);
+    int len = strlen(curr)+1;
     if(len > DIS_MAX_LINE_LEN){
       len = DIS_MAX_LINE_LEN;
     }
-    memcpy(dis_buffer[i], curr, strlen(curr));
+    memcpy(dis_buffer[i], curr, len);
+    dis_buffer[i][len-1] = 0;
+
   }
   return lineIndex;
 }

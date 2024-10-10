@@ -17,18 +17,18 @@ function updateDis(){
   let current_line = blink.m.getPtr("dis__current_line");
   let mem = blink.m.memView;
 
-  let str = ''
+  let str = '<tr'
   for(let i=0; i< lines; i++){
     if(i == current_line){
-      str += "--- "
+      str += ' class="current"'
     }
-    str += "<span>"
+    str += "/> <td>"
     for(let j=0; j<line_len; j++){
       let ch = mem.getUint8(startPtr+i*line_len + j);
       if(!ch) break;
       str += String.fromCharCode(ch);
     }
-    str += "</span><br/>"
+    str += "</td><tr/>"
   }
   elem.innerHTML = str;
 }
@@ -37,8 +37,8 @@ function updateDis(){
 $: $blinkStore.state && updateDis();
 </script>
 
-<div bind:this={elem}>
-</div>
+<table bind:this={elem}>
+</table>
 
 <!-- <div class="disass"> -->
 <!--   <p> -->
@@ -58,19 +58,24 @@ $: $blinkStore.state && updateDis();
 <!--   </p> -->
 <!-- </div> -->
 <div class="disass2">
-<table border="1">
+<table >
   <tr>
     <td class="addr">004000b0</td>
     <td class="hex">90</td>
     <td class="str">nop</td>
   </tr>
-  <tr class="current">
+  <tr >
     <td class="addr">004000b0</td>
     <td class="hex">54</td>
     <td class="str">push rsp</td>
   </tr>
+  <tr class="current">
+    <td class="addr">00400000</td>
+    <td class="hex">ba 14 00 00 00</td>
+    <td class="str">mov <span class="blue">0x14</span>, <span class="red">edx</span></td>
+  </tr>
 {#each Array(100) as _, i}
-  <tr>
+  <tr >
     <td class="addr">004000{i}</td>
     <td class="hex">ba 14 00 00 00</td>
     <td class="str">mov <span class="blue">0x14</span>, <span class="red">edx</span></td>

@@ -36,7 +36,7 @@ segment readable executable
 entry $
 
   push rsp
-	mov	edx,msg_siz
+	mov	edx,msg_size
 	lea	rsi,[msg]
 	mov	edi,1		; STDOUT
 	mov	eax,1		; sys_write
