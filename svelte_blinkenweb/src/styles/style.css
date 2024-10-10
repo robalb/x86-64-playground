@@ -64,16 +64,16 @@
 
 :root{
 	color-scheme: dark;
-  --theme-primary: var(--color-gold-100); /* ex primary */
-  --theme-bg: var(--color-gray-400); /*ex background-color*/
-  --theme-text-fg-contrasting: var(--color-gray-50); /* ex bright font color */
-  --theme-text-fg: var(--color-gray-100); /* ex font color */
-  --theme-link-fg: var(--color-gray-0); /* ex link color */
+  --theme-primary: var(--color-gold-100);
+  --theme-bg: var(--color-gray-400);
+  --theme-text-fg-contrasting: var(--color-gray-50);
+  --theme-text-fg: var(--color-gray-100);
+  --theme-link-fg: var(--color-gray-0);
   --theme-link-underline: var(--color-gold-100);
-  --theme-inline-code-bg: var(--color-gray-300); /* ex inline code background color */
-  --theme-panel-bg: var(--color-gray-500); /* ex panel bg color */
+  --theme-inline-code-bg: var(--color-gray-300);
+  --theme-panel-bg: var(--color-gray-500);
   --theme-panel-controls-bg: var(--color-gray-600);
-  --theme-panel-border: var(--color-gray-t); /* ex controls border color */
+  --theme-panel-border: var(--color-gray-t);
   --theme-focus: var(--theme-primary);
 
   /* hexdump hex numbers */
@@ -99,6 +99,10 @@
   --theme-reg-value-int: var(--color-gray-0);
   --theme-reg-name: var(--color-blue);
   --theme-reg-name-updated: var(--color-orange);
+
+  /* disassembler view */
+  --theme-disaddr-fg: var(--color-gray-0);
+  --theme-dishex-fg: var(--color-gray-200);
 
 
 }
