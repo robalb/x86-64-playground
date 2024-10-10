@@ -16,8 +16,23 @@
 
 ### todo week 2
 
-- integrate assembler
+- [x] integrate assembler
 - test proper design for code editor and disassembler sharing the same panel
 - first release with github pages
+
+### todo week 3
+
+- complete disassembler integration: avoid full rerender, add window scroll
+  when rsp changes.
+- complete the disassembler todos: proper BEM, proper c defines (#ifdef HTML)
+- add a good ui for the controls
+- first release with github pages
+
+
+### backlog
+- add html syntax highlight to c disass.
+- add intel syntax to c disass.
+
+
 
 

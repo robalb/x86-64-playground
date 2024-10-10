@@ -494,9 +494,16 @@ on the main thread, blocking the ui
 are there lightweight versions of gas and ld i could use?
 - https://github.com/tyfkda/xcc (tried, too simple/broken)
 - yasm (it can directly generate an elf) https://github.com/yasm/yasm/
-- fasm https://www.jdoodle.com/execute-fasm-online
+- fasm https://www.jdoodle.com/execute-fasm-online (WORKS!)
 
 gold, lld, rust-lld are worth a try.
+
+### what worked
+
+I ended up implementing both gas+ld and standalone fasm.
+standalone fasm is super fast and generates fully linked elfs,
+so i'm keeping it as default. gas+ld can be used when advanced
+functionality is required
 
 
 ## additional best practices:
