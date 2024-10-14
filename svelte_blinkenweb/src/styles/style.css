@@ -135,9 +135,10 @@
 }
 
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+select:focus-visible {
   outline: 3px solid var(--theme-focus);
-  border-radius: 8px;
+  border-radius: 4px;
   border-bottom-color: transparent;
 }
 
