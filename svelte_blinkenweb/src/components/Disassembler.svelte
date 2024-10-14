@@ -33,7 +33,6 @@ function scrollRip(elem, currline){
   if(n){
     n.classList.add("current")
     if(!isElementInViewport(n)){
-      console.log("not visible")
       n.scrollIntoView({behaviour:"smooth"});
     }
   }
@@ -84,15 +83,15 @@ $: $blinkStore.state && updateDis();
 <table >
     <tbody bind:this={elem}>
       {#each Array(100) as _, i}
-        <tr >
-          <td class="addr">004000{i}</td>
-          <td class="hex">ba 14 00 00 00</td>
-          <td class="str">mov <span class="blue">0x14</span>, <span class="red">edx</span></td>
-        </tr>
         <tr>
-          <td class="addr">004000{i}</td>
-          <td class="hex">ba 14 00 00 00</td>
-          <td class="str">mov <span class="blue">0x14</span>, <span class="brown">[</span><span class="red">rdx</span><span class="brown">]</span></td>
+          <td class="addr">0000000</td>
+          <td class="hex">00 00</td>
+          <td class="str">add 
+            <span class="brown">BYTE PTR [</span>
+            <span class="red">eax</span>
+            <span class="brown">]</span>,
+            <span class="red">al</span>
+          </td>
         </tr>
       {/each}
     </tbody>

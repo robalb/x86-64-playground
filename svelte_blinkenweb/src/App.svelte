@@ -9,7 +9,6 @@ import Disassembler from './components/Disassembler.svelte';
 import Terminal from './components/Terminal.svelte';
 import Controls from './components/Controls.svelte';
 
-let col = true;
 </script>
 
 <PaneGroup direction="horizontal" class="pf__panegroup pf__panegroup--horizontal">
@@ -18,7 +17,6 @@ let col = true;
 			<Pane defaultSize={25} class="pf__pane">
         <div class="pane">
           <div class="pane__content">
-            <!-- <button on:click={()=>col = !col}>aaaa</button> -->
             <Controls/>
           </div>
 				</div>
@@ -75,7 +73,6 @@ let col = true;
 			</Pane>
 		</PaneGroup>
 	</Pane>
-  {#if col}
   <PaneResizer class="pf__resizer pf__resizer--vertical" />
 	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
 		<div class="pane">
@@ -87,7 +84,6 @@ let col = true;
           </div>
 		</div>
 	</Pane>
-{/if}
 </PaneGroup>
 
 <style>
@@ -120,4 +116,5 @@ let col = true;
     /*this is cool the first time you see it, then super annoying */
     /* scroll-behavior: smooth; */
   }
+
 </style>

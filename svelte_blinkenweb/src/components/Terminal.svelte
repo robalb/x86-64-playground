@@ -8,7 +8,7 @@
   function scroll(){
     if(termref){
       setTimeout(()=>{
-        termref.parentElement.scrollTop = termref.parentElement.scrollHeight; // focus on bottom
+        termref.scrollTop = termref.scrollHeight; // focus on bottom
       },1)
     }
   }
@@ -33,6 +33,10 @@
     padding: .5rem;
     padding-left: 0;
     font-family: var(--code-font-family);
+    overflow: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   .term__codewrap{
     padding-left: 1rem;

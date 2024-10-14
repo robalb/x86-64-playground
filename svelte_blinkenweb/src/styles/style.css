@@ -103,6 +103,10 @@
   /* disassembler view */
   --theme-disaddr-fg: var(--color-gray-0);
   --theme-dishex-fg: var(--color-gray-200);
+  --theme-dislabel-fg: var(--color-orange);
+  --theme-dis-current-bg: rgba(255,255,255,0.1);
+  --theme-dis-current-border: gray;
+
 
 
 }
@@ -217,69 +221,75 @@ body {
 
 
 
-/** disassembly panel */
-/*TODO: add disass prefix to all styles, to avoid
-* polluting the cascade. set proper colors.*/
+/** Disassembly panel
+* The disassembly panel is managed via manual DOM updates,
+* bypassing the svelte renderer completely.
+* For this reason, all the styles are managed glbally with BEM
+*
+* TODO: set proper colors.
+*/
+.disass{
+  padding: .5rem;
+  padding-left: 0;
+  font-family: var(--code-font-family);
+  font-size: .9rem;
+  overflow-x: auto;
+}
 
 .disass{
-    padding: .5rem;
-    padding-left: 0;
-    font-family: var(--code-font-family);
-    font-size: .9rem;
-    overflow-x: auto;
+  /* Remove default styles from the table */
+  table, td {
+    border: none;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
   }
-/* Remove default styles from the table */
-table, td {
-  border: none;
-  margin: 0;
-  padding: 0;
-  border-collapse: collapse;
-}
 
-table {
-  width: 100%;
-}
-
-tr.current{
-  border: 1px solid gray;
-  background-color: rgba(255,255,255,0.1);
-}
-
-td {
-  text-align: left;
-  padding-right: 1rem;
-}
-
-.addr{
-  color: var(--theme-disaddr-fg);
-  width: 100px; /* Adjust as needed */
-  text-align:right;
-  padding-left: 1rem;
+  table {
+    width: 100%;
   }
-.hex {
-  color: var(--theme-dishex-fg);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100px; /* Adjust as needed */
-}
-.str{
-  white-space: nowrap;
-  color: white;
-}
-.label{
-  color: var(--color-orange);
-}
 
-span.red{
-  color: #ffa657;
-}
-span.brown{
-  color: #ff7b72;
-}
-span.blue{
-  color: #a5d6ff;
-  color: #79c0ff;
+  tr.current{
+    border: 1px solid var(--theme-dis-current-border);
+    background-color: var(--theme-dis-current-bg);
+  }
+
+  td {
+    text-align: left;
+    padding-right: 1rem;
+  }
+
+  .addr{
+    color: var(--theme-disaddr-fg);
+    width: 100px; /* Adjust as needed */
+    text-align:right;
+    padding-left: 1rem;
+    }
+  .hex {
+    color: var(--theme-dishex-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px; /* Adjust as needed */
+  }
+  .str{
+    white-space: nowrap;
+    color: white;
+  }
+  .label{
+    color: var(--theme-dislabel-fg);
+  }
+
+  span.red{
+    color: #ffa657;
+  }
+  span.brown{
+    color: #ff7b72;
+  }
+  span.blue{
+    color: #a5d6ff;
+    color: #79c0ff;
+  }
 }
 
 
