@@ -25,9 +25,9 @@
   )
 
   async function handle_demo(){
-    let filedata = await fetchBinaryFile(demo1_url)
-    blink.loadElf(filedata);
-    // blink.loadASM($blinkStore.asm);
+    // let filedata = await fetchBinaryFile(demo1_url)
+    // blink.loadElf(filedata);
+    blink.loadASM($blinkStore.asm);
   }
 
 </script>

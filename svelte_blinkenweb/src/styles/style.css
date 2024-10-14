@@ -224,9 +224,8 @@ body {
 /** Disassembly panel
 * The disassembly panel is managed via manual DOM updates,
 * bypassing the svelte renderer completely.
-* For this reason, all the styles are managed glbally with BEM
-*
-* TODO: set proper colors.
+* For this reason the classic svelte scoped css will not work,
+* and global styling via BEM classes is required.
 */
 .disass{
   padding: .5rem;
@@ -236,60 +235,62 @@ body {
   overflow-x: auto;
 }
 
-.disass{
-  /* Remove default styles from the table */
-  table, td {
-    border: none;
-    margin: 0;
-    padding: 0;
-    border-collapse: collapse;
-  }
-
-  table {
-    width: 100%;
-  }
-
-  tr.current{
-    border: 1px solid var(--theme-dis-current-border);
-    background-color: var(--theme-dis-current-bg);
-  }
-
-  td {
-    text-align: left;
-    padding-right: 1rem;
-  }
-
-  .addr{
-    color: var(--theme-disaddr-fg);
-    width: 100px; /* Adjust as needed */
-    text-align:right;
-    padding-left: 1rem;
-    }
-  .hex {
-    color: var(--theme-dishex-fg);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100px; /* Adjust as needed */
-  }
-  .str{
-    white-space: nowrap;
-    color: white;
-  }
-  .label{
-    color: var(--theme-dislabel-fg);
-  }
-
-  span.red{
-    color: #ffa657;
-  }
-  span.brown{
-    color: #ff7b72;
-  }
-  span.blue{
-    color: #a5d6ff;
-    color: #79c0ff;
-  }
+/*remove default styles*/
+.disass table, .disass td {
+  border: none;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
 }
 
+.disass table {
+  width: 100%;
+}
+
+.disass tr.current {
+  border: 1px solid var(--theme-dis-current-border);
+  background-color: var(--theme-dis-current-bg);
+}
+
+.disass td {
+  text-align: left;
+  padding-right: 1rem;
+}
+
+.disass .addr {
+  color: var(--theme-disaddr-fg);
+  width: 100px; /* Adjust as needed */
+  text-align: right;
+  padding-left: 1rem;
+}
+
+.disass .hex {
+  color: var(--theme-dishex-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px; /* Adjust as needed */
+}
+
+.disass .str {
+  white-space: nowrap;
+  color: white;
+}
+
+.disass .label {
+  color: var(--theme-dislabel-fg);
+}
+
+.disass span.red {
+  color: #ffa657; /* TODO: set proper colors.*/
+}
+
+.disass span.brown {
+  color: #ff7b72;
+}
+
+.disass span.blue {
+  color: #a5d6ff;
+  color: #79c0ff;
+}
 

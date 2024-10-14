@@ -22,9 +22,9 @@
 
 ### todo week 3
 
-- complete disassembler integration: avoid full rerender, add window scroll
+-[x] complete disassembler integration: avoid full rerender, add window scroll
   when rsp changes.
-- complete the disassembler todos: proper BEM, proper c defines (#ifdef HTML)
+-[x] complete the disassembler todos: proper BEM, proper c defines (#ifdef HTML)
 - add a good ui for the controls
 - first release with github pages
 
