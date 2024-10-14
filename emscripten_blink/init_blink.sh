@@ -38,5 +38,7 @@ emscripten_flags="\
 -sEXPORT_NAME=\"blinkenlib\" \
 -sEXPORTED_RUNTIME_METHODS='[$exported_runtime_methods_str]' \
 "
-emconfigure ./configure --disable-all LDFLAGS="$emscripten_flags"
-
+emconfigure ./configure \
+  --disable-all \
+  LDFLAGS="$emscripten_flags" \
+  CPPFLAGS="-DHTML -D_FILE_OFFSET_BITS=64 -D_DARWIN_C_SOURCE -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_GNU_SOURCE"

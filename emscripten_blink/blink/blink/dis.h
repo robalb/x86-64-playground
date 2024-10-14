@@ -9,6 +9,12 @@
 
 #define DIS_MAX_SYMBOL_LENGTH 128
 
+#ifdef HTML
+  #define DisHTML(p, str) (stpcpy((p), (str)))
+#else
+  #define DisHTML(p, str) (p)
+#endif
+
 struct DisOp {
   i64 addr;
   u8 size;

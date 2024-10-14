@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <signal.h>
 
-
 void(*signal_callback)(int, int) = 0;
 void(*exit_callback)(int) = 0;
 

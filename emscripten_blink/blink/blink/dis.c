@@ -136,12 +136,6 @@ static char *DisCode(struct Dis *d, char *p, int err) {
   }
 }
 
-//TODO al: propery define this
-#define HTML
-static char *DisString(char *p, char *tag){
-  while ((*p++ = *tag++) != '\0');
-  return p - 1;
-}
 
 static char *DisLineCode(struct Dis *d, char *p, int err) {
   int blen, plen;
@@ -152,9 +146,9 @@ static char *DisLineCode(struct Dis *d, char *p, int err) {
     blen = BYTELEN;
     plen = PFIXLEN;
   }
-  p = DisString(p, "<td class='addr'>");
+  p = DisHTML(p, "<td class='addr'>");
   p = DisColumn(DisAddr(d, p), p, ADDRLEN);
-  p = DisString(p, "</td>");
+  p = DisHTML(p, "</td>");
 #ifdef HAVE_JIT
   if (d->m && !IsJitDisabled(&d->m->system->jit)) {
     uintptr_t hook;
@@ -173,27 +167,27 @@ static char *DisLineCode(struct Dis *d, char *p, int err) {
 #endif
   if (!d->noraw) {
 
-    p = stpcpy(p, "<td class='hex'>");
+    p = DisHTML(p, "<td class='hex'>");
     p = DisColumn(DisRaw(d, p), p, plen * 2 + 1 + blen * 2);
-    p = stpcpy(p, "</td>");
+    p = DisHTML(p, "</td>");
   } else {
     *p++ = ' ';
     *p++ = ' ';
   }
-  p = stpcpy(p, "<td class='str'>");
+  p = DisHTML(p, "<td class='str'>");
   p = DisCode(d, p, err);
-  p = stpcpy(p, "</td>");
+  p = DisHTML(p, "</td>");
   return p;
 }
 
 static char *DisLabel(struct Dis *d, char *p, const char *name) {
-  p = DisString(p, "<td class='addr'>");
+  p = DisHTML(p, "<td class='addr'>");
   p = DisColumn(DisAddr(d, p), p, ADDRLEN);
-  p = stpcpy(p, "</td>");
-  p = DisString(p, "<td class='label'>");
+  p = DisHTML(p, "</td>");
+  p = DisHTML(p, "<td class='label'>");
   p = HighStart(p, g_high.label);
   p = Demangle(p, name, DIS_MAX_SYMBOL_LENGTH);
-  p = stpcpy(p, "</td>");
+  p = DisHTML(p, "</td>");
   p = HighEnd(p);
   *p++ = ':';
   *p = '\0';
