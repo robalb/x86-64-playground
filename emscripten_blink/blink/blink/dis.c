@@ -187,9 +187,9 @@ static char *DisLabel(struct Dis *d, char *p, const char *name) {
   p = DisHTML(p, "<td class='label'>");
   p = HighStart(p, g_high.label);
   p = Demangle(p, name, DIS_MAX_SYMBOL_LENGTH);
-  p = DisHTML(p, "</td>");
   p = HighEnd(p);
   *p++ = ':';
+  p = DisHTML(p, "</td>");
   *p = '\0';
   return p;
 }
