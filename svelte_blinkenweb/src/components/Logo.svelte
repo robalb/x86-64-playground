@@ -4,8 +4,6 @@
   svg{
     width: auto;
     height: 100%;
-    fill: #1c1e24;
-    fill: var(--color-blue);
     fill: var(--theme-primary);
   }
 </style>
