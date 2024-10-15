@@ -2,7 +2,7 @@
 
 a wasm-based x86-64 assembly playground, running entirely in the browser
 
-<img src="./docs/preview.png" />
+<img src="./docs/preview2.jpg" />
 
 The project is composed of two elements:
 - `emscripten_blink` a fork of the [blink](https://github.com/jart/blink/) x86-64 emulator, modified to run on wasm with a javascript api.
