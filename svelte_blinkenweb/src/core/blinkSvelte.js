@@ -1,6 +1,6 @@
 import { writable, derived } from "svelte/store";
 import {Blink, blink_modes} from './blink'
-import { snippets } from "./snippets";
+import { snippets } from "../core/snippets";
 
 function portion(parentStore, name) {
   return derived(parentStore, value => value[name]);
@@ -8,13 +8,30 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  const default_blink_mode = blink_modes.FASM
+  let default_blink_mode = blink_modes.FASM
+  let default_asm = snippets.syscall[default_blink_mode];
+  //Read the uri params to set the initial state
+  //TODO: this is absolutely temporary
+  const params = new URLSearchParams(window.location.search);
+  if(params.get("compiler") == "fasm"){
+    default_blink_mode = blink_modes.FASM
+  }
+  if(params.get("compiler") == "gnu"){
+    default_blink_mode = blink_modes.GNU
+  }
+  if(params.get("demo") == "hello_world"){
+    default_asm = snippets.syscall[default_blink_mode];
+  }
+  if(params.get("demo") == "functions"){
+    default_asm = snippets.functions[default_blink_mode];
+  }
+
 
   const store  = writable({
     term_buffer: "",
     state: "",
     signal: "",
-    asm: "",
+    asm: default_asm,
     manual_render: 0,
     mode: default_blink_mode,
   });
@@ -46,18 +63,8 @@ function createBlinkStore(){
   }
 
 
-  //TODO: put this in a util function
-  let mode = "FASM"
-  const params = new URLSearchParams(window.location.search);
-  if(params.get('compiler') == "gnu"){
-    mode = "GNU"
-  }
-  if(params.get('compiler') == "fasm"){
-    mode = "FASM"
-  }
-    
   const blink = new Blink(
-    mode,
+    default_blink_mode,
     stdinHander,
     stdoutHandler,
     stderrHander,

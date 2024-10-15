@@ -481,8 +481,13 @@ export class Blink{
   * a breakpoint or end.
   */
   run(){
-    this.#setState(this.states.PROGRAM_RUNNING)
-    this.Module._blinkenlib_run();
+    try{
+      this.#setState(this.states.PROGRAM_RUNNING)
+      this.Module._blinkenlib_run();
+    }catch(e){
+      this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
+      this.#setState(this.states.PROGRAM_STOPPED);
+    }
   }
 
   /**
@@ -490,16 +495,26 @@ export class Blink{
   * main function.
   */
   start(){
-    this.Module._blinkenlib_start();
-    this.#setState(this.states.PROGRAM_RUNNING)
+    try{
+      this.Module._blinkenlib_start();
+      this.#setState(this.states.PROGRAM_RUNNING)
+    }catch(e){
+      this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
+      this.#setState(this.states.PROGRAM_STOPPED);
+    }
   }
   /**
   * start the program and stop at the very first 
   * instruction (before main)
   */
   starti(){
-    this.Module._blinkenlib_starti();
-    this.#setState(this.states.PROGRAM_RUNNING)
+    try{
+      this.Module._blinkenlib_starti();
+      this.#setState(this.states.PROGRAM_RUNNING)
+    }catch(e){
+      this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
+      this.#setState(this.states.PROGRAM_STOPPED);
+    }
   }
 
   stepi(){

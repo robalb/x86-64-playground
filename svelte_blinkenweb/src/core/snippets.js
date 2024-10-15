@@ -1,4 +1,6 @@
-let syscall_gdb =`.intel_syntax noprefix
+import {blink_modes} from './blink'
+
+let syscall_gnu =`.intel_syntax noprefix
 
 .global _start
 .text
@@ -20,40 +22,37 @@ _start:
   xor rdi, rdi
   syscall
 
+.data
 hello_string:
         .asciz  "Hello, world!\\n"
 `;
 
-let syscall_fasm=`
-; fasm demonstration of writing 64-bit ELF executable,
-; from the fasm examples repository.
-; (thanks to František Gábriš)
-
-format ELF64 executable 3
+let syscall_fasm=`format ELF64 executable 3
 
 segment readable executable
-
 entry $
+  ;---------------------
+  ; write your code here
+  ;---------------------
 
-  push rsp
+  ; sys_write
 	mov	edx,msg_size
 	lea	rsi,[msg]
-	mov	edi,1		; STDOUT
-	mov	eax,1		; sys_write
+	mov	edi,1
+	mov	eax,1
 	syscall
 
-	xor	edi,edi 	; exit code 0
-	mov	eax,60		; sys_exit
+  ; sys_exit
+	xor	edi,edi
+	mov	eax,60
 	syscall
 
 segment readable writeable
-
 msg db 'Hello 64-bit world!',0xA
 msg_size = $-msg
-  
 `
 
-let functions_gdb= `.intel_syntax noprefix
+let functions_gnu= `.intel_syntax noprefix
 
 .global _start
 .text
@@ -103,7 +102,55 @@ hello_string:
   
 `;
 
-let functions_fasm =`
+let functions_fasm =`format ELF64 executable 3
+
+segment readable executable
+entry $
+
+_start:
+  ; Set up arguments for print function
+  mov rdi, 1
+  lea rsi, [msg]
+  mov rdx, 14
+  call print
+
+  ; Set up arguments for exit function
+  xor rdi, rdi
+  call exit
+
+; Print function
+; Arguments:
+;   rdi - File descriptor (1 for stdout)
+;   rsi - Pointer to the string to print
+;   rdx - Length of the string
+; Return:
+;   None
+print:
+  push rbp
+  mov rbp, rsp
+  mov rax, 1
+  syscall
+  pop rbp
+  ret
+
+; Exit function
+; Arguments:
+;   rdi - Exit code
+; Return:
+;   None
+exit:
+  push rbp
+  mov rbp, rsp
+  mov rax, 60
+  syscall
+  pop rbp
+  ret
+
+
+segment readable writeable
+msg db 'Hello 64-bit world!',0xA
+msg_size = $-msg
+
 `;
 
 
@@ -112,12 +159,12 @@ let functions_fasm =`
 
 export let snippets={
 "syscall":{
-    "gnu":syscall_gdb,
-    "fasm": syscall_fasm
+    [blink_modes.GNU]:syscall_gnu,
+    [blink_modes.FASM]: syscall_fasm
   },
   "functions":{
-    "gnu": functions_gdb,
-    "fasm": functions_fasm
+    [blink_modes.GNU]: functions_gnu,
+    [blink_modes.FASM]: functions_fasm
   }
 }
 

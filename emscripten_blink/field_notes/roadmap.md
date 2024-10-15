@@ -27,9 +27,18 @@
 -[x] complete the disassembler todos: proper BEM, proper c defines (#ifdef HTML)
 - add a good ui for the controls
 - first release with github pages
+- service worker. Understand: is github pages good enough for caching?
+  can i solve eventual caching issues with service workers?
 
+
+service worker:
+https://web.dev/articles/service-worker-lifecycle
+
+https://flatassembler.net/docs.php?article=manual#2.4
 
 ### backlog
+- completely remove the concept of snippets. make every state reachable by
+  url. snippets will just be url that set the asm and the correct compiler
 - add html syntax highlight to c disass.
 - add intel syntax to c disass.
 
