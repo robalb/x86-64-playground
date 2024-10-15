@@ -42,7 +42,10 @@ function updateDis(){
   if(!blink.m)return;
   if(!elem)return;
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
-    blink.state == blink.states.PROGRAM_STOPPED)) return;
+    blink.state == blink.states.PROGRAM_STOPPED)){
+    first_line = "";
+    return;
+  }
 
   let startPtr = blink.m.getPtr("dis__buffer");
   let lines = blink.m.getPtr("dis__max_lines");

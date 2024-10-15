@@ -38,7 +38,17 @@ function createBlinkStore(){
     update((store) => ({ ...store, render:id}))
   }
 
-  const mode = "FASM"
+
+  //TODO: put this in a util function
+  let mode = "FASM"
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('compiler') == "gnu"){
+    mode = "GNU"
+  }
+  if(params.get('compiler') == "fasm"){
+    mode = "FASM"
+  }
+    
   const blink = new Blink(
     mode,
     stdinHander,

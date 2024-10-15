@@ -1,6 +1,7 @@
 <script>
   import {blinkStore} from '../core/blinkSvelte'
   import {fetchBinaryFile} from '../core/utils'
+  import { onMount } from 'svelte';
   // import demo1_url from '../assets/example.elf?url'
   // import demo1_url from '../assets/ld-new.elf?url'
   import demo1_url from '../assets/demo_programs/argv.elf?url'
@@ -10,8 +11,8 @@
   window['blink'] = blink;
 
 	let compiler_options = [
-		{ id: 1, text: `Gnu AS` },
-		{ id: 2, text: `Fasm` },
+		{ id: 1, text: `Fasm`, uri: 'fasm' },
+		{ id: 2, text: `Gnu AS`, uri: 'gnu' },
 	];
   let demo_options = [
 		{ id: 1, text: `Hello World` },
@@ -21,8 +22,17 @@
 	let selected_compiler;
   let selected_demo;
 
-	let compiler_answer = '';
-  let demo_answer = ' ';
+  onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('compiler')) {
+      let opt = compiler_options.find(c => c.uri == params.get('compiler'));
+      if(opt) selected_compiler = opt;
+    }
+  });
+
+  function handle_compiler_change(){
+    window.location.search = `?compiler=${selected_compiler.uri}`;
+  }
 
   let canstart = false;
   let canstep = false;
@@ -85,7 +95,7 @@
 
 <section class="editor">
   <div class="compilebt">
-    <select bind:value={selected_compiler} on:change={() => (compiler_answer = '')}>
+    <select bind:value={selected_compiler} on:change={handle_compiler_change}>
       {#each compiler_options as question}
         <option value={question}>
           {question.text}
