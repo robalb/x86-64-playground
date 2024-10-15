@@ -67,7 +67,7 @@
     <Logo/>
   </a>
   <nav>
-    <a href="https://github.com/robalb/x86-64-playground/docs/about.md" target="_blank">About</a>
+    <a href="https://github.com/robalb/x86-64-playground/blob/master/docs/about.md" target="_blank">About</a>
     <a href="https://github.com/robalb/x86-64-playground" target="_blank">Github</a>
   </nav>
 </header>
