@@ -1,5 +1,5 @@
 <script>
-import {blinkStore} from '../core/blinkSvelte'
+import {blinkStore, manual_render} from '../core/blinkSvelte'
 
 //TODO: a11y arrow keys https://svelte.dev/repl/328a064fd64843f68418e04d2db09f35?version=3.18.1
 export let centered = false;
@@ -15,7 +15,7 @@ let byte_count = 512
 let startAddress = 0n;
 let data = Array(byte_count).fill(0)
 //rerender hexdata on machine step
-$: $blinkStore.render && updateAll();
+$: $manual_render && updateAll();
 
 let hoveredIndex = -1;
 

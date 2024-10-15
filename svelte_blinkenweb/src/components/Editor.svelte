@@ -2,7 +2,7 @@
 import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
 // Importing Prism grammars
 import "prism-code-editor/prism/languages/nasm"
-import {blinkStore} from '../core/blinkSvelte'
+import {blinkStore, asm} from '../core/blinkSvelte'
 import {onMount} from 'svelte'
 import { snippets } from "../core/snippets";
 
@@ -15,12 +15,12 @@ onMount(() => {
     {
       language: "nasm",
       theme: "github-dark",
-      value: snippets["syscall"]["fasm"],
+      value: $blinkStore.asm,
       onUpdate: content=>{
         blinkStore.updateAsm(content)
       },
     },
-    () => console.log("ready"),
+    () => console.log("editor ready"),
   )
 })
 </script>

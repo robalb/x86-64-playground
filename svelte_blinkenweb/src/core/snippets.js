@@ -69,9 +69,6 @@ _start:
   xor rdi, rdi
   call exit
 
-hello_string:
-  .asciz "Hello, world!\\n"
-
 ;# Print function
 ;# Arguments:
 ;#   rdi - File descriptor (1 for stdout)
@@ -99,6 +96,10 @@ exit:
   syscall
   pop rbp
   ret
+
+.data
+hello_string:
+  .asciz "Hello, world!\\n"
   
 `;
 
@@ -111,11 +112,11 @@ let functions_fasm =`
 
 export let snippets={
 "syscall":{
-    "gdb":syscall_gdb,
+    "gnu":syscall_gdb,
     "fasm": syscall_fasm
   },
   "functions":{
-    "gdb": functions_gdb,
+    "gnu": functions_gdb,
     "fasm": functions_fasm
   }
 }

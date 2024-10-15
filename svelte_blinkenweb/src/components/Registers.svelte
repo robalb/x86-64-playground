@@ -1,5 +1,5 @@
 <script>
-import {blinkStore} from '../core/blinkSvelte'
+import {blinkStore, manual_render} from '../core/blinkSvelte'
 
 let blink = blinkStore.getInstance()
 
@@ -26,9 +26,11 @@ let registers = [
 ]
 
 function updateRegisters(){
+  console.log("REG update")
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
     blink.state == blink.states.PROGRAM_STOPPED)) return;
 
+  console.log("REG heavy")
   for(let reg of registers){
     let new_str = blink.m.stringReadU64(reg.name.trim())
     if(new_str == reg.str){
@@ -43,7 +45,7 @@ function updateRegisters(){
 }
 
 //rerender registers on machine step
-$: $blinkStore.render && updateRegisters();
+$: $manual_render && updateRegisters();
 
 </script>
 

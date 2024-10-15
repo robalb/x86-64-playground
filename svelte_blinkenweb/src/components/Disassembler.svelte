@@ -1,5 +1,5 @@
 <script>
-import {blinkStore} from '../core/blinkSvelte'
+import {blinkStore, manual_render} from '../core/blinkSvelte'
 
 let blink = blinkStore.getInstance()
 
@@ -39,6 +39,7 @@ function scrollRip(elem, currline){
 }
 
 function updateDis(){
+  console.log("DIS update ")
   if(!blink.m)return;
   if(!elem)return;
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
@@ -46,6 +47,7 @@ function updateDis(){
     first_line = "";
     return;
   }
+  console.log("DIS heavy")
 
   let startPtr = blink.m.getPtr("dis__buffer");
   let lines = blink.m.getPtr("dis__max_lines");
@@ -76,8 +78,12 @@ function updateDis(){
   }
 }
 
-//rerender registers on machine step
-$: $blinkStore.state && updateDis();
+//rerender the disassembler only when the render event is dispatched
+//we are using svelte's store as a dispatch api for our custom
+//rendering shenaningans.
+//this is faster because this specific component is 
+//manually updating the DOM, bypassing the optimized svelte renderer
+$: $manual_render && updateDis();
 
 
 </script>
@@ -90,9 +96,7 @@ $: $blinkStore.state && updateDis();
           <td class="addr">0000000</td>
           <td class="hex">00 00</td>
           <td class="str">add 
-            <span class="brown">BYTE PTR [</span>
-            <span class="red">eax</span>
-            <span class="brown">]</span>,
+            <span class="brown">BYTE PTR [</span><span class="red">eax</span><span class="brown">]</span>,
             <span class="red">al</span>
           </td>
         </tr>

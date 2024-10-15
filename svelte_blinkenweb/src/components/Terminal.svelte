@@ -1,26 +1,27 @@
 <script>
-  import {blinkStore} from '../core/blinkSvelte'
+  import {blinkStore, term_buffer, state} from '../core/blinkSvelte'
 
   let blink = blinkStore.getInstance()
 
-  //handle terminal scroll
   let termref;
   function scroll(){
+    console.log("scroll")
     if(termref){
       setTimeout(()=>{
         termref.scrollTop = termref.scrollHeight; // focus on bottom
       },1)
     }
   }
-  $: $blinkStore.state && scroll()
+  //scroll the terminal wen the program state or the terminal buffer change
+  $: ($term_buffer || $state) && scroll()
 
 </script>
 
 <div class="term" bind:this={termref}>
   <div class="term__codewrap">
-    <code >{$blinkStore.term_buffer}</code>
+    <code >{$term_buffer}</code>
   </div>
-{#if $blinkStore.state == blink.states.PROGRAM_STOPPED}
+{#if $state == blink.states.PROGRAM_STOPPED}
     <p class="stopinfo">{blink.stopReason.details}</p>
 {/if}
 </div>

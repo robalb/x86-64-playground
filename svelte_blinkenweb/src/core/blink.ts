@@ -205,7 +205,7 @@ export let blink_modes = {
 * possibility to completely remove the emscripten dependency
 * 
 */
-export default class Blink{
+export class Blink{
   #stdinHandler: ()=>number;
   #stdoutHandler: (charCode: number)=>void;
   #stderrHandler: (charCode: number)=>void;
@@ -492,6 +492,7 @@ export default class Blink{
   */
   run(){
     this.#setState(this.states.PROGRAM_RUNNING)
+    this.#renderHandler(Date.now())
     this.Module._blinkenlib_run();
   }
 
@@ -501,6 +502,7 @@ export default class Blink{
   */
   start(){
     this.Module._blinkenlib_start();
+    this.#renderHandler(Date.now())
     this.#setState(this.states.PROGRAM_RUNNING)
   }
   /**
@@ -509,6 +511,7 @@ export default class Blink{
   */
   starti(){
     this.Module._blinkenlib_starti();
+    this.#renderHandler(Date.now())
     this.#setState(this.states.PROGRAM_RUNNING)
   }
 
