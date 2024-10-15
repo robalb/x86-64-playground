@@ -164,7 +164,7 @@ void update_clstruct(struct Machine *m){
   cls.r15 = (u32) &m->r15;
 
   cls.rax = (u32) &m->ax;
-  cls.rcx = (u32) &m->bx;
+  cls.rbx = (u32) &m->bx;
   cls.rcx = (u32) &m->cx;
   cls.rdx = (u32) &m->dx;
 
