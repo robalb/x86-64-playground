@@ -2,17 +2,17 @@
   import {blinkStore, term_buffer, state} from '../core/blinkSvelte'
 
   let blink = blinkStore.getInstance()
-
   let termref;
+
   function scroll(){
-    console.log("scroll")
     if(termref){
-      setTimeout(()=>{
-        termref.scrollTop = termref.scrollHeight; // focus on bottom
-      },1)
+      requestAnimationFrame(()=>{
+          termref.scrollTop = termref.scrollHeight;
+      })
     }
   }
-  //scroll the terminal wen the program state or the terminal buffer change
+  // Scroll the terminal wen the program state 
+  // or the terminal buffer change
   $: ($term_buffer || $state) && scroll()
 
 </script>
@@ -53,7 +53,7 @@
     line-height: 1.5;
   }
  .stopinfo{
-    /*TODO al: customize colors, find proper design */
+    /*TODO: remove hardcoded colors, find proper design */
     background-color: rgb(224, 73, 35);
     background-color: rgb(96, 48, 36);
     color: white;

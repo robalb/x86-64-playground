@@ -39,7 +39,6 @@ function scrollRip(elem, currline){
 }
 
 function updateDis(){
-  console.log("DIS update ")
   if(!blink.m)return;
   if(!elem)return;
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
@@ -47,7 +46,6 @@ function updateDis(){
     first_line = "";
     return;
   }
-  console.log("DIS heavy")
 
   let startPtr = blink.m.getPtr("dis__buffer");
   let lines = blink.m.getPtr("dis__max_lines");
@@ -60,9 +58,9 @@ function updateDis(){
   }
   else{
     first_line = current_first_line;
-    /* ================= */
-    /* Redraw everything */
-    /* ================= */
+    // -----------------
+    // Redraw everything
+    // -----------------
     let str = ''
     for(let i=0; i< lines; i++){
       str += "<tr>"
@@ -91,7 +89,7 @@ $: $manual_render && updateDis();
 <div class="disass" >
 <table >
     <tbody bind:this={elem}>
-      {#each Array(100) as _, i}
+      {#each Array(100) as _}
         <tr>
           <td class="addr">0000000</td>
           <td class="hex">00 00</td>

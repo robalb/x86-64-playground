@@ -211,7 +211,6 @@ export class Blink{
   #stderrHandler: (charCode: number)=>void;
   #signalHandler: (signal: number, code: number)=>void;
   #stateChangeHandler: (state: string, oldState: string)=>void;
-  #renderHandler: (id: number)=>void;
 
   m: M_CLStruct;
 
@@ -243,7 +242,6 @@ export class Blink{
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
     stateChangeHandler?: (state: string, oldState: string)=>void,
-    renderHandler?: (id: number)=>void,
   ){
     this.setCallbacks(
       stdinHandler,
@@ -251,7 +249,6 @@ export class Blink{
       stderrHandler,
       signalHandler,
       stateChangeHandler,
-      renderHandler,
     );
     this.#initEmscripten(mode);
   }
@@ -327,7 +324,6 @@ export class Blink{
       this.stopReason = {loadFail: false, exitCode: exitCode, details: details}
       this.#setState(this.states.PROGRAM_STOPPED);
     }
-    this.#renderHandler(Date.now())
     this.#signalHandler(sig, code);
   }
 
@@ -355,7 +351,6 @@ export class Blink{
     }
     this.#setState(this.states.PROGRAM_STOPPED);
     console.log("exit callback called")
-    this.#renderHandler(Date.now())
   }
 
 
@@ -365,7 +360,6 @@ export class Blink{
     stderrHandler?: (charCode: number)=>void,
     signalHandler?: (signal: number, code: number)=>void,
     stateChangeHandler?: (state: string, oldState: string)=>void,
-    renderHandler?: (id: number)=>void,
   ){
     if(stdinHandler)
       this.#stdinHandler = stdinHandler
@@ -377,8 +371,6 @@ export class Blink{
       this.#signalHandler = signalHandler
     if(stateChangeHandler)
       this.#stateChangeHandler = stateChangeHandler
-    if(renderHandler)
-      this.#renderHandler = renderHandler
 
     if(!this.#stdinHandler)
       this.#stdinHandler = this.#default_stdinHandler
@@ -390,8 +382,6 @@ export class Blink{
       this.#signalHandler = this.#default_signalHandler
     if(!this.#stateChangeHandler)
       this.#stateChangeHandler = this.#default_stateChangeHandler
-    if(!this.#renderHandler)
-      this.#renderHandler = this.#default_renderHander
   }
 
   /**
@@ -492,7 +482,6 @@ export class Blink{
   */
   run(){
     this.#setState(this.states.PROGRAM_RUNNING)
-    this.#renderHandler(Date.now())
     this.Module._blinkenlib_run();
   }
 
@@ -502,7 +491,6 @@ export class Blink{
   */
   start(){
     this.Module._blinkenlib_start();
-    this.#renderHandler(Date.now())
     this.#setState(this.states.PROGRAM_RUNNING)
   }
   /**
@@ -511,7 +499,6 @@ export class Blink{
   */
   starti(){
     this.Module._blinkenlib_starti();
-    this.#renderHandler(Date.now())
     this.#setState(this.states.PROGRAM_RUNNING)
   }
 
@@ -539,8 +526,4 @@ export class Blink{
   #default_stateChangeHandler(state: string, oldState: string){
     console.log(`state change: ${oldState} -> ${state}`)
   }
-  #default_renderHander(id: number){
-    console.log(`update ID: ${id}`)
-  }
-
 }

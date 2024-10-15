@@ -66,8 +66,7 @@ function createBlinkStore(){
     stdoutHandler,
     stderrHander,
     signalHander,
-    stateChangeHander,
-    renderHandler
+    stateChangeHander
   )
 
   update((store) => ({ ...store, state:blink.state}))

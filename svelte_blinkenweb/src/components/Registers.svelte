@@ -26,11 +26,9 @@ let registers = [
 ]
 
 function updateRegisters(){
-  console.log("REG update")
   if(!(blink.state == blink.states.PROGRAM_RUNNING ||
     blink.state == blink.states.PROGRAM_STOPPED)) return;
 
-  console.log("REG heavy")
   for(let reg of registers){
     let new_str = blink.m.stringReadU64(reg.name.trim())
     if(new_str == reg.str){
@@ -41,7 +39,8 @@ function updateRegisters(){
       reg.str = new_str
     }
   }
-  registers = registers; //force svelte rendering
+  //force svelte rendering
+  registers = registers;
 }
 
 //rerender registers on machine step
