@@ -34,6 +34,7 @@ struct System *s;
 struct Machine *m;
 static struct Dis dis[1];
 bool single_stepping = false;
+bool debugger_enabled = false;
 
 /**
  * Signals handler.
@@ -122,6 +123,7 @@ u64 updateDisassembler(){
 
 
 void update_clstruct(struct Machine *m){
+  if(!debugger_enabled)return;
   //memory regions
   u64 pc = GetPc(m);
   u64 sp = Read64(m->sp);
@@ -255,25 +257,28 @@ void OnSymbols(struct System *s) {
 }
 
 void PostLoadSetup(){
-  //TODO: from blinkenlights. Test
   AddStdFd(&m->system->fds, 0);
   AddStdFd(&m->system->fds, 1);
   AddStdFd(&m->system->fds, 2);
-  //initialize the disassembler
-  m->system->dis = dis;
-  m->system->onsymbols = OnSymbols;
-  LoadDebugSymbols(m->system);
-  Disassemble();
+  if(debugger_enabled){
+    //initialize the disassembler
+    m->system->dis = dis;
+    m->system->onsymbols = OnSymbols;
+    LoadDebugSymbols(m->system);
+    Disassemble();
+  }
 }
 
 void TearDown(void) {
-  //TODO: from blinkenlights
+  //TODO: make sure free is ok when not allocated
   DisFree(dis);
   FreeMachine(m);
+  memset(dis_buffer, 0, sizeof(dis_buffer));
 }
 
 
-void setupProgramWithArgs(char* programpath, char **args){
+void setupProgramWithArgs(char* programpath, char **args, bool withdebugger){
+  debugger_enabled = withdebugger;
   //close previous instances
   TearDown();
   char *bios = 0;
@@ -294,7 +299,7 @@ void setupProgram(){
   char codepath[] = "/program";
   char *args[] = {"/program", 0};
   puts("/program");
-  setupProgramWithArgs(codepath, args);
+  setupProgramWithArgs(codepath, args, true);
 }
 
 
@@ -319,7 +324,7 @@ void blinkenlib_loadPlayground(int step){
     puts("\n/fasm /assembly.s /program");
     char codepath[] = "/fasm";
     char *args[] = {"/fasm", "/assembly.s", "/program", 0};
-    setupProgramWithArgs(codepath, args);
+    setupProgramWithArgs(codepath, args, false);
     single_stepping = false;
     runLoop();
   }
@@ -327,7 +332,7 @@ void blinkenlib_loadPlayground(int step){
     puts("\n/as -o /program.o /assembly.s");
     char codepath[] = "/as";
     char *args[] = {"/as", "-o", "/program.o", "/assembly.s", 0};
-    setupProgramWithArgs(codepath, args);
+    setupProgramWithArgs(codepath, args, false);
     single_stepping = false;
     runLoop();
   }
@@ -335,7 +340,7 @@ void blinkenlib_loadPlayground(int step){
     puts("\n/ld -o /program /program.o");
     char codepath2[] = "/ld";
     char *args2[] = {"/ld", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
-    setupProgramWithArgs(codepath2, args2);
+    setupProgramWithArgs(codepath2, args2, false);
     single_stepping = false;
     runLoop();
     puts("Program ready.");

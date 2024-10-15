@@ -6,6 +6,17 @@ let blink = blinkStore.getInstance()
 let elem;
 let first_line = "";
 
+let blank_template = `
+  <tr>
+    <td class="addr">0000000</td>
+    <td class="hex">00 00</td>
+    <td class="str">add 
+      <span class="brown">BYTE PTR [</span><span class="red">eax</span><span class="brown">]</span>,
+      <span class="red">al</span>
+    </td>
+  </tr>
+`
+
 function getFirstLine(mem, startPtr, line_len){
   let str = ""
   for(let j=0; j<line_len; j++){
@@ -52,6 +63,13 @@ function updateDis(){
   let line_len = blink.m.getPtr("dis__max_line_len");
   let current_line = blink.m.getPtr("dis__current_line");
   let mem = blink.m.memView;
+
+  //handle disassembler fails
+  if(current_line > lines){
+    elem.innerHTML = blank_template;
+    return;
+  }
+
   let current_first_line = getFirstLine(mem, startPtr, line_len)
   if(current_first_line == first_line){
     scrollRip(elem, current_line);

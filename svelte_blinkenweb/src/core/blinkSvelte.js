@@ -1,5 +1,6 @@
 import { writable, derived } from "svelte/store";
 import {Blink, blink_modes} from './blink'
+import { snippets } from "./snippets";
 
 function portion(parentStore, name) {
   return derived(parentStore, value => value[name]);
@@ -37,16 +38,11 @@ function createBlinkStore(){
     })
   }
 
-  //TODO: remove renderHandler, set manual_render when state or signal are received
-  //TODO: remove renderHandler from blink class
   let signalHander=(signal, code)=>{
     update((store) => ({ ...store, manual_render: store.manual_render+1}))
   }
   let stateChangeHander=(state, oldstate)=>{
     update((store) => ({ ...store, state:state, manual_render: store.manual_render+1}))
-  }
-  let renderHandler=(id)=>{
-    // update((store) => ({ ...store, manual_render: store.manual_render+1}))
   }
 
 

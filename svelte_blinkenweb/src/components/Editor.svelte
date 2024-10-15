@@ -2,9 +2,8 @@
 import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
 // Importing Prism grammars
 import "prism-code-editor/prism/languages/nasm"
-import {blinkStore, asm} from '../core/blinkSvelte'
+import {blinkStore} from '../core/blinkSvelte'
 import {onMount} from 'svelte'
-import { snippets } from "../core/snippets";
 
 let editor_elem;
 
