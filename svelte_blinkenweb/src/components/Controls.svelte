@@ -5,7 +5,6 @@
   // import demo1_url from '../assets/example.elf?url'
   // import demo1_url from '../assets/ld-new.elf?url'
   import demo1_url from '../assets/demo_programs/argv.elf?url'
-  import { snippets } from "../core/snippets";
   import Logo from './Logo.svelte';
 
   let blink = blinkStore.getInstance()
@@ -16,8 +15,8 @@
 		{ id: 2, text: `Gnu AS`, uri: 'gnu' },
 	];
   let demo_options = [
-		{ id: 1, text: `Hello World`, uri: 'hello_world', snippet: snippets.syscall },
-		{ id: 2, text: `Functions`, uri:'functions', snippet: snippets.functions }
+		{ id: 1, text: `Hello World`, uri: 'hello_world' },
+		{ id: 2, text: `Functions`, uri:'functions' }
   ]
 
 	let selected_compiler;

@@ -439,9 +439,9 @@ export class Blink{
     if(this.mode == blink_modes.FASM){step = STEP_ASSEMBLE_AND_LINK;}
     if(this.mode == blink_modes.GNU){step = STEP_ASSEMBLE;}
     //this hack ensures that the function is called after a browser render pass
-    setTimeout(()=>{
+    requestAnimationFrame(()=>{
       this.Module._blinkenlib_loadPlayground(step);
-    },0)
+    })
   }
 
   loadASM_assembler_exit_callback(code: number){
@@ -458,9 +458,9 @@ export class Blink{
       //the gnu mode requires a separate linking step
       this.#setState(this.states.LINKING);
       //this hack ensures that the function is called after a browser render pass
-      setTimeout(()=>{
+      requestAnimationFrame(()=>{
       this.Module._blinkenlib_loadPlayground(2);
-      },0)
+      })
 
     }
   }
