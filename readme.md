@@ -1,12 +1,15 @@
 # x86-64 playground
 
-a wasm-based x86-64 assembly playground, running entirely in the browser
+A browser-based x86-64 assembly playground, powered by a WebAssembly port of the lightweight Blink emulator
 
 <img src="./docs/preview2.jpg" />
 
 The project is composed of two elements:
-- `emscripten_blink` a fork of the [blink](https://github.com/jart/blink/) x86-64 emulator, modified to run on wasm with a javascript api.
-- `svelte_blinkenweb` a svelte webapp that depends on the wasm build artifacts of `emscripten_blink` to run.
+- `emscripten_blink` a fork of the [blink](https://github.com/jart/blink/) x86-64 emulator, modified to expose a javascript api when compiled for webassembly.
+- `svelte_blinkenweb` a svelte webapp implementing the frontend for the blink wasm emulator.
+
+The assemblers provided by the app are traditional x86-64 ELFs, emulated client-side in the blink runtime.
+
 
 
 ## Project design
