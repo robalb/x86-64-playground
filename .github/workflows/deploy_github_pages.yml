@@ -1,6 +1,9 @@
-name: Update GitHub Pages
+#
+# This workflow requires writing permissions to the repository.
+# The GITHUB_TOKEN provided by the runner defaults to read-only permissions.
+# Remember to add write permissions in `Settings -> Action -> General -> Workflow permissions`
 
-# Trigger this workflow when a push is made to the master branch
+name: Update GitHub Pages
 on:
   push:
     branches:
@@ -41,7 +44,7 @@ jobs:
       run: |
         cp -r ./svelte_blinkenweb/dist/* ./docs/
 
-    - name: Commit changes
+    - name: Commit and push changes
       run: |
         # Note: the following account information will not work on GHES
         git config user.name "github-actions[bot]"
@@ -49,9 +52,3 @@ jobs:
         git add --all
         git commit -m "Update GitHub Pages with latest build from master"
         git push origin github_pages_test --force
-
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@v0.6.0
-    #   with:
-    #     branch: github_pages_test
-
