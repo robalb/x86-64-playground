@@ -19,7 +19,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Specify your node version here
+        node-version: '20.11.1'  # TODO: nix! reproducible builds! & a sprinkle of professionalism
 
     # Step 3: Merge master into github_pages
     - name: Merge master into github_pages
