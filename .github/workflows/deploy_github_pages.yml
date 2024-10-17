@@ -11,53 +11,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    # Step 2: Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20.11.1'  # TODO: nix! reproducible builds! & a sprinkle of professionalism
 
-    # Step 3: Merge master into github_pages
     - name: Merge master into github_pages
       run: |
         git fetch origin
         git checkout github_pages_test
         git reset --hard origin/master
 
-    # Step 4: Install dependencies and build the project
-    - name: Install dependencies and build
+    - name: Install dependencies and build the web project
       working-directory: ./svelte_blinkenweb
       run: |
         npm ci
         npm run build
 
-    # Step 5: Remove the content of /docs
     - name: Remove old /docs content
       run: |
         rm -rf ./docs/*
 
-    # Step 6: Copy new build to /docs
     - name: Copy build to /docs
       run: |
         cp -r ./svelte_blinkenweb/dist/* ./docs/
 
-    # Step 7: Commit the changes
     - name: Commit changes
       run: |
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
+        # Note: the following account information will not work on GHES
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add --all
         git commit -m "Update GitHub Pages with latest build from master"
+        git push origin github_pages_test --force
 
-    # Step 8: Push the changes
-    - name: Push changes
-      uses: ad-m/github-push-action@v0.6.0
-      with:
-        branch: github_pages_test
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@v0.6.0
+    #   with:
+    #     branch: github_pages_test
 
