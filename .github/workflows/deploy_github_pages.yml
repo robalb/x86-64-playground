@@ -14,6 +14,8 @@ jobs:
     # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     # Step 2: Set up Node.js
     - name: Set up Node.js
@@ -43,7 +45,7 @@ jobs:
     # Step 6: Copy new build to /docs
     - name: Copy build to /docs
       run: |
-        cp -r ./svelte_blinkenweb/build/* ./docs/
+        cp -r ./svelte_blinkenweb/dist/* ./docs/
 
     # Step 7: Commit and push the changes
     - name: Commit and push changes
