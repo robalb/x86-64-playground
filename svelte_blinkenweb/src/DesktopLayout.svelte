@@ -14,7 +14,7 @@ import Controls from './components/Controls.svelte';
 
 	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
 		<div class="pane">
-          <Controls/>
+          <Controls isMobile={false}/>
           <div class="pane__content">
             <Editor />
           </div>

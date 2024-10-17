@@ -7,6 +7,9 @@ import Disassembler from './components/Disassembler.svelte';
 import Terminal from './components/Terminal.svelte';
 import Controls from './components/Controls.svelte';
 
+import {blinkStore, state} from './core/blinkSvelte'
+
+let blink = blinkStore.getInstance()
 
 /*
  *   This content is licensed according to the W3C Software License at
@@ -153,13 +156,24 @@ function initTabARIA(node){
   }
 }
 
+let showEditor = true;
+$: showEditor = (
+  $state == blink.states.READY ||
+  $state == blink.states.NOT_READY ||
+  $state == blink.states.ASSEMBLING ||
+  $state == blink.states.LINKING
+)
+
 </script>
 
 <div class="pane">
   <div class="controls">
-    <Controls/>
+    <Controls isMobile={true} showEditor={showEditor}/>
   </div>
   <div class="tabs">
+  {#if showEditor}
+      <Editor/>
+  {:else}
     <div id="tabpanel-1" role="tabpanel" tabindex="0" aria-labelledby="tab-1">
       <Disassembler />
     </div>
@@ -187,6 +201,7 @@ function initTabARIA(node){
         <span class="focus">Memory</span>
       </button>
     </div>
+  {/if}
   </div>
       
 </div>
@@ -294,10 +309,7 @@ function initTabARIA(node){
     width: 100%;
     height: 100%;
     overflow: auto;
-    /* background: hsl(220deg 43% 99%); */
-    /* padding: 5px; */
-    /* border-radius: 0 5px 5px; */
-    /* border: 2px solid hsl(219deg 1% 72%); */
+
     margin-bottom: 3rem;
   }
 
