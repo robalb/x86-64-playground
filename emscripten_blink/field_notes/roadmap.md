@@ -39,6 +39,9 @@
   can i solve eventual caching issues with service workers?
   https://web.dev/articles/service-worker-lifecycle
 - adaptive favicon https://web.dev/articles/building/an-adaptive-favicon
+  even better:
+        <link rel="icon" href="" media="(prefers-color-scheme: dark)" type="image/png">
+        <link rel="icon" href="" media="(prefers-color-scheme: dark)" type="image/svg+xml">
 - completely remove the concept of snippets. make every state reachable by
   url. snippets will just be url that set the asm and the correct compiler
 - add html syntax highlight to c disass.
