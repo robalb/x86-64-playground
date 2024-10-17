@@ -1,17 +1,20 @@
 <script lang="ts">
 import './styles/style.css';
 import DesktopLayout from './DesktopLayout.svelte';
+import MobileLayout from './MobileLayout.svelte';
 
 let innerWidth = 0; 
-$: isMobile = innerWidth <= 640; 
+let breakpoints = {
+  mobile: 640
+}
 
 </script>
 
 <!-- attach an action to the browser window -->
 <svelte:window bind:innerWidth />
 
-{#if isMobile}
-  <h1>mobile layout</h1>
+{#if innerWidth <= breakpoints.mobile}
+  <MobileLayout/>
 {:else}
   <DesktopLayout/>
 {/if}
