@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   // import demo1_url from '../assets/example.elf?url'
   // import demo1_url from '../assets/ld-new.elf?url'
-  import demo1_url from '../assets/demo_programs/argv.elf?url'
+  // import demo1_url from '../assets/demo_programs/argv.elf?url'
   import Logo from './Logo.svelte';
 
   let blink = blinkStore.getInstance()
