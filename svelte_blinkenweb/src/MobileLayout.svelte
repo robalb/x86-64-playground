@@ -168,7 +168,7 @@ $: showEditor = (
 
 <div class="pane">
   <div class="controls">
-    <Controls isMobile={true} showEditor={showEditor}/>
+    <Controls mobile={true} showEditor={showEditor}/>
   </div>
   <div class="tabs">
   {#if showEditor}
