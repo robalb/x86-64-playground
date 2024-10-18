@@ -113,8 +113,8 @@
         {/each}
       </select>
     {:else}
-      <button on:click={handle_back}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <button on:click={handle_back} >
+        <svg class="fill-none" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 19L8 12L15 5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         Back to editor
@@ -235,9 +235,15 @@
     height: 2rem;
     display: flex;
     align-items: center;
+    /* transition: scale .1s ease-in-out; */
   }
   button:disabled{
     color: gray;
+  }
+  button:not(:disabled):active{
+    /* transform: scale(1.1); */
+    border: 1px solid rgba(255,255,255,0.7);
+
   }
 
   button svg{
@@ -303,6 +309,9 @@
 
   .debugbt{
     margin-left: 1rem;
+  }
+  .fill-none {
+    fill: none;
   }
 
 
