@@ -152,7 +152,7 @@
 
 
 {#if mobile && !showEditor && $state == blink.states.PROGRAM_STOPPED}
-  <p class="stopinfo">exit reason</p>
+  <p class="stopinfo">{blink.stopReason.details}</p>
 {/if}
 
 

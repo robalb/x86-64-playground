@@ -309,8 +309,7 @@ $: showEditor = (
     width: 100%;
     height: 100%;
     overflow: auto;
-
-    margin-bottom: 3rem;
+    padding-bottom: 3rem;
   }
 
   [role="tabpanel"].is-hidden {
