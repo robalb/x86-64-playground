@@ -3,6 +3,9 @@
 # The GITHUB_TOKEN provided by the runner defaults to read-only permissions.
 # Remember to add write permissions in `Settings -> Action -> General -> Workflow permissions`
 
+# TODO: use the official github pages workflow.
+# We are currently pushing build artifacts to a branch, which is stupid.
+# https://github.com/actions/upload-pages-artifact
 name: Update GitHub Pages
 on:
   push:

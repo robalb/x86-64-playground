@@ -525,6 +525,10 @@ export class Blink{
     this.Module._blinkenlib_continue()
   }
 
+  setready(){
+    this.#setState(this.states.READY);
+  }
+
   #default_signalHandler(sig: number, code: number){
     console.log(`received signal: ${sig} code: ${code}`)
   }

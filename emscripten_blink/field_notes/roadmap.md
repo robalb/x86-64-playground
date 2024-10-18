@@ -27,19 +27,21 @@
 -[x] complete the disassembler todos: proper BEM, proper c defines (#ifdef HTML)
 -[x] add a good ui for the controls
 -[x] first release with github pages
-- service worker. Understand: is github pages good enough for caching?
-  can i solve eventual caching issues with service workers?
-- CI/CD pipeline. pushes to master should trigger a merge and then a checkout into github_pages. then trigger a build. the contents of /build should be copied into /docs, and pushed.
+-[x] CI/CD pipeline. pushes to master should trigger a merge and then a checkout into github_pages. then trigger a build. the contents of /build should be copied into /docs, and pushed.
+- test CI/CD pipeline that directly publishes to github pages without storing the artifacts in a branch. -> https://github.com/actions/upload-pages-artifact
+- mobile layout
 
 
-service worker:
-https://web.dev/articles/service-worker-lifecycle
 
-https://flatassembler.net/docs.php?article=manual#2.4
-
-https://web.dev/articles/building/an-adaptive-favicon
 
 ### backlog
+- service worker. Understand: is github pages good enough for caching?
+  can i solve eventual caching issues with service workers?
+  https://web.dev/articles/service-worker-lifecycle
+- adaptive favicon https://web.dev/articles/building/an-adaptive-favicon
+  even better:
+        <link rel="icon" href="" media="(prefers-color-scheme: dark)" type="image/png">
+        <link rel="icon" href="" media="(prefers-color-scheme: dark)" type="image/svg+xml">
 - completely remove the concept of snippets. make every state reachable by
   url. snippets will just be url that set the asm and the correct compiler
 - add html syntax highlight to c disass.
@@ -48,3 +50,4 @@ https://web.dev/articles/building/an-adaptive-favicon
 
 
 
+https://flatassembler.net/docs.php?article=manual#2.4
