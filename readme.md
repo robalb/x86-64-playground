@@ -8,7 +8,7 @@ Try a demo on https://x64.halb.it
 
 The project is composed of two elements:
 - `emscripten_blink` a fork of the [blink](https://github.com/jart/blink/) x86-64 emulator, modified to expose a javascript api when compiled for webassembly.
-- `svelte_blinkenweb` a svelte webapp implementing the frontend for the blink wasm emulator.
+- `svelte_blinkenweb` a svelte webapp implementing a mobile-friendly frontend for the blink wasm emulator.
 
 The assemblers provided by the app are traditional x86-64 ELFs, emulated client-side in the blink runtime.
 
