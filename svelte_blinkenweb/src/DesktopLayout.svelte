@@ -23,7 +23,7 @@ import Controls from './components/Controls.svelte';
 	</Pane>
 
 	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
+	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">
             <p>Disassembly</p>
@@ -35,7 +35,7 @@ import Controls from './components/Controls.svelte';
 	</Pane>
 
 	<PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={15} class="pf__pane pf__pane--h100">
+	<Pane defaultSize={20} class="pf__pane pf__pane--h100">
 		<PaneGroup direction="vertical" class="pf__panegroup pf__panegroup--vertical">
 			<Pane defaultSize={50} class="pf__pane">
         <div class="pane">
@@ -61,7 +61,7 @@ import Controls from './components/Controls.svelte';
 		</PaneGroup>
 	</Pane>
   <PaneResizer class="pf__resizer pf__resizer--vertical" />
-	<Pane defaultSize={25} class="pf__pane pf__pane--h100">
+	<Pane defaultSize={30} class="pf__pane pf__pane--h100">
 		<div class="pane">
           <div class="pane__bar">
             <p>Stack memory</p>

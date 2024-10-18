@@ -152,7 +152,7 @@
 
 
 {#if mobile && !showEditor && $state == blink.states.PROGRAM_STOPPED}
-  <p class="stopinfo">exit reason</p>
+  <p class="stopinfo">{blink.stopReason.details}</p>
 {/if}
 
 
@@ -276,6 +276,9 @@
   .group button:nth-child(2){
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+  }
+  .group button:active:not(:disabled):nth-child(1){/* I hereby challenge you to write a line with more selectors */
+    border-right: 1px solid rgba(255,255,255,0.7);
   }
 
 
