@@ -1,21 +1,12 @@
 <script>
+import { onMount } from 'svelte';
 import {blinkStore, manual_render} from '../core/blinkSvelte'
 
 let blink = blinkStore.getInstance()
 
 let elem;
 let first_line = "";
-
-let blank_template = `
-  <tr>
-    <td class="addr">0000000</td>
-    <td class="hex">00 00</td>
-    <td class="str">add 
-      <span class="brown">BYTE PTR [</span><span class="red">eax</span><span class="brown">]</span>,
-      <span class="red">al</span>
-    </td>
-  </tr>
-`
+let disassebly_fail = false
 
 function getFirstLine(mem, startPtr, line_len){
   let str = ""
@@ -58,6 +49,10 @@ function updateDis(){
     return;
   }
 
+  if(blink.state == blink.states.PROGRAM_STOPPED){
+    first_line = "";
+  }
+
   let startPtr = blink.m.getPtr("dis__buffer");
   let lines = blink.m.getPtr("dis__max_lines");
   let line_len = blink.m.getPtr("dis__max_line_len");
@@ -66,8 +61,11 @@ function updateDis(){
 
   //handle disassembler fails
   if(current_line > lines){
-    elem.innerHTML = blank_template;
+    disassebly_fail = true;
     return;
+  }
+  else{
+    disassebly_fail = false;
   }
 
   let current_first_line = getFirstLine(mem, startPtr, line_len)
@@ -101,12 +99,21 @@ function updateDis(){
 //manually updating the DOM, bypassing the optimized svelte renderer
 $: $manual_render && updateDis();
 
+onMount(async () => {
+  updateDis();
+});
+
 
 </script>
 
-<div class="disass" >
-<table >
-    <tbody bind:this={elem}>
+<div class="disass" class:fail={disassebly_fail} >
+  {#if disassebly_fail}
+    <div class="box">
+      <p>Disassembly failed</p>
+    </div>
+  {/if}
+  <table>
+    <tbody bind:this={elem} >
       {#each Array(100) as _}
         <tr>
           <td class="addr">0000000</td>
@@ -118,9 +125,28 @@ $: $manual_render && updateDis();
         </tr>
       {/each}
     </tbody>
-</table>
+  </table>
 </div>
 
 <style>
-
+  .fail{
+    background-color: red;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--theme-dis-fail-stripebg1),
+      var(--theme-dis-fail-stripebg1) 2px,
+      var(--theme-dis-fail-stripebg2) 2px,
+      var(--theme-dis-fail-stripebg2) 16px
+      );
+    min-height: calc(100vh - 2rem);
+  }
+  .fail table{
+    display: none;
+  }
+  .fail .box{
+    background-color: var(--theme-dis-fail-boxbg);
+    margin: 2rem;
+    padding: 1rem;
+    border: 1px solid var(--theme-dis-fail-boxborder);
+  }
 </style>
