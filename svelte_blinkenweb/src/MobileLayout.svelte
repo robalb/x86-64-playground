@@ -86,13 +86,6 @@ $: showEditor = (
     /* border: 1px solid var(--theme-panel-border); */
   }
 
-  .controls{
-    /* overflow: auto;  */
-    /* height: 100%; */
-    /*this is cool the first time you see it, then super annoying */
-    /* scroll-behavior: smooth; */
-  }
-
   .tabs {
     height: 100%;
     overflow: auto;
@@ -112,25 +105,14 @@ $: showEditor = (
     display:flex;
     align-items:center;
     justify-content:center;
-    /* display: inline-block; */
-    /* z-index: 2; */
+
     margin: 0;
     outline: none;
     overflow: hidden;
     text-align: left;
     cursor: pointer;
 
-    /* font-weight: bold; */
-    /* max-width: 22%; */
-    /* top: 2px; */
-    /* margin-top: 4px; */
-    /* padding: 3px 3px 4px; */
-    /* border: 1px solid hsl(219deg 1% 72%); */
-    /* border-bottom: 2px solid hsl(219deg 1% 72%); */
-    /* border-radius: 5px 5px 0 0; */
-    /* background: hsl(220deg 20% 94%); */
-
-    background-color: transparent;
+    background-color: var(--theme-bg);
     height: 3rem;
     flex-grow: 1;
 
@@ -145,14 +127,7 @@ $: showEditor = (
   }
 
   [role="tab"][aria-selected="true"] {
-    /* padding: 2px 2px 4px; */
-    /* margin-top: 0; */
-    /* border-width: 2px; */
-    /* border-top-width: 6px; */
-    /* border-bottom-color: hsl(220deg 43% 99%); */
-    /* background: hsl(220deg 43% 99%); */
-    border-top-color: transparent;
-    background-color: var(--theme-bg);
+    background-color: transparent;
     border-bottom: 6px solid var(--theme-focus);
   }
 
@@ -166,14 +141,6 @@ $: showEditor = (
     padding: 4px 6px;
   }
 
-  [role="tab"]:hover span.focus,
-  [role="tab"]:focus span.focus,
-  [role="tab"]:active span.focus {
-    /* padding: 2px 4px; */
-    /* border: 2px solid var(--theme-focus); */
-    /* border-radius: 3px; */
-  }
-
   [role="tabpanel"] {
     width: 100%;
     height: 100%;
@@ -183,10 +150,6 @@ $: showEditor = (
 
   [role="tabpanel"].is-hidden {
     display: none;
-  }
-
-  [role="tabpanel"] p {
-    margin: 0;
   }
 
 </style>
