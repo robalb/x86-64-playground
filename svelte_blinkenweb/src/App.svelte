@@ -26,6 +26,14 @@ function handleDragover(e){
   }, 2000)
 }
 
+function handleDragLeave(e){
+  e.preventDefault();
+  clearTimeout(timer)
+  timer = setTimeout(()=>{
+    dragDecoration = false;
+  }, 100)
+}
+
 export const fileToArrayBuffer = (blob: Blob) => {
   return new Promise((resolve) => {
     const reader = new FileReader()
@@ -38,13 +46,14 @@ async function handleDrop(e){
   e.preventDefault();
   console.log("drop")
   dragDecoration = false;
-
+  //extract the first file dropped in the page
   let firstfile: any;
   if (e.dataTransfer.items) {
     firstfile = [...e.dataTransfer.items].find((item) => item.kind == "file")
   } else {
     firstfile = [...e.dataTransfer.files][0]
   }
+  //execute the file in the blink emulator
   if (firstfile) {
     const file = firstfile.getAsFile();
     let filedata = await fileToArrayBuffer(file);
@@ -63,22 +72,24 @@ async function handleDrop(e){
 <div 
   on:dragover={handleDragover}
   on:drop={handleDrop}
+  on:dragleave={handleDragLeave}
   role="region"
 >
-{#if dragDecoration}
-  <div class="drag">
+  {#if dragDecoration}
+    <div class="drag">
       <div class="drag__box">
         <h2>Run your executable</h2>
         <p>Drop a statically-linked ELF here to
           execute it in a sandboxed environment</p>
       </div>
-  </div>
-{/if}
-{#if innerWidth <= breakpoints.mobile}
-  <MobileLayout/>
-{:else}
-  <DesktopLayout/>
-{/if}
+    </div>
+  {/if}
+
+  {#if innerWidth <= breakpoints.mobile}
+    <MobileLayout/>
+  {:else}
+    <DesktopLayout/>
+  {/if}
 </div>
 
 <style>

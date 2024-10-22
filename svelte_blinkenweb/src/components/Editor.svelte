@@ -2,14 +2,19 @@
 import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
 // Importing Prism grammars
 import "prism-code-editor/prism/languages/nasm"
-import {blinkStore} from '../core/blinkSvelte'
-import Svg from "./Svg.svelte";
+import {blinkStore, state} from '../core/blinkSvelte'
 import {onMount} from 'svelte'
 
 let editor_elem;
 
-onMount(() => {
+let invalidElf = false;
+let blink = blinkStore.getInstance()
 
+$: $state && (
+  invalidElf = blink.state == blink.states.PROGRAM_STOPPED &&
+    blink.stopReason.loadFail)
+
+onMount(() => {
   const editors = basicEditor(
     editor_elem,
     {
@@ -33,9 +38,11 @@ onMount(() => {
       </svg>
       <p><b>File:</b> {$blinkStore.uploadedElf}</p>
 
-      <p class="stopinfo">This file is not a valid eld. </p>
+  {#if invalidElf}
+      <p class="stopinfo">This file is not a valid ELF. </p>
       <p>This emulator requires Statically linked x86-64 Elf LSB Executables. It works best
-      with musl libc or cosmopolitan libc</p>
+      with musl or cosmopolitan libc</p>
+  {/if}
 
       <button on:click={()=>blinkStore.setUploadedElfName("")}>back to editor</button>
     </div>
@@ -62,7 +69,6 @@ onMount(() => {
     display:flex;
     height: 100%;
     align-items: center;
-    justify-content:center;
     flex-direction:column;
     font-size: 1rem;
     padding: 2rem;
