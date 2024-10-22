@@ -3,7 +3,7 @@ import './styles/style.css';
 import DesktopLayout from './DesktopLayout.svelte';
 import MobileLayout from './MobileLayout.svelte';
 
-import {blinkStore} from './core/blinkSvelte'
+import {blinkStore, uploadedElf} from './core/blinkSvelte'
 let blink = blinkStore.getInstance()
 
 //make the blink wrapper accessible to the developer tools
@@ -50,6 +50,7 @@ async function handleDrop(e){
     let filedata = await fileToArrayBuffer(file);
     blink.loadElf(filedata);
     blink.starti()
+    blinkStore.setUploadedElfName(file.name)
   }
 
 }
