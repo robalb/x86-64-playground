@@ -95,6 +95,7 @@ onMount(() => {
     background-color:transparent;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    cursor: pointer;
   }
   .files button:hover{
     color: var(--color-gray-0);

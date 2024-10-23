@@ -411,9 +411,11 @@ export class Blink{
     catch(e){
       this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
       this.#setState(this.states.PROGRAM_STOPPED);
+      return
     }
     //TODO free param strings
     //
+    this.starti()
   }
 
   /**
@@ -454,6 +456,7 @@ export class Blink{
       let FS = this.Module.FS
       FS.chmod('/program', 0o777);
       this.#setState(this.states.PROGRAM_LOADED);
+      this.starti()
     }else{
       //the gnu mode requires a separate linking step
       this.#setState(this.states.LINKING);
@@ -474,6 +477,7 @@ export class Blink{
     let FS = this.Module.FS
     FS.chmod('/program', 0o777);
     this.#setState(this.states.PROGRAM_LOADED);
+    this.starti()
   }
 
   /**
