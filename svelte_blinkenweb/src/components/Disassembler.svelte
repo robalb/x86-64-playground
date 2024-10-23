@@ -49,6 +49,13 @@ function updateDis(){
     return;
   }
 
+  if(blink.state == blink.states.PROGRAM_STOPPED &&
+    blink.stopReason.loadFail){
+    disassebly_fail = true;
+    first_line = "";
+    return;
+  }
+
   if(blink.state == blink.states.PROGRAM_STOPPED){
     first_line = "";
   }
@@ -60,7 +67,15 @@ function updateDis(){
   let mem = blink.m.memView;
 
   //handle disassembler fails
+  //TODO: there is a bug where first_line = junk data
+  //      after a rip jump to the stack
   if(current_line > lines){
+    // console.log({
+    //   startPtr,
+    //   lines,
+    //   line_len,
+    //   current_line
+    // })
     disassebly_fail = true;
     return;
   }
