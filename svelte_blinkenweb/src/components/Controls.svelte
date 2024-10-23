@@ -74,6 +74,7 @@
 
   function handle_back(){
     blink.setready()
+    blinkStore.setUploadedElfName("")
   }
 
 </script>
@@ -91,7 +92,7 @@
 
 <div class="controls" class:controls-inverted={!mobile} >
   <section class="controls__row controls__row-top">
-    {#if showEditor || !mobile}
+    {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
       <div class="compilebt">
         <select bind:value={selected_compiler} on:change={handle_compiler_change}>
           {#each compiler_options as question}

@@ -107,9 +107,10 @@
   --theme-dislabel-fg: var(--color-orange);
   --theme-dis-current-bg: rgba(255,255,255,0.1);
   --theme-dis-current-border: gray;
-
-
-
+  --theme-dis-fail-stripebg1: var(--color-gray-t);
+  --theme-dis-fail-stripebg2: transparent;
+  --theme-dis-fail-boxborder: var(--color-orange);
+  --theme-dis-fail-boxbg: var(--theme-bg);
 }
 
 

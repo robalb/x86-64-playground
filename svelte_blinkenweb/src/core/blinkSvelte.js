@@ -34,6 +34,7 @@ function createBlinkStore(){
     asm: default_asm,
     manual_render: 0,
     mode: default_blink_mode,
+    uploadedElf: ""
   });
   const { subscribe, update } = store
 
@@ -82,6 +83,9 @@ function createBlinkStore(){
     updateAsm(asm){
       console.log("update")
       update((store) => ({...store, asm}))
+    },
+    setUploadedElfName(uploadedElf){
+      update((store) => ({...store, uploadedElf}))
     }
   }
 
@@ -107,4 +111,5 @@ export const state = portion(blinkStore, "state");
 export const signal = portion(blinkStore, "signal");
 export const asm = portion(blinkStore, "asm");
 export const mode = portion(blinkStore, "mode");
+export const uploadedElf = portion(blinkStore, "uploadedElf");
 
