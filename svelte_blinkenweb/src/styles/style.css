@@ -317,6 +317,7 @@ body {
   height: 2rem;
   display: flex;
   align-items: center;
+  font-size: .9rem;
 }
 .button:disabled, .btgroup__button:disabled{
   color: var(--theme-text-fg-disabled);
@@ -324,6 +325,16 @@ body {
 .button:not(:disabled):active,
 .btgroup__button:not(:disabled):active{
   border: 1px solid rgba(255,255,255,0.7);
+}
+
+.button--secondary{
+  color: var(--color-gray-100);
+  text-decoration: none;
+  border-color: transparent;
+}
+.button--secondary:hover{
+  color: var(--color-gray-0);
+  background-color: var(--color-gray-300);
 }
 
 
@@ -350,7 +361,6 @@ body {
   border-radius: 4px;
 }
 .btgroup .btgroup__button{
-  display: flex;
   border: 1px solid transparent;
 }
 .btgroup .btgroup__button--select{
@@ -370,4 +380,102 @@ body {
 }
 
 
+/*
+* default style for the Melt UI elements.
+* This style is applied via the data-attributes
+* that the library automatically injects.
+* All these attributes are documented in the library docs
+*/
+*[data-melt-dropdown-menu-submenu],
+*[data-melt-dropdown-menu]{
+  outline: none;
+  z-index: 40;
+  background-color: var(--theme-panel-bg);
+  /* background-color: var(--theme-bg); */
+  border-radius: 4px;
+  border: 1px solid var(--theme-text-fg-disabled);
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 30rem;
+  min-width: 15rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+  color: var(--theme-text-fg);
+  font-size: 1rem;
+}
+
+*[data-melt-dropdown-menu-item],
+*[data-melt-dropdown-menu-subtrigger]{
+  outline: none;
+  z-index: 40;
+  position: relative;
+  color: var(--theme-text-fg);
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: .1rem .5rem;
+}
+
+*[data-melt-dropdown-menu-item][data-highlighted],
+*[data-melt-dropdown-menu-subtrigger][data-highlighted] {
+  color: var(--theme-panel-controls-bg);
+  outline: 1px solid gray;
+  background-color: rgba(255,255,255,.1);
+  background-color: var(--theme-focus);
+}
+*[data-melt-dropdown-menu-item][data-highlighted] svg,
+*[data-melt-dropdown-menu-subtrigger][data-highlighted] svg{
+  fill: var(--theme-panel-controls-bg);
+}
+
+*[data-melt-separator]{
+  margin: 5px 0;
+  height: 1px;
+  background-color: var(--theme-text-fg-disabled);
+}
+
+
+@media only screen and (max-width: 600px) {
+  *[data-melt-dropdown-menu-submenu],
+  *[data-melt-dropdown-menu]{
+    position: absolute!important;
+    bottom: 0!important;
+    left: 0!important;
+    top: auto!important;
+    width: 100%;
+    padding: 1rem;
+    padding-bottom: 4rem;
+    padding-top: 1rem;
+    border: 1px solid var(--theme-text-fg-disabled);
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+    background-color: var(--theme-bg);
+    animation: slideIn .2s forwards;
+  }
+  /* This looks cool at first, but becomes annoyin quickly */
+  /* body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) #app{ */
+    /* filter: blur(4px); */
+  /* } */
+
+  *[data-melt-dropdown-menu-item],
+  *[data-melt-dropdown-menu-subtrigger]{
+    padding: .5rem .5rem;
+    color: var(--theme-text-fg-contrasting);
+  }
+}
+
+
+@keyframes slideIn {
+  from {
+    padding-bottom: 0;
+  }
+  to {
+    padding-bottom: 4rem;
+  }
+}
 

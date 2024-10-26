@@ -240,6 +240,26 @@
   }
 
 
+  /* -------------------- */
+  /*        Other         */
+  /* -------------------- */
+
+
+  .m-left-1{
+    margin-left: 1rem;
+  }
+
+ .stopinfo{
+    /*TODO: remove hardcoded colors, find proper design */
+    background-color: rgb(224, 73, 35);
+    background-color: rgb(96, 48, 36);
+    color: white;
+    border: 1px solid rgb(245, 127, 97);
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+ 
 
   /* -------------------- */
   /*      Buttons&c       */
@@ -327,24 +347,5 @@
   /*   border-bottom-right-radius: 0; */
   /* } */
 
-  .m-left-1{
-    margin-left: 1rem;
-  }
-  .fill-none {
-    fill: none;
-  }
-
-
- .stopinfo{
-    /*TODO: remove hardcoded colors, find proper design */
-    background-color: rgb(224, 73, 35);
-    background-color: rgb(96, 48, 36);
-    color: white;
-    border: 1px solid rgb(245, 127, 97);
-    margin: 0;
-    padding-left: 1rem;
-  }
-
- 
 
 </style>
