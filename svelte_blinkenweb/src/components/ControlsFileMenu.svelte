@@ -1,9 +1,31 @@
 <script lang="ts">
   import { createDropdownMenu, melt } from '@melt-ui/svelte';
-  import { writable } from 'svelte/store';
-  import { fly } from 'svelte/transition';
-    import ArrowForward from './icons/ArrowForward.svelte';
-    import ArrowDropDown from './icons/ArrowDropDown.svelte';
+  import ArrowForward from './icons/ArrowForward.svelte';
+  import ArrowDropDown from './icons/ArrowDropDown.svelte';
+  import {blinkStore, state} from '../core/blinkSvelte'
+
+  let blink = blinkStore.getInstance()
+
+  let fileElem:any;
+  function handleLoadExec(){
+    if(!fileElem) return
+    fileElem.click()
+  }
+  export const fileToArrayBuffer = (blob: Blob) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsArrayBuffer(blob)
+    })
+  }
+  async function handleFileUpload(e){
+    if (fileElem && fileElem.files.length) {
+      const file = fileElem.files[0]
+      let filedata = await fileToArrayBuffer(file);
+      blink.loadElf(filedata);
+      blinkStore.setUploadedElfName(file.name)
+    }
+  }
 
 
   const {
@@ -23,12 +45,19 @@
 
 
   const personsArr = [
-    'Hunter Johnston',
-    'Thomas G. Lopes',
-    'Adrian Gonz',
-    'Franck Poingt',
+    'Hello world (Fasm)',
+    'Hello world (Gnu AS)',
+    'Functions (Fasm)',
+    'Functions (Gnu AS)',
+    'Shellcode (Fasm)',
+    'Shellcode (Gnu AS)',
   ];
 </script>
+
+
+<input
+  on:change={handleFileUpload}
+  type="file" class="file" bind:this={fileElem} />
 
 <button
   type="button"
@@ -59,7 +88,9 @@
     {/if}
 
     <div {...$separator} use:separator />
-    <div {...$item} use:item>Load executable from your files</div>
+    <div {...$item} use:item on:m-click={handleLoadExec}>
+      Load executable from your files
+    </div>
 
   </div>
 {/if}
@@ -80,5 +111,9 @@
 .text {
   padding: .1rem .5rem;
   color: var(--theme-text-fg-disabled);
+}
+
+.file{
+  display: none;
 }
 </style>

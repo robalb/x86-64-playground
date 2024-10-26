@@ -6,9 +6,9 @@
   import { onMount } from 'svelte';
   import {blinkStore, state} from '../core/blinkSvelte'
   import {fetchBinaryFile} from '../core/utils'
-    import ControlsEditor from './ControlsEditor.svelte';
     import WizardHat from './icons/WizardHat.svelte';
     import ArrowBack from './icons/ArrowBack.svelte';
+    import ControlsFileMenu from './ControlsFileMenu.svelte';
   // import demo1_url from '../assets/example.elf?url'
   // import demo1_url from '../assets/ld-new.elf?url'
   // import demo1_url from '../assets/demo_programs/argv.elf?url'
@@ -42,30 +42,12 @@
 		{ id: 1, text: `Fasm`, uri: 'fasm' },
 		{ id: 2, text: `Gnu AS`, uri: 'gnu' },
 	];
-  let demo_options = [
-		{ id: 1, text: `Hello World`, uri: 'hello_world' },
-		{ id: 2, text: `Functions`, uri:'functions' }
-  ]
 
 	let selected_compiler;
-  let selected_demo;
-
-  onMount(() => {
-    const params = new URLSearchParams(window.location.search);
-    let compiler_opt = compiler_options.find(c => c.uri == params.get('compiler'));
-    if(compiler_opt) selected_compiler = compiler_opt;
-    let demo_opt = demo_options.find(c => c.uri == params.get('demo'));
-    if(demo_opt) selected_demo = demo_opt;
-  });
 
   function handle_compiler_change(){
-    window.location.search = `?compiler=${selected_compiler.uri}&demo=${selected_demo.uri}`;
-  }
 
-  function handle_demo_change(e){
-    window.location.search = `?compiler=${selected_compiler.uri}&demo=${selected_demo.uri}`;
   }
-
 
   //control handlers
 
@@ -131,7 +113,7 @@
           compile</button>
       </div>
 
-      <ControlsEditor />
+      <ControlsFileMenu />
 
     {:else}
       <button on:click={handle_back} class="button" >

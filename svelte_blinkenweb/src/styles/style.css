@@ -451,8 +451,8 @@ body {
     border-bottom: 0;
     border-left: 0;
     border-right: 0;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
     background-color: var(--theme-bg);
     animation: slideIn .2s forwards;
