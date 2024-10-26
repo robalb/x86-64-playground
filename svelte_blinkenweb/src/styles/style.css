@@ -332,9 +332,8 @@ body {
 {
   stroke: var(--theme-text-fg-contrasting);
   fill: var(--theme-text-fg-contrasting);
-  height: 18px;
-  width: 18px;
-  margin-right: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 .button:disabled svg,
 .btgroup__button:disabled svg
@@ -353,6 +352,9 @@ body {
 .btgroup .btgroup__button{
   display: flex;
   border: 1px solid transparent;
+}
+.btgroup .btgroup__button--select{
+  background-color:rgba(255,255,255,.1);
 }
 .btgroup .btgroup__button:nth-child(1){
   border-right: 1px solid var(--color-gray-t);
