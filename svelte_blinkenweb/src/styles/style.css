@@ -40,6 +40,7 @@
   --color-gray-100: #d0d5df;
   --color-gray-150: #b3b9c5;
   --color-gray-200: #818a9d;
+  --color-gray-250: gray;
   --color-gray-300: #393e4b;
   --color-gray-400: #282c38;
   --color-gray-500: #20232a;
@@ -69,6 +70,7 @@
   --theme-bg: var(--color-gray-400);
   --theme-text-fg-contrasting: var(--color-gray-50);
   --theme-text-fg: var(--color-gray-100);
+  --theme-text-fg-disabled: var(--color-gray-250);
   --theme-link-fg: var(--color-gray-0);
   --theme-link-underline: var(--color-gold-100);
   --theme-inline-code-bg: var(--color-gray-300);
@@ -76,6 +78,7 @@
   --theme-panel-controls-bg: var(--color-gray-600);
   --theme-panel-border: var(--color-gray-t);
   --theme-focus: var(--theme-primary);
+
 
   /* hexdump hex numbers */
   --theme-hex-zero: var(--color-gray-200);
@@ -296,4 +299,73 @@ body {
   color: #a5d6ff;
   color: #79c0ff;
 }
+
+
+
+/**
+* Global UI component styles
+* TODO: properly define these styles together
+* with the MELT ui system.
+*/
+.button, .select, .btgroup__button{
+  border: 1px solid var(--color-gray-t);
+  color: white;
+  padding: .2rem 0.6rem;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+}
+.button:disabled, .btgroup__button:disabled{
+  color: var(--theme-text-fg-disabled);
+}
+.button:not(:disabled):active,
+.btgroup__button:not(:disabled):active{
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+
+.button svg,
+.btgroup__button svg
+{
+  stroke: var(--theme-text-fg-contrasting);
+  fill: var(--theme-text-fg-contrasting);
+  height: 18px;
+  width: 18px;
+  margin-right: 3px;
+}
+.button:disabled svg,
+.btgroup__button:disabled svg
+{
+  fill: var(--theme-text-fg-disabled);
+  stroke: var(--theme-text-fg-disabled);
+}
+
+
+.btgroup{
+  display: flex;
+  border: 1px solid var(--color-gray-t);
+  background-color: transparent;
+  border-radius: 4px;
+}
+.btgroup .btgroup__button{
+  display: flex;
+  border: 1px solid transparent;
+}
+.btgroup .btgroup__button:nth-child(1){
+  border-right: 1px solid var(--color-gray-t);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btgroup .btgroup__button:nth-child(2){
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btgroup .btgroup__button:active:not(:disabled):nth-child(1){/* I hereby challenge you to write a line with more selectors */
+  border-right: 1px solid rgba(255,255,255,0.7);
+}
+
+
 

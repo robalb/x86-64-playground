@@ -29,7 +29,17 @@
 -[x] first release with github pages
 -[x] CI/CD pipeline. pushes to master should trigger a merge and then a checkout into github_pages. then trigger a build. the contents of /build should be copied into /docs, and pushed.
 - test CI/CD pipeline that directly publishes to github pages without storing the artifacts in a branch. -> https://github.com/actions/upload-pages-artifact
-- mobile layout
+-[x] mobile layout
+
+
+
+https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+
+TODO: figure out design system.
+- what about MELT ui, styling every melt ui element via the data-attributes the library sets? 
+  overrides should be easy via custom styles.
+
+- what about elements that are not controlled by melt ui? such as basic buttons?
 
 
 
