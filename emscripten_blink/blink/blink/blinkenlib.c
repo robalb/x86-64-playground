@@ -303,31 +303,37 @@ void stringToArgsArray(char *argsString, char **argsArray, int maxArgs) {
     argsArray[count] = NULL;
 }
 
-//TODO: remove. merge into setupProgram
-void setupProgramWithArgs(char* programpath, char **args, bool withdebugger){
+/**
+ * Set up a program using the arguments previously set
+  * by javascript in the global strings:
+  * - progname_string
+  * - argc_string
+  * - argv_string
+  *
+  */
+void setupProgram(bool withdebugger){
   debugger_enabled = withdebugger;
-  //close previous instances
-  TearDown();
-  char *bios = 0;
-  char *vars = 0;
-  SetUp();
-  LoadProgram(m, programpath, programpath, args, &vars, bios);
-#ifdef DEBUG
-  printf("loaded: %d, exited: %d\n", s->loaded, s->exited);
-#endif
-  PostLoadSetup();
-  update_clstruct(m);
-}
 
-void setupProgram(){
-  //setup a program using the arguments globally set by javascript
-  printf("$ %s %s \n", progname_string, argc_string);
+  //terminal prompt
+  printf("\n$ %s\n", argc_string);
 
+  //get **argc
+  char *args[ARGC_MAX_LINE_LEN];
   char argc_string_copy[ARGC_MAX_LINE_LEN];
   memcpy(argc_string_copy, argc_string, ARGC_MAX_LINE_LEN);
-  char *args[ARGC_MAX_LINE_LEN];
   stringToArgsArray(argc_string_copy, args, ARGC_MAX_LINE_LEN);
-  setupProgramWithArgs(progname_string, args, true);
+
+  //get **argv
+  //TODO
+  char *vars = 0;
+
+  //close previous instances
+  TearDown();
+  SetUp();
+  char *bios = 0;
+  LoadProgram(m, progname_string, progname_string, args, &vars, bios);
+  PostLoadSetup();
+  update_clstruct(m);
 }
 
 
@@ -339,48 +345,15 @@ void setupProgram(){
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_run_fast(){
-  debugger_enabled = false;//TOO: set this via a new setupProgram arg
-  setupProgram();
+  setupProgram(false);
   single_stepping = false;
   runLoop();
 }
 
-EMSCRIPTEN_KEEPALIVE
-//TODO: remove. use multiple calls to run_fast instead
-void blinkenlib_loadPlayground(int step){
-  #define STEP_ASSEMBLE_AND_LINK 0
-  #define STEP_ASSEMBLE 1
-  #define STEP_LINK 2
-  if(step == STEP_ASSEMBLE_AND_LINK){
-    puts("\n/fasm /assembly.s /program");
-    char codepath[] = "/assembler";
-    char *args[] = {"/assembler", "/assembly.s", "/program", 0};
-    setupProgramWithArgs(codepath, args, false);
-    single_stepping = false;
-    runLoop();
-  }
-  else if(step == STEP_ASSEMBLE){
-    puts("\n/as -o /program.o /assembly.s");
-    char codepath[] = "/assembler";
-    char *args[] = {"/assembler", "-o", "/program.o", "/assembly.s", 0};
-    setupProgramWithArgs(codepath, args, false);
-    single_stepping = false;
-    runLoop();
-  }
-  else if(step == STEP_LINK){
-    puts("\n/ld -o /program /program.o");
-    char codepath2[] = "/linker";
-    char *args2[] = {"/linker", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
-    setupProgramWithArgs(codepath2, args2, false);
-    single_stepping = false;
-    runLoop();
-    puts("Program ready.");
-  }
-}
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_run(){
-  setupProgram();
+  setupProgram(true);
   //run the program to the end
   single_stepping = false;
   runLoop();
@@ -388,13 +361,13 @@ void blinkenlib_run(){
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_starti(){
-  setupProgram();
+  setupProgram(true);
   //don't run any instruction
 }
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_start(){
-  setupProgram();
+  setupProgram(true);
   //TODO: set breakpoint at main
   single_stepping = false;
   runLoop();

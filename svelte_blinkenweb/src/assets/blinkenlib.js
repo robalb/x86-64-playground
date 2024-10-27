@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","___indirect_function_table","_blinkenlib_run_fast","_blinkenlib_loadPlayground","_blinkenlib_run","_blinkenlib_starti","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_blinkenlib_get_argc_string","_blinkenlib_get_argv_string","_blinkenlib_get_progname_string","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","___indirect_function_table","_blinkenlib_run_fast","_blinkenlib_run","_blinkenlib_starti","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_get_clstruct","_blinkenlib_get_argc_string","_blinkenlib_get_argv_string","_blinkenlib_get_progname_string","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5448,7 +5448,6 @@ var wasmImports = {
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
 var _blinkenlib_run_fast = Module['_blinkenlib_run_fast'] = createExportWrapper('blinkenlib_run_fast', 0);
-var _blinkenlib_loadPlayground = Module['_blinkenlib_loadPlayground'] = createExportWrapper('blinkenlib_loadPlayground', 1);
 var _blinkenlib_run = Module['_blinkenlib_run'] = createExportWrapper('blinkenlib_run', 0);
 var _blinkenlib_starti = Module['_blinkenlib_starti'] = createExportWrapper('blinkenlib_starti', 0);
 var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blinkenlib_start', 0);
