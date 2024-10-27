@@ -15,19 +15,36 @@
 #include <stdio.h>
 #include <signal.h>
 
+void update_clstruct(struct Machine *m);
+
+/*
+ * These variables are defined by javascript;
+ * the pointers are passed to main when this module starts
+ */
 void(*signal_callback)(int, int) = 0;
 void(*exit_callback)(int) = 0;
 
-void update_clstruct(struct Machine *m);
 
 
-/**
+/*
  * this buffer holds the disassembly strings
  * that will be passed to js
  */
 #define DIS_MAX_LINES 200
 #define DIS_MAX_LINE_LEN 200
 char dis_buffer[DIS_MAX_LINES][DIS_MAX_LINE_LEN] = {0};
+
+/*
+ * These buffers hold the program execution arguments.
+ * The pointers to these strings will be passed to js,
+ * and the content will be dynamically set by js
+ */
+#define ARGC_MAX_LINE_LEN 200
+#define ARGV_MAX_LINE_LEN 200
+#define PROGNAME_MAX_LINE_LEN 200
+char argc_string[ARGC_MAX_LINE_LEN] = {0};
+char argv_string[ARGV_MAX_LINE_LEN] = {0};
+char progname_string[PROGNAME_MAX_LINE_LEN] = {0};
 
 struct clstruct cls;
 struct System *s;
@@ -276,6 +293,15 @@ void TearDown(void) {
   memset(dis_buffer, 0, sizeof(dis_buffer));
 }
 
+void stringToArgsArray(char *argsString, char **argsArray, int maxArgs) {
+    int count = 0;
+    char *token = strtok(argsString, " ");
+    while (token != NULL && count < maxArgs - 1) {
+        argsArray[count++] = token;
+        token = strtok(NULL, " ");
+    }
+    argsArray[count] = NULL;
+}
 
 void setupProgramWithArgs(char* programpath, char **args, bool withdebugger){
   debugger_enabled = withdebugger;
@@ -293,13 +319,14 @@ void setupProgramWithArgs(char* programpath, char **args, bool withdebugger){
 }
 
 void setupProgram(){
-  //TODO: all this must be received as arg.
-  //remember to free these strings after they are used, since
-  //they will be allocated dynamically from js
-  char codepath[] = "/program";
-  char *args[] = {"/program", 0};
-  puts("/program");
-  setupProgramWithArgs(codepath, args, true);
+  //setup a program using the arguments globally set by javascript
+  printf("$ %s %s \n", progname_string, argc_string);
+
+  char argc_string_copy[ARGC_MAX_LINE_LEN];
+  memcpy(argc_string_copy, argc_string, ARGC_MAX_LINE_LEN);
+  char *args[ARGC_MAX_LINE_LEN];
+  stringToArgsArray(argc_string_copy, args, ARGC_MAX_LINE_LEN);
+  setupProgramWithArgs(progname_string, args, true);
 }
 
 
@@ -308,38 +335,52 @@ void setupProgram(){
 ////////////////////////
 
 
+
 EMSCRIPTEN_KEEPALIVE
-void blinkenlib_loadProgram(){
-  //this is currently fully implemented in js.
-  //the elf is fetched js-side, and put in the 
-  //vfs at the path ./program
+void blinkenlib_run_fast(){
+  puts(argc_string);
+  char *token = strtok(argc_string, " ");
+  
+  // Iterate through each token
+  while (token != NULL) {
+      printf("Argument: %s\n", token);
+      token = strtok(NULL, " ");
+  }
+  puts(argc_string);
+  return;
+  char codepath[] = "/assembler";
+  char *args[] = {"/assembler", "-o", "/program.o", "/assembly.s", 0};
+  setupProgramWithArgs(codepath, args, false);
+  single_stepping = false;
+  runLoop();
 }
 
 EMSCRIPTEN_KEEPALIVE
+//TODO: remove. use multiple calls to run_fast instead
 void blinkenlib_loadPlayground(int step){
   #define STEP_ASSEMBLE_AND_LINK 0
   #define STEP_ASSEMBLE 1
   #define STEP_LINK 2
   if(step == STEP_ASSEMBLE_AND_LINK){
     puts("\n/fasm /assembly.s /program");
-    char codepath[] = "/fasm";
-    char *args[] = {"/fasm", "/assembly.s", "/program", 0};
+    char codepath[] = "/assembler";
+    char *args[] = {"/assembler", "/assembly.s", "/program", 0};
     setupProgramWithArgs(codepath, args, false);
     single_stepping = false;
     runLoop();
   }
   else if(step == STEP_ASSEMBLE){
     puts("\n/as -o /program.o /assembly.s");
-    char codepath[] = "/as";
-    char *args[] = {"/as", "-o", "/program.o", "/assembly.s", 0};
+    char codepath[] = "/assembler";
+    char *args[] = {"/assembler", "-o", "/program.o", "/assembly.s", 0};
     setupProgramWithArgs(codepath, args, false);
     single_stepping = false;
     runLoop();
   }
   else if(step == STEP_LINK){
     puts("\n/ld -o /program /program.o");
-    char codepath2[] = "/ld";
-    char *args2[] = {"/ld", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
+    char codepath2[] = "/linker";
+    char *args2[] = {"/linker", "--no-dynamic-linker", "-o", "/program", "/program.o", 0};
     setupProgramWithArgs(codepath2, args2, false);
     single_stepping = false;
     runLoop();
@@ -394,6 +435,21 @@ void *blinkenlib_get_clstruct(){
 }
 
 EMSCRIPTEN_KEEPALIVE
+void *blinkenlib_get_argc_string(){
+  return &argc_string;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void *blinkenlib_get_argv_string(){
+  return &argv_string;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void *blinkenlib_get_progname_string(){
+  return &progname_string;
+}
+
+EMSCRIPTEN_KEEPALIVE
 u8 *blinkenlib_spy_address(u64 virtual_address){
   BEGIN_NO_PAGE_FAULTS;
   return SpyAddress(m, virtual_address);
@@ -408,7 +464,7 @@ int main(int argc, char *argv[]) {
 #endif
   puts("Initializing blink emulator...");
   if(argc != 3){
-    puts("Error. main expected 2 args");
+    puts("Error. main expected 3 args");
     return 1;
   }
   int signal_callback_num = atoi(argv[1]);

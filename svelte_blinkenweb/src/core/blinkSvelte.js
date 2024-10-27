@@ -1,6 +1,7 @@
 import { writable, derived } from "svelte/store";
 import {Blink, blink_modes} from './blink'
 import { snippets } from "../core/snippets";
+import {assemblers} from './assemblers'
 
 function portion(parentStore, name) {
   return derived(parentStore, value => value[name]);
@@ -65,7 +66,7 @@ function createBlinkStore(){
 
 
   const blink = new Blink(
-    default_blink_mode,
+    assemblers.FASM_trunk,
     stdinHander,
     stdoutHandler,
     stderrHander,

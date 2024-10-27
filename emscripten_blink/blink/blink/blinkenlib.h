@@ -56,18 +56,20 @@ struct clstruct{
   //disassembly buffer
   u32 dis__max_lines;    //number
   u32 dis__max_line_len; //number
-  u32 dis__current_line;  //number
+  u32 dis__current_line; //number
   u32 dis__buffer;
 };
 
-void blinkenlib_loadProgram();
-void blinkenlib_loadPlayground(int stage);
+void blinkenlib_run_fast();
 void blinkenlib_run();
 void blinkenlib_start();
 void blinkenlib_starti();
 void blinkenlib_stepi();
 void blinkenlib_continue();
 void *blinkenlib_get_clstruct();
+void *blinkenlib_get_argc_string();
+void *blinkenlib_get_argv_string();
+void *blinkenlib_get_progname_string();
 u8 *blinkenlib_spy_address(u64 virtual_address);
 
 #endif /* BLINK_BLINKENLIB_H_ */
