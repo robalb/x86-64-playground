@@ -303,6 +303,7 @@ void stringToArgsArray(char *argsString, char **argsArray, int maxArgs) {
     argsArray[count] = NULL;
 }
 
+//TODO: remove. merge into setupProgram
 void setupProgramWithArgs(char* programpath, char **args, bool withdebugger){
   debugger_enabled = withdebugger;
   //close previous instances
@@ -338,19 +339,8 @@ void setupProgram(){
 
 EMSCRIPTEN_KEEPALIVE
 void blinkenlib_run_fast(){
-  puts(argc_string);
-  char *token = strtok(argc_string, " ");
-  
-  // Iterate through each token
-  while (token != NULL) {
-      printf("Argument: %s\n", token);
-      token = strtok(NULL, " ");
-  }
-  puts(argc_string);
-  return;
-  char codepath[] = "/assembler";
-  char *args[] = {"/assembler", "-o", "/program.o", "/assembly.s", 0};
-  setupProgramWithArgs(codepath, args, false);
+  debugger_enabled = false;//TOO: set this via a new setupProgram arg
+  setupProgram();
   single_stepping = false;
   runLoop();
 }

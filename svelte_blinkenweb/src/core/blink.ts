@@ -130,6 +130,10 @@ class M_CLStruct{
   }
 
   writeStringToHeap(offset: number, str: string, maxLength: number){
+    if(!this.structView.buffer.byteLength){
+      console.log("blink: memory grew")
+      this.growMemory()
+    }
     if(offset == 0){
       console.log("blink: write to null ptr")
       return
@@ -262,6 +266,9 @@ export class Blink{
   argv_ptr = 0;
   progname_ptr = 0;
 
+  default_argc = "/program"
+  default_argv = ""
+
   /**
   * Initialize the emscripten blink module.
   */
@@ -391,13 +398,6 @@ export class Blink{
     this.m.writeStringToHeap(this.argv_ptr, argv, this.max_argv_len)
   }
 
-  //TODO: remove
-  test(a){
-    this.#setEmulationArgs(a, "argc here", "argv here");
-    this.Module._blinkenlib_run_fast()
-  }
-
-
   setCallbacks(
     stdinHandler?: ()=>number,
     stdoutHandler?: (charCode: number)=>void,
@@ -444,7 +444,6 @@ export class Blink{
     FS.close(stream);
     FS.chmod('/program', 0o777);
 
-    this.#setEmulationArgs("/program", "arg1", "env1")
     this.starti()
   }
 
@@ -464,17 +463,10 @@ export class Blink{
     this.#setState(this.states.ASSEMBLING);
     let FS = this.Module.FS
     FS.writeFile("/assembly.s", asmString);
-    //TODO: change all this. run the linker directly, by setting up the linker
-    //commands
-    let STEP_ASSEMBLE_AND_LINK = 0;
-    let STEP_ASSEMBLE = 1;
-    let STEP_LINK = 2;
-    let step: number;
-    if(true){step = STEP_ASSEMBLE_AND_LINK;}
-    if(false){step = STEP_ASSEMBLE;}
     //this hack ensures that the function is called after a browser render pass
     requestAnimationFrame(()=>{
-      this.Module._blinkenlib_loadPlayground(step);
+      this.#setEmulationArgs("/assembler", this.mode.binaries.assembler.commands, "")
+      this.Module._blinkenlib_run_fast()
     })
   }
 
@@ -495,7 +487,8 @@ export class Blink{
       this.#setState(this.states.LINKING);
       //this hack ensures that the function is called after a browser render pass
       requestAnimationFrame(()=>{
-      this.Module._blinkenlib_loadPlayground(2);
+        this.#setEmulationArgs("/linker", this.mode.binaries.linker.commands, "")
+        this.Module._blinkenlib_run_fast()
       })
 
     }
@@ -520,6 +513,7 @@ export class Blink{
   run(){
     try{
       this.#setState(this.states.PROGRAM_RUNNING)
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_run();
     }catch(e){
       this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
@@ -533,6 +527,7 @@ export class Blink{
   */
   start(){
     try{
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_start();
       this.#setState(this.states.PROGRAM_RUNNING)
     }catch(e){
@@ -546,6 +541,7 @@ export class Blink{
   */
   starti(){
     try{
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_starti();
       this.#setState(this.states.PROGRAM_RUNNING)
     }catch(e){

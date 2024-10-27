@@ -9,7 +9,7 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  let default_blink_mode = blink_modes.FASM
+  let default_blink_mode = blink_modes.GNU
   let default_asm = snippets.syscall[default_blink_mode];
   //Read the uri params to set the initial state
   //TODO: this is absolutely temporary
@@ -66,7 +66,7 @@ function createBlinkStore(){
 
 
   const blink = new Blink(
-    assemblers.FASM_trunk,
+    assemblers.GNU_trunk,
     stdinHander,
     stdoutHandler,
     stderrHander,
