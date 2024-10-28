@@ -3,20 +3,27 @@
   export let showEditor;
 
   import Logo from './Logo.svelte';
-  import { onMount } from 'svelte';
-  import {blinkStore, state} from '../core/store'
-  import {fetchBinaryFile} from '../core/utils'
-    import WizardHat from './icons/WizardHat.svelte';
-    import ArrowBack from './icons/ArrowBack.svelte';
-    import ControlsFileMenu from './ControlsFileMenu.svelte';
-  // import demo1_url from '../assets/example.elf?url'
-  // import demo1_url from '../assets/ld-new.elf?url'
-  // import demo1_url from '../assets/demo_programs/argv.elf?url'
+  import WizardHat from './icons/WizardHat.svelte';
+  import ArrowBack from './icons/ArrowBack.svelte';
+  import ControlsFileMenu from './ControlsFileMenu.svelte';
+  import { assemblers } from '../core/assemblers';
+  import {blinkStore, state, mode} from '../core/store'
 
   let blink = blinkStore.getInstance()
-  window['blink'] = blink;
 
+  //-------------------
+  //bindings for the assembler selection dropdown
+  //-------------------
+  let assemblerModes = Object.values(assemblers)
+	let selectedMode;
+  $: selectedMode = $mode;
+  function handle_assembler_change(){
+    blinkStore.setMode(selectedMode)
+  }
+
+  //-------------------
   //render conditionals
+  //-------------------
   let showControls = false;
   let canstart = false;
   let canstep = false;
@@ -37,26 +44,12 @@
     $blinkStore.state != blink.states.LINKING
   )
 
-  //temporary control state logic
-	let compiler_options = [
-		{ id: 1, text: `Fasm`, uri: 'fasm' },
-		{ id: 2, text: `Gnu AS`, uri: 'gnu' },
-	];
-
-	let selected_compiler;
-
-  function handle_compiler_change(){
-
-  }
-
+  //-------------------
   //control handlers
-
+  //-------------------
   async function handle_compile(){
-    // let filedata = await fetchBinaryFile(demo1_url)
-    // blink.loadElf(filedata);
     blink.loadASM($blinkStore.asm);
   }
-
   function handle_back(){
     blink.setready()
     blinkStore.setUploadedElfName("")
@@ -96,58 +89,62 @@
    ----------
  -->
 <div class="controls" class:controls-inverted={!mobile} >
-  <section class="controls__row controls__row-top">
-    {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
-      <div class="btgroup">
-        <select class="btgroup__button btgroup__button--select"
-          bind:value={selected_compiler} on:change={handle_compiler_change}>
-          {#each compiler_options as question}
-            <option value={question}>
-              {question.text}
-            </option>
-          {/each}
-        </select>
-        <button class="btgroup__button"
-          disabled={!cancompile} on:click={handle_compile}>
-          <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" />
-          compile</button>
-      </div>
+  <!-- Editor row -->
+    <section class="controls__row controls__row-top">
+      {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
+        <div class="btgroup">
+          <select class="btgroup__button btgroup__button--select"
+            bind:value={selectedMode} on:change={handle_assembler_change}>
+            {#each assemblerModes as mode}
+              <option value={mode.id}>
+                {mode.display_name}
+              </option>
+            {/each}
+          </select>
+          <button class="btgroup__button"
+            disabled={!cancompile} on:click={handle_compile}>
+            <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" />
+            compile</button>
+        </div>
 
-      <ControlsFileMenu />
+        <ControlsFileMenu />
 
-    {:else}
-      <button on:click={handle_back} class="button" >
-        <ArrowBack aria-hidden="true" focusable="false" width="16px" height="16px"/>
-        Back to editor
-      </button>
-    {/if}
+      {:else}
+        <button on:click={handle_back} class="button" >
+          <ArrowBack aria-hidden="true" focusable="false" width="16px" height="16px"/>
+          Back to editor
+        </button>
+      {/if}
 
-  </section>
+    </section>
+  <!-- /Editor row -->
 
   {#if showControls}
-  <section class="controls__row controls__row-bottom">
+  <!-- Debugger row -->
+    <section class="controls__row controls__row-bottom">
 
-    <div class="btgroup">
-      <button class="btgroup__button"
-        on:click={()=>blink.starti()}
-        disabled={!canstart} > 
-        starti 
-      </button>
-      <button class="btgroup__button"
-        on:click={()=>blink.run()}
-        disabled={!canstart} > 
-        run 
-      </button>
-    </div>
+      <div class="btgroup">
+        <button class="btgroup__button"
+          on:click={()=>blink.starti()}
+          disabled={!canstart} > 
+          starti 
+        </button>
+        <button class="btgroup__button"
+          on:click={()=>blink.run()}
+          disabled={!canstart} > 
+          run 
+        </button>
+      </div>
 
-    <button class="button m-left-1" on:click={()=>blink.stepi()}
-      disabled={!canstep}
-    > stepi </button>
-    <button class="button m-left-1" on:click={()=>blink.continue()}
-      disabled={!canstep}
-    > continue </button>
+      <button class="button m-left-1" on:click={()=>blink.stepi()}
+        disabled={!canstep}
+      > stepi </button>
+      <button class="button m-left-1" on:click={()=>blink.continue()}
+        disabled={!canstep}
+      > continue </button>
 
-  </section>
+    </section>
+  <!-- /Debugger row -->
   {/if}
 </div>
 
@@ -240,94 +237,5 @@
     margin: 0;
     padding-left: 1rem;
   }
-
- 
-
-  /* -------------------- */
-  /*      Buttons&c       */
-  /* -------------------- */
-  /* button, select{ */
-  /*   border: 1px solid var(--color-gray-t); */
-  /*   color: white; */
-  /*   padding: .2rem 0.6rem; */
-  /*   border-radius: 4px; */
-  /*   background-color: transparent; */
-  /*   cursor: pointer; */
-  /*   height: 2rem; */
-  /*   display: flex; */
-  /*   align-items: center; */
-  /* } */
-  /* button:disabled{ */
-  /*   color: gray; */
-  /* } */
-  /* button:not(:disabled):active{ */
-  /*   border: 1px solid rgba(255,255,255,0.7); */
-
-  /* } */
-
-  /* button svg{ */
-  /*   stroke: white; */
-  /*   fill: white; */
-  /*   height: 18px; */
-  /*   width: 18px; */
-  /*   margin-right: 3px; */
-  /* } */
-  /* button:disabled svg{ */
-  /*   fill: gray; */
-  /*   stroke: gray; */
-  /* } */
-
-  /* .group{ */
-  /*   display: flex; */
-  /*   border: 1px solid var(--color-gray-t); */
-  /*   background-color: transparent; */
-  /*   border-radius: 4px; */
-  /* } */
-  /* .group button{ */
-  /*   display: flex; */
-  /*   border: 1px solid transparent; */
-  /* } */
-  /* .group button:nth-child(1){ */
-  /*   border-right: 1px solid var(--color-gray-t); */
-  /*   border-top-right-radius: 0; */
-  /*   border-bottom-right-radius: 0; */
-  /* } */
-  /* .group button:nth-child(2){ */
-  /*   border-top-left-radius: 0; */
-  /*   border-bottom-left-radius: 0; */
-  /* } */
-  /* .group button:active:not(:disabled):nth-child(1){/* I hereby challenge you to write a line with more selectors */
-  /*   border-right: 1px solid rgba(255,255,255,0.7); */
-  /* } */
-
-
-  /* .compilebt{ */
-  /*   display: flex; */
-  /*   border: 1px solid var(--color-gray-t); */
-  /*   background-color: #1c1e24; */
-  /*   border-radius: 4px; */
-  /*   margin-right: 1rem; */
-  /* } */
-  /* .compilebt button{ */
-  /*   display: flex; */
-  /*   border: 1px solid transparent; */
-  /*   align-items:center; */
-  /*   background-color:transparent; */
-  /*   padding: 0 0.6rem; */
-  /*   border-top-left-radius: 0; */
-  /*   border-bottom-left-radius: 0; */
-  /* } */
-  /* .compilebt button svg{ */
-  /*   width: 25px; */
-  /*   height: 25px; */
-  /*   stroke: white; */
-  /* } */
-  /* .compilebt select{ */
-  /*   border: 1px solid transparent; */
-  /*   background-color:rgba(255,255,255,.1); */
-  /*   border-top-right-radius: 0; */
-  /*   border-bottom-right-radius: 0; */
-  /* } */
-
 
 </style>

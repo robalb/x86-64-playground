@@ -29,24 +29,8 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  let default_blink_mode = blink_modes.FASM
-  let default_asm = snippets.syscall[default_blink_mode];
-  //Read the uri params to set the initial state
-  //TODO: this is absolutely temporary
-  const params = new URLSearchParams(window.location.search);
-  if(params.get("compiler") == "fasm"){
-    default_blink_mode = blink_modes.FASM
-  }
-  if(params.get("compiler") == "gnu"){
-    default_blink_mode = blink_modes.GNU
-  }
-  if(params.get("demo") == "hello_world"){
-    default_asm = snippets.syscall[default_blink_mode];
-  }
-  if(params.get("demo") == "functions"){
-    default_asm = snippets.functions[default_blink_mode];
-  }
-
+  let default_asm = ""
+  let default_mode: Assemblers_key = 'FASM_trunk';
 
   const store  = writable({
     term_buffer: "",
@@ -54,7 +38,7 @@ function createBlinkStore(){
     signal: "",
     asm: default_asm,
     manual_render: 0,
-    mode: default_blink_mode,
+    mode: default_mode,
     uploadedElf: ""
   });
   const { subscribe, update } = store
@@ -86,7 +70,7 @@ function createBlinkStore(){
 
 
   const blink = new Blink(
-    assemblers.FASM_trunk,
+    assemblers[default_mode],
     stdinHander,
     stdoutHandler,
     stderrHander,
@@ -101,15 +85,16 @@ function createBlinkStore(){
     getInstance(){
       return blink;
     },
-    updateAsm(asm){
+    updateAsm(asm:string){
       console.log("update")
       update((store) => ({...store, asm}))
     },
-    setUploadedElfName(uploadedElf){
+    setUploadedElfName(uploadedElf: string|null){
       update((store) => ({...store, uploadedElf}))
     },
     setMode(mode: Assemblers_key){
-
+      update((store) => ({...store, mode}))
+      blink.setMode(assemblers[mode])
     }
   }
 

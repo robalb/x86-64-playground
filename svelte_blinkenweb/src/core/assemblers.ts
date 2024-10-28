@@ -8,6 +8,7 @@ export interface Binary {
 }
 
 export interface AssemblerMode {
+  id: string;
   display_name: string;
   description: string;
   binaries: {
@@ -34,6 +35,7 @@ export type Assemblers_key = keyof typeof assemblers;
 */
 export const assemblers: Record<string, AssemblerMode> = {
   'GNU_trunk': {
+    id: 'GNU_trunk',
     display_name: 'GNU as',
     description: 'GNU as + GNU ld, version 2.43.50. Compiled as a static MUSL binary',
     binaries: {
@@ -48,6 +50,7 @@ export const assemblers: Record<string, AssemblerMode> = {
     },
   },
   'FASM_trunk': {
+    id: 'FASM_trunk',
     display_name: 'Fasm',
     description: 'Flat assembler version 1.73.32',
     binaries: {
