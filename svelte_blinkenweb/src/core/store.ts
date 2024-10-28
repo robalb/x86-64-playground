@@ -1,6 +1,5 @@
 import { writable, derived, get } from "svelte/store";
 import {Blink, blink_modes} from './blink'
-import { snippets } from "../core/snippets";
 import {assemblers, Assemblers_key} from './assemblers'
 import {AppState} from './appState'
 
@@ -30,7 +29,8 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  let default_asm = "a"
+  //todo: get default state from url appstate deserializer
+  let default_asm = "this should come from either an url appstate or a default example_snippet appstate"
   let default_mode: Assemblers_key = 'FASM_trunk';
 
   const store  = writable({
@@ -115,7 +115,11 @@ function createBlinkStore(){
       update((store) => ({...store, editorContent_read: content}))
     },
     setEditorContent(content:string){
-      update((store) => ({...store, editorContent_write: content}))
+      //will immediately trigger a call to notifyEditorContent
+      update((store) => ({
+        ...store,
+        editorContent_write: content,
+      }))
     },
     setUploadedElfName(uploadedElf: string|null){
       update((store) => ({...store, uploadedElf}))

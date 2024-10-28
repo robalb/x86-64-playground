@@ -1,5 +1,4 @@
 <script>
-
 import {blinkStore, state, editorContent_write} from '../core/store'
 import {onMount} from 'svelte'
 import { createEditor } from "prism-code-editor"
@@ -70,14 +69,7 @@ $: $editorContent_write && updateEditor()
 onMount(() => {
   renderEditor();
 })
-
-
 </script>
-
-  <!-- TODO: remove. this is a test button -->
-<button on:click={()=>{blinkStore.setEditorContent("aaa" + Math.random())}}
-  style="position: absolute; bottom: 0; left: 0;"
->update all</button>
 
 <div class="container">
   {#if $blinkStore.uploadedElf}

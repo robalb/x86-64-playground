@@ -420,8 +420,6 @@ body {
 *[data-melt-dropdown-menu-item][data-highlighted],
 *[data-melt-dropdown-menu-subtrigger][data-highlighted] {
   color: var(--theme-panel-controls-bg);
-  outline: 1px solid gray;
-  background-color: rgba(255,255,255,.1);
   background-color: var(--theme-focus);
 }
 *[data-melt-dropdown-menu-item][data-highlighted] svg,
