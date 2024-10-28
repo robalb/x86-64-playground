@@ -3,7 +3,7 @@ import './styles/style.css';
 import DesktopLayout from './DesktopLayout.svelte';
 import MobileLayout from './MobileLayout.svelte';
 
-import {blinkStore, uploadedElf} from './core/blinkSvelte'
+import {blinkStore, uploadedElf} from './core/store'
 let blink = blinkStore.getInstance()
 
 //make the blink wrapper accessible to the developer tools

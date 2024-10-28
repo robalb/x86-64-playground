@@ -18,6 +18,8 @@ export interface AssemblerMode {
   }
 }
 
+export type Assemblers_key = keyof typeof assemblers;
+
 /**
 * All the assemblers that can be selected from the UI,
 *

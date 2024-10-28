@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import {blinkStore, manual_render} from '../core/blinkSvelte'
+import {blinkStore, manual_render} from '../core/store'
 
 let blink = blinkStore.getInstance()
 

@@ -8,13 +8,12 @@ import Terminal from './components/Terminal.svelte';
 import Controls from './components/Controls.svelte';
 import {TabsAutomatic} from './core/ARIA'
 
-import {blinkStore, state} from './core/blinkSvelte'
+import {blinkStore, state} from './core/store'
 
 let blink = blinkStore.getInstance()
 
 // Initialize tablist
 function initTabARIA(node){
-  console.log(node)
   let t =  new TabsAutomatic(node);
   return{
     update(){

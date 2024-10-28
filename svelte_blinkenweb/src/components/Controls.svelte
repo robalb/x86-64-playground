@@ -4,7 +4,7 @@
 
   import Logo from './Logo.svelte';
   import { onMount } from 'svelte';
-  import {blinkStore, state} from '../core/blinkSvelte'
+  import {blinkStore, state} from '../core/store'
   import {fetchBinaryFile} from '../core/utils'
     import WizardHat from './icons/WizardHat.svelte';
     import ArrowBack from './icons/ArrowBack.svelte';

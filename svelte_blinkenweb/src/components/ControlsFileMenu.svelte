@@ -2,7 +2,7 @@
   import { createDropdownMenu, melt } from '@melt-ui/svelte';
   import ArrowForward from './icons/ArrowForward.svelte';
   import ArrowDropDown from './icons/ArrowDropDown.svelte';
-  import {blinkStore, state} from '../core/blinkSvelte'
+  import {blinkStore, state} from '../core/store'
 
   let blink = blinkStore.getInstance()
 
