@@ -1,11 +1,5 @@
 import blinkenlib from '../assets/blinkenlib.js'
-// TODO: remove these imports
-// import fasm_elf_url from '../assets/fasm.elf?url'
-// import as_elf_url from '../assets/gnu-as.elf?url'
-// import ld_elf_url from '../assets/gnu-ld.elf?url'
-
-
-import {assemblers} from '../core/assemblers'
+import {assemblers, AssemblerMode} from '../core/assemblers'
 
 //TODO: remove this, and anything used by this
 export let blink_modes = {
@@ -250,7 +244,7 @@ export class Blink{
     'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
   } as const;
 
-  mode: typeof assemblers[keyof typeof assemblers];
+  mode: AssemblerMode;
 
   Module: any;/*Emscripten Module object*/
   memory: WebAssembly.Memory;
@@ -273,7 +267,7 @@ export class Blink{
   * Initialize the emscripten blink module.
   */
   constructor(
-    mode: typeof assemblers[keyof typeof assemblers],
+    mode: AssemblerMode,
     stdinHandler?: ()=>number,
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
@@ -290,7 +284,7 @@ export class Blink{
     this.#initEmscripten(mode);
   }
 
-  async #initEmscripten(mode?: typeof assemblers[keyof typeof assemblers]){
+  async #initEmscripten(mode?: AssemblerMode){
     this.mode = mode;
     this.Module = await blinkenlib({
       noInitialRun: true,
@@ -426,6 +420,55 @@ export class Blink{
       this.#signalHandler = this.#default_signalHandler
     if(!this.#stateChangeHandler)
       this.#stateChangeHandler = this.#default_stateChangeHandler
+  }
+
+  async #fetchBinaryFile(url: string): Promise<ArrayBuffer>{
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      return arrayBuffer;
+    } catch (error) {
+      console.error('Failed to fetch binary file:', error);
+    }
+  }
+
+  //TODO: remove
+  test(){
+    this.setMode(assemblers.GNU_trunk)
+  }
+
+  /** 
+  * Update the assembler mode of this blink instance.
+  * The state will be set to NOT_READY, and
+  * a new set of compilers will be downloaded.
+  */
+  async setMode(mode: AssemblerMode){
+    this.mode = mode;
+    this.#setState(this.states.NOT_READY);
+
+    //download assembler
+    let downloadedElf = await this.#fetchBinaryFile(mode.binaries.assembler.fileurl)
+    let data = new Uint8Array(downloadedElf);
+    let FS = this.Module.FS
+    let stream = FS.open('/assembler', 'w+');
+    FS.write(stream, data, 0, data.length, 0);
+    FS.close(stream);
+    FS.chmod('/assembler', 0o777);
+
+    //download linker, if required by this mode
+    if(mode.binaries.linker){
+      let downloadedElf = await this.#fetchBinaryFile(this.mode.binaries.linker.fileurl)
+      let data = new Uint8Array(downloadedElf);
+      let FS = this.Module.FS
+      let stream = FS.open('/linker', 'w+');
+      FS.write(stream, data, 0, data.length, 0);
+      FS.close(stream);
+      FS.chmod('/linker', 0o777);
+    }
+    this.#setState(this.states.READY);
   }
 
   /**

@@ -2,12 +2,12 @@ import fasm_1_73_32 from '../assets/assemblers/fasm.1.73.32.elf?url'
 import gnu_as_2_43_50 from '../assets/assemblers/gnu-as.2.43.50.elf?url'
 import gnu_ld_2_43_50 from '../assets/assemblers/gnu-ld.2.43.50.elf?url'
 
-interface Binary {
+export interface Binary {
   fileurl: string;
   commands: string;
 }
 
-interface AssemblerMode {
+export interface AssemblerMode {
   display_name: string;
   description: string;
   binaries: {
@@ -56,4 +56,6 @@ export const assemblers: Record<string, AssemblerMode> = {
     },
   }
 } as const;
+
+
 
