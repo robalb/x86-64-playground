@@ -1,34 +1,83 @@
 <script>
-import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
-// Importing Prism grammars
-import "prism-code-editor/prism/languages/nasm"
-import {blinkStore, state} from '../core/store'
+
+import {blinkStore, state, editorContent_write} from '../core/store'
 import {onMount} from 'svelte'
+import { createEditor } from "prism-code-editor"
+
+// Prism grammars
+import "prism-code-editor/prism/languages/nasm"
+
+// Editor styles
+import "prism-code-editor/layout.css"
+import "prism-code-editor/scrollbar.css"
+import "prism-code-editor/themes/github-dark.css"
+
+// Non critical extensions (could be lazy loaded)
+import { indentGuides } from "prism-code-editor/guides"
+import { matchBrackets } from "prism-code-editor/match-brackets"
+import { highlightSelectionMatches } from "prism-code-editor/search"
+import { defaultCommands } from "prism-code-editor/commands"
+import { setIgnoreTab } from "prism-code-editor/commands"
+
 
 let editor_elem;
+let editor;
 
-let invalidElf = false;
 let blink = blinkStore.getInstance()
 
+// render conditionals
+let invalidElf = false;
 $: $state && (
   invalidElf = blink.state == blink.states.PROGRAM_STOPPED &&
     blink.stopReason.loadFail)
 
-onMount(() => {
-  const editors = basicEditor(
+
+function renderEditor(){
+  console.log("editor: rendering everything")
+  if(!editor_elem)
+    return;
+
+  editor = createEditor(
     editor_elem,
     {
       language: "nasm",
-      theme: "github-dark",
-      value: $blinkStore.asm,
+      value: $blinkStore.editorContent_write,
       onUpdate: content=>{
-        blinkStore.updateAsm(content)
+        blinkStore.notifyEditorContent(content)
       },
     },
-    () => console.log("editor ready"),
+    indentGuides(),
+    matchBrackets(),
+    highlightSelectionMatches(),
+    defaultCommands(),
   )
+  //annoying but required since this editor is trapping focus, causing
+  //a11y issues
+  setIgnoreTab(true)
+}
+
+function updateEditor(){
+  if(!editor){
+    return;
+  }
+  editor.setOptions({
+    value: $editorContent_write
+  })
+}
+
+$: $editorContent_write && updateEditor()
+
+onMount(() => {
+  renderEditor();
 })
+
+
 </script>
+
+  <!-- TODO: remove. this is a test button -->
+<button on:click={()=>{blinkStore.setEditorContent("aaa" + Math.random())}}
+  style="position: absolute; bottom: 0; left: 0;"
+>update all</button>
 
 <div class="container">
   {#if $blinkStore.uploadedElf}

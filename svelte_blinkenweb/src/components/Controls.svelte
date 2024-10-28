@@ -48,7 +48,7 @@
   //control handlers
   //-------------------
   async function handle_compile(){
-    blink.loadASM($blinkStore.asm);
+    blink.loadASM($blinkStore.editorContent_read);
   }
   function handle_back(){
     blink.setready()

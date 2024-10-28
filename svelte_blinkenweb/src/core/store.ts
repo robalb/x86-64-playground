@@ -1,7 +1,8 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 import {Blink, blink_modes} from './blink'
 import { snippets } from "../core/snippets";
 import {assemblers, Assemblers_key} from './assemblers'
+import {AppState} from './appState'
 
 //TODO: a complete refactor of the mode key.
 //mode should be set via a specific setter, and should be an Assemblers_key.
@@ -29,31 +30,54 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  let default_asm = ""
+  let default_asm = "a"
   let default_mode: Assemblers_key = 'FASM_trunk';
 
   const store  = writable({
     term_buffer: "",
     state: "",
     signal: "",
-    asm: default_asm,
     manual_render: 0,
     mode: default_mode,
-    uploadedElf: ""
+    uploadedElf: "",
+    //change this to programmatically update the editor input box
+    editorContent_write: default_asm,
+    //real time value of the text editor input box.
+    //changing this will not cause a rerender
+    //TODO: to reduce input lag, move this to a dedicated writable store
+    editorContent_read: "",
   });
   const { subscribe, update } = store
+
+  let setAppState =(state: AppState)=>{
+    update((store) => ({
+      ...store,
+      manual_render: store.manual_render +1,
+      mode: state.mode,
+      editorContent_read: state.editorContent,
+      editorContent_write: state.editorContent,
+    }))
+  };
+  let getAppState = (): AppState =>{
+    let storeObj = get(store);
+    return {
+      editorContent: storeObj.editorContent_read,
+      mode: storeObj.mode,
+    };
+  };
+
 
   let stdinHander=()=>{
     return null;
   }
-  let stdoutHandler=(charcode)=>{
+  let stdoutHandler=(charcode: number)=>{
     update((store) =>{
       let char = String.fromCharCode(charcode);
       store.term_buffer += char;
       return store;
     })
   }
-  let stderrHander=(charcode)=>{
+  let stderrHander=(charcode: number)=>{
     update((store) =>{
       let char = String.fromCharCode(charcode);
       store.term_buffer += char;
@@ -82,12 +106,16 @@ function createBlinkStore(){
 
   return {
     subscribe,
+    getAppState,
+    setAppState,
     getInstance(){
       return blink;
     },
-    updateAsm(asm:string){
-      console.log("update")
-      update((store) => ({...store, asm}))
+    notifyEditorContent(content:string){
+      update((store) => ({...store, editorContent_read: content}))
+    },
+    setEditorContent(content:string){
+      update((store) => ({...store, editorContent_write: content}))
     },
     setUploadedElfName(uploadedElf: string|null){
       update((store) => ({...store, uploadedElf}))
@@ -95,7 +123,7 @@ function createBlinkStore(){
     setMode(mode: Assemblers_key){
       update((store) => ({...store, mode}))
       blink.setMode(assemblers[mode])
-    }
+    },
   }
 
 }
@@ -118,7 +146,7 @@ export const manual_render = portion(blinkStore, "manual_render");
 export const term_buffer = portion(blinkStore, "term_buffer");
 export const state = portion(blinkStore, "state");
 export const signal = portion(blinkStore, "signal");
-export const asm = portion(blinkStore, "asm");
 export const mode = portion(blinkStore, "mode");
 export const uploadedElf = portion(blinkStore, "uploadedElf");
+export const editorContent_write = portion(blinkStore, "editorContent_write");
 
