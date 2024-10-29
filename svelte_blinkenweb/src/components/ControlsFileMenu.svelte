@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { createDropdownMenu, melt } from '@melt-ui/svelte';
+  import { createDropdownMenu } from '@melt-ui/svelte';
   import ArrowForward from './icons/ArrowForward.svelte';
   import ArrowDropDown from './icons/ArrowDropDown.svelte';
-  import {blinkStore, state} from '../core/store'
+  import {blinkStore} from '../core/store'
+
+import {snippetToAppState} from '../core/appState'
+import { snippets, default_snippet } from "../core/example_snippets";
 
   let blink = blinkStore.getInstance()
 
@@ -42,16 +45,14 @@
     states: { subOpen },
   } = createSubmenu();
 
+  const snippetsList = Object.values(snippets)
 
+  function handleSnippetClick(snippetId: string){
+    let selected_snippet = snippets[snippetId]
+    let appState = snippetToAppState(selected_snippet)
+    blinkStore.setAppState(appState)
+  }
 
-  const personsArr = [
-    'Hello world (Fasm)',
-    'Hello world (Gnu AS)',
-    'Functions (Fasm)',
-    'Functions (Gnu AS)',
-    'Shellcode (Fasm)',
-    'Shellcode (Gnu AS)',
-  ];
 </script>
 
 
@@ -81,8 +82,10 @@
     {#if $subOpen}
       <div {...$subMenu} use:subMenu >
         <div class="text">Examples</div>
-          {#each personsArr as person}
-            <div {...$item} use:item>{person}</div>
+          {#each snippetsList as snippet}
+            <div {...$item} use:item
+              on:m-click={_ => handleSnippetClick(snippet.id)}
+              >{snippet.display_name}</div>
           {/each}
       </div>
     {/if}
