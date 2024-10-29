@@ -1,7 +1,7 @@
 import { writable, derived, get } from "svelte/store";
 import {Blink} from './blink'
 import {assemblers, Assemblers_key} from './assemblers'
-import {AppState, snippetToAppState} from './appState'
+import {AppState, snippetToAppState, storage_getAppState, storage_setAppState} from './appState'
 import { snippets, default_snippet } from "./example_snippets";
 
 //TODO: a complete refactor of the mode key.
@@ -39,7 +39,7 @@ function createBlinkStore(){
   //AppData sources in order of importance
   let defaultAppState: AppState = undefined//router_getAppState()
   if(!defaultAppState){
-    defaultAppState = undefined//storage_getAppState()
+    defaultAppState = storage_getAppState()
   }
   if(!defaultAppState){
     let selected_snippet = snippets[default_snippet]
@@ -61,23 +61,6 @@ function createBlinkStore(){
     editorContent_read: defaultAppState.editorContent,
   });
   const { subscribe, update } = store
-
-  let setAppState =(state: AppState)=>{
-    update((store) => ({
-      ...store,
-      manual_render: store.manual_render +1,
-      mode: state.mode,
-      editorContent_read: state.editorContent,
-      editorContent_write: state.editorContent,
-    }))
-  };
-  let getAppState = (): AppState =>{
-    let storeObj = get(store);
-    return {
-      editorContent: storeObj.editorContent_read,
-      mode: storeObj.mode,
-    };
-  };
 
 
   let stdinHander=()=>{
@@ -119,8 +102,26 @@ function createBlinkStore(){
 
   return {
     subscribe,
-    getAppState,
-    setAppState,
+    setAppState(state: AppState){
+      update((store) => ({
+        ...store,
+        manual_render: store.manual_render +1,
+        mode: state.mode,
+        editorContent_read: state.editorContent,
+        editorContent_write: state.editorContent,
+      }))
+      //changes to mode require manual updates to the blink object
+      blink.setMode(assemblers[state.mode])
+      //also save the changes in localStorage
+      storage_setAppState(state)
+    },
+    getAppState(): AppState{
+      let storeObj = get(store);
+      return {
+        editorContent: storeObj.editorContent_read,
+        mode: storeObj.mode,
+      };
+    },
     getInstance(){
       return blink;
     },
@@ -139,6 +140,7 @@ function createBlinkStore(){
     },
     setMode(mode: Assemblers_key){
       update((store) => ({...store, mode}))
+      //changes to mode require manual updates to the blink object
       blink.setMode(assemblers[mode])
     },
   }

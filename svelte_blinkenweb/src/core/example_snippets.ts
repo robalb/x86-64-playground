@@ -1,4 +1,4 @@
-import {assemblers, Assemblers_key} from './assemblers'
+import type {Assemblers_key} from './assemblers'
 
 let syscall_gnu =`.intel_syntax noprefix
 

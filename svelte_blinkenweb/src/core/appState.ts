@@ -23,3 +23,15 @@ export function snippetToAppState(snippet: Snippet): AppState{
     mode: snippet.mode
   }
 }
+
+
+export function storage_setAppState(state: AppState){
+}
+
+export function storage_getAppState(): AppState|null{
+  return null
+}
+
+export function storage_deleteAppState(){
+}
+
