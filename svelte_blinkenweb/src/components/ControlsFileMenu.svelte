@@ -14,14 +14,14 @@ import { snippets, default_snippet } from "../core/example_snippets";
     if(!fileElem) return
     fileElem.click()
   }
-  export const fileToArrayBuffer = (blob: Blob) => {
+  export const fileToArrayBuffer = (blob: Blob): Promise<ArrayBuffer> => {
     return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result)
       reader.readAsArrayBuffer(blob)
     })
   }
-  async function handleFileUpload(e){
+  async function handleFileUpload(e: any){
     if (fileElem && fileElem.files.length) {
       const file = fileElem.files[0]
       let filedata = await fileToArrayBuffer(file);

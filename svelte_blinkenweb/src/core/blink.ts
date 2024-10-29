@@ -469,7 +469,7 @@ export class Blink{
   * set the emulation arguments
   * optionally start the program
   */
-  loadElf(elfArrayBytes:ArrayBuffer, argc, argv): boolean{
+  loadElf(elfArrayBytes:ArrayBuffer): boolean{
     if(this.state == this.states.NOT_READY){
       return false;
     }
