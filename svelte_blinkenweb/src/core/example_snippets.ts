@@ -1,4 +1,4 @@
-import {blink_modes} from './blink'
+import {assemblers, Assemblers_key} from './assemblers'
 
 let syscall_gnu =`.intel_syntax noprefix
 
@@ -154,17 +154,46 @@ msg_size = $-msg
 `;
 
 
-
-
-
-export let snippets={
-"syscall":{
-    [blink_modes.GNU]:syscall_gnu,
-    [blink_modes.FASM]: syscall_fasm
-  },
-  "functions":{
-    [blink_modes.GNU]: functions_gnu,
-    [blink_modes.FASM]: functions_fasm
-  }
+export interface Snippet{
+  id: string;
+  display_name: string;
+  description: string;
+  mode: Assemblers_key;
+  editorContent: string;
 }
+
+
+export let snippets: Record<string, Snippet> = {
+  "syscall_GNU":{
+    id: "syscall_GNU",
+    display_name: "Syscall (GNU as)",
+    description: "A simple program that prints Hello World using raw syscalls, then quits. written for the Gnu Assembler, using the Intel syntax flavour",
+    mode:  "GNU_trunk",
+    editorContent: syscall_gnu
+  },
+  "syscall_FASM":{
+    id: "syscall_FASM",
+    display_name: "Syscall (Fasm)",
+    description: "A simple program that prints Hello World using raw syscalls, then quits. written for the Flat Assembler",
+    mode:  "FASM_trunk",
+    editorContent: syscall_fasm
+  },
+  "functions_GNU":{
+    id: "functions_GNU",
+    display_name: "Functions (GNU as)",
+    description: "Hello world using function calls. written for the Gnu Assembler, using the Intel syntax flavour",
+    mode:  "GNU_trunk",
+    editorContent: functions_gnu
+  },
+  "functions_FASM":{
+    id: "functions_FASM",
+    display_name: "Functions (Fasm)",
+    description: "Hello world using function calls. written for the Flat Assembler",
+    mode:  "FASM_trunk",
+    editorContent: functions_fasm
+  },
+} as const;
+
+
+export let default_snippet: keyof typeof snippets = "syscall_FASM";
 

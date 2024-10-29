@@ -1,7 +1,8 @@
 import { writable, derived, get } from "svelte/store";
-import {Blink, blink_modes} from './blink'
+import {Blink} from './blink'
 import {assemblers, Assemblers_key} from './assemblers'
-import {AppState} from './appState'
+import {AppState, snippetToAppState} from './appState'
+import { snippets, default_snippet } from "./example_snippets";
 
 //TODO: a complete refactor of the mode key.
 //mode should be set via a specific setter, and should be an Assemblers_key.
@@ -22,6 +23,11 @@ import {AppState} from './appState'
 //every example should be the combo codestring,Assemblers_key.
 //we can then create a custom webappstate serializer that takes this combo and 
 //generates a webappstate, that is passed to setWebAppState
+//
+//
+//unrelated todo:
+//- editor tooltip for asm guide https://stackblitz.com/edit/vitejs-vite-z2fgpu?file=src%2Fmain.ts
+//- editor line error highlight: https://stackblitz.com/edit/vitejs-vite-y5pwon?file=src%2Fmain.ts,readme.md
 
 function portion(parentStore, name) {
   return derived(parentStore, value => value[name]);
@@ -29,23 +35,30 @@ function portion(parentStore, name) {
 
 function createBlinkStore(){
 
-  //todo: get default state from url appstate deserializer
-  let default_asm = "this should come from either an url appstate or a default example_snippet appstate"
-  let default_mode: Assemblers_key = 'FASM_trunk';
+  //set the initial store content by inspecting the available
+  //AppData sources in order of importance
+  let defaultAppState: AppState = undefined//router_getAppState()
+  if(!defaultAppState){
+    defaultAppState = undefined//storage_getAppState()
+  }
+  if(!defaultAppState){
+    let selected_snippet = snippets[default_snippet]
+    defaultAppState = snippetToAppState(selected_snippet)
+  }
 
   const store  = writable({
     term_buffer: "",
     state: "",
     signal: "",
     manual_render: 0,
-    mode: default_mode,
+    mode: defaultAppState.mode,
     uploadedElf: "",
     //change this to programmatically update the editor input box
-    editorContent_write: default_asm,
+    editorContent_write: defaultAppState.editorContent,
     //real time value of the text editor input box.
     //changing this will not cause a rerender
     //TODO: to reduce input lag, move this to a dedicated writable store
-    editorContent_read: "",
+    editorContent_read: defaultAppState.editorContent,
   });
   const { subscribe, update } = store
 
@@ -94,7 +107,7 @@ function createBlinkStore(){
 
 
   const blink = new Blink(
-    assemblers[default_mode],
+    assemblers[defaultAppState.mode],
     stdinHander,
     stdoutHandler,
     stderrHander,

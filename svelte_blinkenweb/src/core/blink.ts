@@ -1,13 +1,6 @@
 import blinkenlib from '../assets/blinkenlib.js'
 import {assemblers, AssemblerMode} from '../core/assemblers'
 
-//TODO: remove this, and anything used by this
-export let blink_modes = {
-  'GNU': 'GNU',
-  'FASM': 'FASM'
-} as const;
-
-
 /**
 * Machine Cross-language struct.
 * offsers access to some of the blink Machine struct elements,

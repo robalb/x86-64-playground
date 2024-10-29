@@ -1,4 +1,5 @@
 import {Assemblers_key} from './assemblers'
+import {Snippet} from './example_snippets'
 
 
 
@@ -14,4 +15,11 @@ import {Assemblers_key} from './assemblers'
 export interface AppState {
   editorContent: string;
   mode: Assemblers_key;
+}
+
+export function snippetToAppState(snippet: Snippet): AppState{
+  return {
+    editorContent: snippet.editorContent,
+    mode: snippet.mode
+  }
 }
