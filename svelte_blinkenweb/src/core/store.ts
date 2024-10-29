@@ -4,31 +4,6 @@ import {assemblers, Assemblers_key} from './assemblers'
 import {AppState, snippetToAppState, storage_getAppState, storage_setAppState} from './appState'
 import { snippets, default_snippet } from "./example_snippets";
 
-//TODO: a complete refactor of the mode key.
-//mode should be set via a specific setter, and should be an Assemblers_key.
-//it should be used to render the assembler dropdown menu, together with the assemblers object.
-//changes to mode should not trigger changes to the Editor content.
-//
-//We then need a way to reactively set the Editor content.
-//
-//We then need a function to set the webapp state (for now, assembler mode and editor content, but in the future
-//there could be more options).
-//When a demo is selected this function is called.
-//we also need several serializers and deserializers compatible with this webappState.
-//when you click "share", the current webappState is serialized into an url.
-//when the page loads, or the url changes, some url param is deserialized and passed to
-//setWebAppstate.
-//
-//we should refactor snippets.js into example_scripts.ts.
-//every example should be the combo codestring,Assemblers_key.
-//we can then create a custom webappstate serializer that takes this combo and 
-//generates a webappstate, that is passed to setWebAppState
-//
-//
-//unrelated todo:
-//- editor tooltip for asm guide https://stackblitz.com/edit/vitejs-vite-z2fgpu?file=src%2Fmain.ts
-//- editor line error highlight: https://stackblitz.com/edit/vitejs-vite-y5pwon?file=src%2Fmain.ts,readme.md
-
 function portion(parentStore, name) {
   return derived(parentStore, value => value[name]);
 }
