@@ -20,6 +20,9 @@ function createBlinkStore(){
     let selected_snippet = snippets[default_snippet]
     defaultAppState = snippetToAppState(selected_snippet)
   }
+  //remove any search param from the url as soon as the page loads
+  //TODO: is this pattern good?
+  window.history.replaceState(null, '', window.location.pathname);
 
   const store  = writable({
     term_buffer: "",
