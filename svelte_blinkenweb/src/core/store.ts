@@ -1,7 +1,7 @@
 import { writable, derived, get } from "svelte/store";
 import {Blink} from './blink'
 import {assemblers, Assemblers_key} from './assemblers'
-import {AppState, snippetToAppState, storage_getAppState, storage_setAppState} from './appState'
+import {AppState, snippetToAppState, storage_getAppState, storage_setAppState, uri_getAppState} from './appState'
 import { snippets, default_snippet } from "./example_snippets";
 
 function portion(parentStore, name) {
@@ -12,7 +12,7 @@ function createBlinkStore(){
 
   //set the initial store content by inspecting the available
   //AppData sources in order of importance
-  let defaultAppState: AppState = undefined//router_getAppState()
+  let defaultAppState = uri_getAppState()
   if(!defaultAppState){
     defaultAppState = storage_getAppState()
   }

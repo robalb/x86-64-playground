@@ -4,8 +4,9 @@
   import ArrowDropDown from './icons/ArrowDropDown.svelte';
   import {blinkStore} from '../core/store'
 
-import {snippetToAppState} from '../core/appState'
+import {snippetToAppState, uri_serializeAppState} from '../core/appState'
 import { snippets, default_snippet } from "../core/example_snippets";
+    import { copyTextToClipboard } from '../core/utils';
 
   let blink = blinkStore.getInstance()
 
@@ -53,6 +54,14 @@ import { snippets, default_snippet } from "../core/example_snippets";
     blinkStore.setAppState(appState)
   }
 
+  function handleShareClick(){
+    let uri = uri_serializeAppState(blinkStore.getAppState(), true)
+    //TODO: handle properly
+    console.log(uri)
+    copyTextToClipboard(uri)
+    window.open(uri, '_blank').focus();
+  }
+
 </script>
 
 
@@ -72,7 +81,7 @@ import { snippets, default_snippet } from "../core/example_snippets";
 
 {#if $open}
   <div {...$menu} use:menu >
-    <div {...$item} use:item>Share</div>
+    <div {...$item} use:item on:m-click={handleShareClick}>Share</div>
     <div {...$subTrigger} use:subTrigger>
       Load example
       <div class="rightSlot">
