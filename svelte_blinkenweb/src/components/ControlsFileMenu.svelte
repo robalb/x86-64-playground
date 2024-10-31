@@ -59,7 +59,7 @@ import { snippets, default_snippet } from "../core/example_snippets";
     //TODO: handle properly
     console.log(uri)
     copyTextToClipboard(uri)
-    window.open(uri, '_blank').focus();
+    // window.open(uri, '_blank').focus();
   }
 
 </script>
