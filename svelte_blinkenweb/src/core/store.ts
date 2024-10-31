@@ -40,6 +40,19 @@ function createBlinkStore(){
   });
   const { subscribe, update } = store
 
+  /*
+  * Autosave, debounced
+  */
+  let autoSaveTimer:any;
+  subscribe(()=>{
+    clearTimeout(autoSaveTimer)
+    autoSaveTimer = setTimeout(autoSave, 5*1000)
+  });
+  function autoSave(){
+    console.log("store: autosave")
+    storage_setAppState(getAppState())
+  }
+
 
   let stdinHander=()=>{
     return null;
@@ -58,14 +71,12 @@ function createBlinkStore(){
       return store;
     })
   }
-
   let signalHander=(signal, code)=>{
     update((store) => ({ ...store, manual_render: store.manual_render+1}))
   }
   let stateChangeHander=(state, oldstate)=>{
     update((store) => ({ ...store, state:state, manual_render: store.manual_render+1}))
   }
-
 
   const blink = new Blink(
     assemblers[defaultAppState.mode],
@@ -78,28 +89,31 @@ function createBlinkStore(){
 
   update((store) => ({ ...store, state:blink.state}))
 
+  function setAppState(state: AppState){
+    update((store) => ({
+      ...store,
+      manual_render: store.manual_render +1,
+      mode: state.mode,
+      editorContent_read: state.editorContent,
+      editorContent_write: state.editorContent,
+    }))
+    //changes to mode require manual updates to the blink object
+    blink.setMode(assemblers[state.mode])
+    //also save the changes in localStorage
+    storage_setAppState(state)
+  }
+  function getAppState(): AppState{
+    let storeObj = get(store);
+    return {
+      editorContent: storeObj.editorContent_read,
+      mode: storeObj.mode,
+    };
+  }
+
   return {
     subscribe,
-    setAppState(state: AppState){
-      update((store) => ({
-        ...store,
-        manual_render: store.manual_render +1,
-        mode: state.mode,
-        editorContent_read: state.editorContent,
-        editorContent_write: state.editorContent,
-      }))
-      //changes to mode require manual updates to the blink object
-      blink.setMode(assemblers[state.mode])
-      //also save the changes in localStorage
-      storage_setAppState(state)
-    },
-    getAppState(): AppState{
-      let storeObj = get(store);
-      return {
-        editorContent: storeObj.editorContent_read,
-        mode: storeObj.mode,
-      };
-    },
+    setAppState,
+    getAppState,
     getInstance(){
       return blink;
     },
@@ -130,7 +144,6 @@ function createBlinkStore(){
  * wrapped in a svelte store
  */
 export const blinkStore = createBlinkStore();
-
 
 /**
  * individual store access to the elements in the store object.

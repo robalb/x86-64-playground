@@ -76,12 +76,12 @@ function isSerializedAppState(obj: any): obj is SerializedAppState {
 }
 
 function serializeAppState(state: AppState): string{
-  const versionedState: SerializedAppState = {
+  const serialized: SerializedAppState = {
     magic: "it.halb.x64",
     version: APPSTATE_VERSION,
     data: state
   }
-  const jsonString = JSON.stringify(versionedState);
+  const jsonString = JSON.stringify(serialized);
   return compressStringToBase64(jsonString)
 }
 
@@ -115,13 +115,22 @@ export function snippetToAppState(snippet: Snippet): AppState{
 
 
 export function storage_setAppState(state: AppState){
+  try{
+    localStorage.setItem("appstate", serializeAppState(state))
+  } catch(error){
+    console.error(error)
+  }
 }
 
 export function storage_getAppState(): AppState|null{
-  return null
+  let item = localStorage.getItem("appstate")
+  if(item == null)
+    return null
+  return deserializeAppState(item)
 }
 
 export function storage_deleteAppState(){
+  localStorage.removeItem("appstate")
 }
 
 export function uri_serializeAppState(state: AppState, wantFullUrl=false): string {
@@ -133,7 +142,6 @@ export function uri_serializeAppState(state: AppState, wantFullUrl=false): strin
   else{
     return param;
   }
-
 }
 
 export function uri_getAppState(): AppState | null {
@@ -141,28 +149,4 @@ export function uri_getAppState(): AppState | null {
   const str = params.get('appstate');
   return deserializeAppState(str)
 }
-
-
-
-// async function test(jsonString){
-//   // let str = encodeURIComponent(jsonString);
-//   let str1 = jsonString;
-//   let browser = await decompressBase64ToString(
-//       await compressStringToBase64(str1)
-//     )
-//   let fflate = decompressBase64ToString_poly(
-//       compressStringToBase64_poly(str1)
-//     )
-//   console.log("browser")
-//   console.log(browser)
-//   console.log("fflate")
-//   console.log(fflate)
-//   console.log(browser === fflate)
-
-//   console.log("broser length")
-//   let ret = await compressStringToBase64(str1)
-//   console.log(ret.length)
-//   console.log("fflate length")
-//   console.log(compressStringToBase64_poly(str1).length)
-// }
 

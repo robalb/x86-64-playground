@@ -5,7 +5,7 @@
   let termref;
 
   function scroll(){
-    if(termref){
+    if(termref != null){
       requestAnimationFrame(()=>{
           termref.scrollTop = termref.scrollHeight;
       })

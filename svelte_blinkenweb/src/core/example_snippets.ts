@@ -1,14 +1,15 @@
 import type {Assemblers_key} from './assemblers'
 
-let syscall_gnu =`.intel_syntax noprefix
-
+let syscall_gnu =`;#---------------------
+;#  GNU Assembler file
+;#  Syscall Hello World
+;#---------------------
+.intel_syntax noprefix
+format ELF64 executable 3
+segment readable executable
 .global _start
 .text
-
 _start:
-  ;#---------------------
-  ;# write your code here
-  ;#---------------------
 
   ;# sys_write
   mov rax, 1
@@ -27,13 +28,13 @@ hello_string:
         .asciz  "Hello, world!\\n"
 `;
 
-let syscall_fasm=`format ELF64 executable 3
-
+let syscall_fasm=`;---------------------
+;  Flat Assembler file
+;  Syscall Hello World
+;---------------------
+format ELF64 executable 3
 segment readable executable
 entry $
-  ;---------------------
-  ; write your code here
-  ;---------------------
 
   ; sys_write
 	mov	edx,msg_size
@@ -52,8 +53,11 @@ msg db 'Hello 64-bit world!',0xA
 msg_size = $-msg
 `
 
-let functions_gnu= `.intel_syntax noprefix
-
+let functions_gnu= `;#---------------------
+;#  GNU Assembler file
+;#  Function calls demo
+;#---------------------
+.intel_syntax noprefix
 .global _start
 .text
 
@@ -102,8 +106,11 @@ hello_string:
   
 `;
 
-let functions_fasm =`format ELF64 executable 3
-
+let functions_fasm =`;---------------------
+;  Flat Assembler file
+;  Function calls demo
+;---------------------
+format ELF64 executable 3
 segment readable executable
 entry $
 
@@ -111,7 +118,7 @@ _start:
   ; Set up arguments for print function
   mov rdi, 1
   lea rsi, [msg]
-  mov rdx, 14
+  mov rdx, msg_size
   call print
 
   ; Set up arguments for exit function
