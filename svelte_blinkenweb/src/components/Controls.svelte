@@ -165,6 +165,7 @@
     display: flex;
     align-items:center;
     justify-content:space-between;
+    background-color: var(--theme-panel-controls-bg);
   }
   header .logo{
     height: 2.4rem;

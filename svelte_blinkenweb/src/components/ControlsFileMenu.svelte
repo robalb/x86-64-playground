@@ -56,15 +56,6 @@
     blinkStore.setAppState(appState)
   }
 
-  function handleShareClick(){
-    let uri = uri_serializeAppState(blinkStore.getAppState(), true)
-    //TODO: handle properly
-    console.log(uri)
-    console.log(uri.length)
-    copyTextToClipboard(uri)
-    // window.open(uri, '_blank').focus();
-  }
-
 </script>
 
 
@@ -88,7 +79,6 @@
 
 {#if $open}
   <div {...$menu} use:menu >
-    <div {...$item} use:item on:m-click={handleShareClick}>Share</div>
     <div {...$subTrigger} use:subTrigger>
       Load example
       <div class="rightSlot">

@@ -379,6 +379,16 @@ body {
   border-right: 1px solid rgba(255,255,255,0.7);
 }
 
+.errorbox{
+    /*TODO: remove hardcoded colors, find proper design */
+  background-color: rgb(224, 73, 35);
+  background-color: rgb(96, 48, 36);
+  color: white;
+  border: 1px solid rgb(245, 127, 97);
+  margin: 0;
+  padding-left: 1rem;
+}
+
 
 /*
 * default style for the Melt UI elements.
@@ -565,9 +575,7 @@ body {
   }
 
   *[data-melt-dialog-close]:hover {
-    /* background-color: var(--color-gold-100); */
     background-color: rgba(255,255,255,.2);
-    /* border: 1px solid var(--color-gray-0); */
   }
 
   *[data-melt-dialog-title]{
