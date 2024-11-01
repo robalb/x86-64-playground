@@ -20,6 +20,14 @@
   function updater(node){
     uri = uri_serializeAppState(blinkStore.getAppState(), true)
     urilen = uri.length
+
+    //analytics
+    if(window.hasOwnProperty("goatcounter")){
+      window.goatcounter.count({
+          path:  function(p) { return 'click-share-' + p },
+          event: true,
+      })
+    }
   }
 
   function handleCopyClick(){

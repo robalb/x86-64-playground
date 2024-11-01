@@ -124,6 +124,7 @@
 .text {
   padding: .1rem .5rem;
   color: var(--theme-text-fg-disabled);
+  color: var(--color-orange);
 }
 
 .file{
