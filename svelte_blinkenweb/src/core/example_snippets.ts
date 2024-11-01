@@ -5,8 +5,6 @@ let syscall_gnu =`;#---------------------
 ;#  Syscall Hello World
 ;#---------------------
 .intel_syntax noprefix
-format ELF64 executable 3
-segment readable executable
 .global _start
 .text
 _start:

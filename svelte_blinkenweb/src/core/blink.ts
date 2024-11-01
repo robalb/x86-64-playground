@@ -1,5 +1,5 @@
 import blinkenlib from '../assets/blinkenlib.js'
-import {assemblers, AssemblerMode} from '../core/assemblers'
+import {assemblers, AssemblerMode, fasm_diagnostics} from '../core/assemblers'
 
 /**
 * Machine Cross-language struct.
@@ -256,6 +256,11 @@ export class Blink{
   default_argc = "/program"
   default_argv = ""
 
+  //assembler stdout and stderr
+  assembler_logs = ""
+  //assembler diagnostic errors
+  assembler_errors = []
+
   /**
   * Initialize the emscripten blink module.
   */
@@ -284,8 +289,14 @@ export class Blink{
       preRun: (M: any) =>{
         M.FS.init(
           this.#stdinHandler,
-          this.#stdoutHandler,
-          this.#stderrHandler,
+          (charcode:number)=>{
+            this.#assembler_logcollector(charcode)
+            this.#stdoutHandler(charcode)
+          },
+          (charcode:number)=>{
+            this.#assembler_logcollector(charcode)
+            this.#stderrHandler(charcode)
+          }
         );
         M.FS.createPreloadedFile("/", "assembler", mode.binaries.assembler.fileurl, true, true);
         if(mode.binaries.linker){
@@ -320,6 +331,17 @@ export class Blink{
 
   
     this.#setState(this.states.READY)
+  }
+
+  /**
+  * This callback receives the stdout and stderr of the blink emulator.
+  * When An assembler is being emulated, the stream received is logged
+  * in a buffer, in order to catch eventual diagnostic errors
+  */
+  #assembler_logcollector(charcode:number){
+    if(this.state == this.states.ASSEMBLING){
+      this.assembler_logs += String.fromCharCode(charcode)
+    }
   }
 
   #setState(state: typeof this.states[keyof typeof this.states]){
@@ -428,11 +450,6 @@ export class Blink{
     }
   }
 
-  //TODO: remove
-  test(){
-    this.setMode(assemblers.GNU_trunk)
-  }
-
   /** 
   * Update the assembler mode of this blink instance.
   * The state will be set to NOT_READY, and
@@ -441,6 +458,8 @@ export class Blink{
   async setMode(mode: AssemblerMode){
     this.mode = mode;
     this.#setState(this.states.NOT_READY);
+    this.assembler_logs = ""
+    this.assembler_errors = []
 
     //download assembler
     let downloadedElf = await this.#fetchBinaryFile(mode.binaries.assembler.fileurl)
@@ -496,6 +515,8 @@ export class Blink{
     if(this.state == this.states.NOT_READY){
       return false
     }
+    this.assembler_logs = ""
+    this.assembler_errors = []
     this.#setState(this.states.ASSEMBLING);
     let FS = this.Module.FS
     FS.writeFile("/assembly.s", asmString);
@@ -508,7 +529,13 @@ export class Blink{
 
   loadASM_assembler_exit_callback(code: number){
     if(code != 0){
-      console.log("assembler failed");
+      console.log("blink: assembler failed");
+      if(this.mode.diagnosticsParser){
+        console.log("blink: assembler diagnostics parsed")
+        this.assembler_errors = this.mode.diagnosticsParser(this.assembler_logs);
+        console.log(this.assembler_logs)
+        console.log(this.assembler_errors)
+      }
       this.#setState(this.states.READY);
       return
     }
