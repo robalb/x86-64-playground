@@ -1,9 +1,5 @@
 import blinkenlib from '../assets/blinkenlib.js'
-import fasm_elf_url from '../assets/fasm.elf?url'
-import as_elf_url from '../assets/gnu-as.elf?url'
-import ld_elf_url from '../assets/gnu-ld.elf?url'
-import assembly_url from '../assets/helloworld.s?url'
-
+import {assemblers, AssemblerMode} from '../core/assemblers'
 
 /**
 * Machine Cross-language struct.
@@ -50,7 +46,7 @@ class M_CLStruct{
     rcx: {index: 24, pointer: true},
     rdx: {index: 25, pointer: true},
 
-  //disassembly buffer
+    //disassembly buffer
     dis__max_lines: {index: 26, pointer: false},
     dis__max_line_len: {index: 27, pointer: false},
     dis__current_line: {index: 28, pointer: false},
@@ -112,12 +108,35 @@ class M_CLStruct{
 
   getPtr(key: keyof typeof this.keys): number{
     if(!this.structView.buffer.byteLength){
-      console.log("memory grew")
+      console.log("blink: memory grew")
       this.growMemory()
     }
     let index = this.keys[key].index * this.sizeof_key;
     let little_endian = true;
     return this.structView.getUint32(index, little_endian);
+  }
+
+  writeStringToHeap(offset: number, str: string, maxLength: number){
+    if(!this.structView.buffer.byteLength){
+      console.log("blink: memory grew")
+      this.growMemory()
+    }
+    if(offset == 0){
+      console.log("blink: write to null ptr")
+      return
+    }
+    let writeLen = Math.min(str.length, maxLength-1)
+    for (var i = 0; i < writeLen; ++i) {
+      let u = str.charCodeAt(i);
+      if(u >= 0x20 && u <= 0x7E){
+        this.memView.setUint8(offset+i, u)
+      }else{
+        //replace non-ascii characters with a space
+        this.memView.setUint8(offset+i, 0x20)
+      }
+    }
+    // Null-terminate the pointer to the buffer.
+    this.memView.setUint8(offset+writeLen, 0)
   }
 
 }
@@ -192,12 +211,6 @@ let signals_info = {
     31: {"name": "SIGSYS", "description": "Bad system call."}
 }
 
-export let blink_modes = {
-  'GNU': 'GNU',
-  'FASM': 'FASM'
-} as const;
-
-
 /**
 * A javascript wrapper for the blink x86-64 emulator.
 * The goal is to provide an interface to blink that is as
@@ -224,7 +237,7 @@ export class Blink{
     'PROGRAM_STOPPED': 'PROGRAM_STOPPED'
   } as const;
 
-  mode: typeof blink_modes[keyof typeof blink_modes];
+  mode: AssemblerMode;
 
   Module: any;/*Emscripten Module object*/
   memory: WebAssembly.Memory;
@@ -232,11 +245,22 @@ export class Blink{
     this.states.NOT_READY;
   stopReason: null|{loadFail: boolean, exitCode: number, details: string};
 
+  //program emulation arguments
+  max_argc_len = 200;
+  max_argv_len = 200;
+  max_progname_len = 200;
+  argc_ptr = 0;
+  argv_ptr = 0;
+  progname_ptr = 0;
+
+  default_argc = "/program"
+  default_argv = ""
+
   /**
   * Initialize the emscripten blink module.
   */
   constructor(
-    mode: typeof blink_modes[keyof typeof blink_modes],
+    mode: AssemblerMode,
     stdinHandler?: ()=>number,
     stdoutHandler?: (charCode: number)=>void,
     stderrHandler?: (charCode: number)=>void,
@@ -253,7 +277,7 @@ export class Blink{
     this.#initEmscripten(mode);
   }
 
-  async #initEmscripten(mode?: typeof blink_modes[keyof typeof blink_modes]){
+  async #initEmscripten(mode?: AssemblerMode){
     this.mode = mode;
     this.Module = await blinkenlib({
       noInitialRun: true,
@@ -263,12 +287,9 @@ export class Blink{
           this.#stdoutHandler,
           this.#stderrHandler,
         );
-        if(mode == blink_modes.GNU){
-          M.FS.createPreloadedFile("/", "as", as_elf_url, true, true);
-          M.FS.createPreloadedFile("/", "ld", ld_elf_url, true, true);
-        }
-        else if(mode == blink_modes.FASM){
-          M.FS.createPreloadedFile("/", "fasm", fasm_elf_url, true, true);
+        M.FS.createPreloadedFile("/", "assembler", mode.binaries.assembler.fileurl, true, true);
+        if(mode.binaries.linker){
+          M.FS.createPreloadedFile("/", "linker", mode.binaries.linker.fileurl, true, true);
         }
       }
     });
@@ -283,8 +304,8 @@ export class Blink{
     let fp_2 = this.Module.addFunction(exit_callback, exit_callback_llvm_signature);
 
     this.Module.callMain([
-      fp_1.toString(), /* signal_callback */
-      fp_2.toString(), /* exit_callback */
+      fp_1.toString(),    /* signal_callback */
+      fp_2.toString(),    /* exit_callback */
     ])
 
     //init memory
@@ -292,7 +313,12 @@ export class Blink{
     //initialize the cross language struct
     let cls_pointer = this.Module._blinkenlib_get_clstruct();
     this.m = new M_CLStruct(this.memory, cls_pointer);
+    //initialize the program emulation arguments
+    this.argc_ptr = this.Module._blinkenlib_get_argc_string();
+    this.argv_ptr = this.Module._blinkenlib_get_argv_string();
+    this.progname_ptr = this.Module._blinkenlib_get_progname_string();
 
+  
     this.#setState(this.states.READY)
   }
 
@@ -353,6 +379,11 @@ export class Blink{
     console.log("exit callback called")
   }
 
+  #setEmulationArgs(progname, argc,argv){
+    this.m.writeStringToHeap(this.progname_ptr, progname, this.max_progname_len)
+    this.m.writeStringToHeap(this.argc_ptr, argc, this.max_argc_len)
+    this.m.writeStringToHeap(this.argv_ptr, argv, this.max_argv_len)
+  }
 
   setCallbacks(
     stdinHandler?: ()=>number,
@@ -384,12 +415,61 @@ export class Blink{
       this.#stateChangeHandler = this.#default_stateChangeHandler
   }
 
-  /**
-  * close previous processes,
-  * reset the emaulator state,
-  * and load the given elf file
+  async #fetchBinaryFile(url: string): Promise<ArrayBuffer>{
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      return arrayBuffer;
+    } catch (error) {
+      console.error('Failed to fetch binary file:', error);
+    }
+  }
+
+  //TODO: remove
+  test(){
+    this.setMode(assemblers.GNU_trunk)
+  }
+
+  /** 
+  * Update the assembler mode of this blink instance.
+  * The state will be set to NOT_READY, and
+  * a new set of compilers will be downloaded.
   */
-  loadElf(elfArrayBytes:ArrayBuffer, filename, argc, argv): boolean{
+  async setMode(mode: AssemblerMode){
+    this.mode = mode;
+    this.#setState(this.states.NOT_READY);
+
+    //download assembler
+    let downloadedElf = await this.#fetchBinaryFile(mode.binaries.assembler.fileurl)
+    let data = new Uint8Array(downloadedElf);
+    let FS = this.Module.FS
+    let stream = FS.open('/assembler', 'w+');
+    FS.write(stream, data, 0, data.length, 0);
+    FS.close(stream);
+    FS.chmod('/assembler', 0o777);
+
+    //download linker, if required by this mode
+    if(mode.binaries.linker){
+      let downloadedElf = await this.#fetchBinaryFile(this.mode.binaries.linker.fileurl)
+      let data = new Uint8Array(downloadedElf);
+      let FS = this.Module.FS
+      let stream = FS.open('/linker', 'w+');
+      FS.write(stream, data, 0, data.length, 0);
+      FS.close(stream);
+      FS.chmod('/linker', 0o777);
+    }
+    this.#setState(this.states.READY);
+  }
+
+  /**
+  * save the program to the Virtual File System
+  * set the emulation arguments
+  * optionally start the program
+  */
+  loadElf(elfArrayBytes:ArrayBuffer): boolean{
     if(this.state == this.states.NOT_READY){
       return false;
     }
@@ -399,22 +479,7 @@ export class Blink{
     FS.write(stream, data, 0, data.length, 0);
     FS.close(stream);
     FS.chmod('/program', 0o777);
-    //TODO allocate param strings
-    //
-    //
-    //
-    try{
-      this.Module._blinkenlib_loadProgram()
-      this.#setState(this.states.PROGRAM_LOADED);
-      this.stopReason = null;
-    }
-    catch(e){
-      this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
-      this.#setState(this.states.PROGRAM_STOPPED);
-      return
-    }
-    //TODO free param strings
-    //
+
     this.starti()
   }
 
@@ -434,15 +499,10 @@ export class Blink{
     this.#setState(this.states.ASSEMBLING);
     let FS = this.Module.FS
     FS.writeFile("/assembly.s", asmString);
-    let STEP_ASSEMBLE_AND_LINK = 0;
-    let STEP_ASSEMBLE = 1;
-    let STEP_LINK = 2;
-    let step: number;
-    if(this.mode == blink_modes.FASM){step = STEP_ASSEMBLE_AND_LINK;}
-    if(this.mode == blink_modes.GNU){step = STEP_ASSEMBLE;}
     //this hack ensures that the function is called after a browser render pass
     requestAnimationFrame(()=>{
-      this.Module._blinkenlib_loadPlayground(step);
+      this.#setEmulationArgs("/assembler", this.mode.binaries.assembler.commands, "")
+      this.Module._blinkenlib_run_fast()
     })
   }
 
@@ -452,17 +512,19 @@ export class Blink{
       this.#setState(this.states.READY);
       return
     }
-    if(this.mode == blink_modes.FASM){
+    if(!this.mode.binaries.linker){
+      //the current assembler directly generates an ELF without a linker
       let FS = this.Module.FS
       FS.chmod('/program', 0o777);
       this.#setState(this.states.PROGRAM_LOADED);
       this.starti()
     }else{
-      //the gnu mode requires a separate linking step
+      //we need a separate linking step
       this.#setState(this.states.LINKING);
       //this hack ensures that the function is called after a browser render pass
       requestAnimationFrame(()=>{
-      this.Module._blinkenlib_loadPlayground(2);
+        this.#setEmulationArgs("/linker", this.mode.binaries.linker.commands, "")
+        this.Module._blinkenlib_run_fast()
       })
 
     }
@@ -487,6 +549,7 @@ export class Blink{
   run(){
     try{
       this.#setState(this.states.PROGRAM_RUNNING)
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_run();
     }catch(e){
       this.stopReason = {loadFail: true, exitCode: 0, details: "invalid ELF"}
@@ -500,6 +563,7 @@ export class Blink{
   */
   start(){
     try{
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_start();
       this.#setState(this.states.PROGRAM_RUNNING)
     }catch(e){
@@ -513,6 +577,7 @@ export class Blink{
   */
   starti(){
     try{
+      this.#setEmulationArgs("/program", this.default_argc, this.default_argv)
       this.Module._blinkenlib_starti();
       this.#setState(this.states.PROGRAM_RUNNING)
     }catch(e){

@@ -1,11 +1,11 @@
 <script>
-  import {blinkStore, term_buffer, state} from '../core/blinkSvelte'
+  import {blinkStore, term_buffer, state} from '../core/store'
 
   let blink = blinkStore.getInstance()
   let termref;
 
   function scroll(){
-    if(termref){
+    if(termref != null){
       requestAnimationFrame(()=>{
           termref.scrollTop = termref.scrollHeight;
       })

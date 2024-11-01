@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import {blinkStore, manual_render} from '../core/blinkSvelte'
+import {blinkStore, manual_render} from '../core/store'
 
 let blink = blinkStore.getInstance()
 
@@ -145,7 +145,6 @@ onMount(async () => {
 
 <style>
   .fail{
-    background-color: red;
     background: repeating-linear-gradient(
       -45deg,
       var(--theme-dis-fail-stripebg1),

@@ -29,12 +29,58 @@
 -[x] first release with github pages
 -[x] CI/CD pipeline. pushes to master should trigger a merge and then a checkout into github_pages. then trigger a build. the contents of /build should be copied into /docs, and pushed.
 - test CI/CD pipeline that directly publishes to github pages without storing the artifacts in a branch. -> https://github.com/actions/upload-pages-artifact
-- mobile layout
+-[x] mobile layout
+
+-[x] Figure out design system:
+     - what about MELT ui, styling every melt ui element via the data-attributes the library sets? 
+    overrides should be easy via custom styles.
+      - what about elements that are not controlled by melt ui? such as basic buttons? https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
 
 
+
+## todo week 4
+
+Story:
+
+TODO: a complete refactor of the mode key.
+mode should be set via a specific setter, and should be an Assemblers_key.
+it should be used to render the assembler dropdown menu, together with the assemblers object.
+changes to mode should not trigger changes to the Editor content.
+
+We then need a way to reactively set the Editor content.
+
+We then need a function to set the webapp state (for now, assembler mode and editor content, but in the future
+there could be more options).
+When a demo is selected this function is called.
+we also need several serializers and deserializers compatible with this webappState.
+when you click "share", the current webappState is serialized into an url.
+when the page loads, or the url changes, some url param is deserialized and passed to
+setWebAppstate.
+
+we should refactor snippets.js into example_scripts.ts.
+every example should be the combo codestring,Assemblers_key.
+we can then create a custom webappstate serializer that takes this combo and 
+generates a webappstate, that is passed to setWebAppState
+
+
+actual Todo list:
+
+- [x] uri manager and uri appstate serializers
+- define diagnosticparser interface, associated to an assemblerMode.
+  a diagnosticParse should parse the stout of a compiler when assembly fails,
+  generating a standardized diagnostic output that is used by the editor to render error lines
+- add line error support to the editor. 
+  this snippet shows how to tap in the editor renderer to add line highlights
+    https://stackblitz.com/edit/vitejs-vite-y5pwon?file=src%2Fmain.ts,readme.md
+  In the editor component, we'll need to listen to store.diagnostics, and when
+  they are not null, render them.
+  in store.notifyEditorContent we should add a line that resets the diagnostics
 
 
 ### backlog
+- editor tooltip for asm guide, like in compiler explorer
+  https://stackblitz.com/edit/vitejs-vite-z2fgpu?file=src%2Fmain.ts
+- invert taborder in the control rows. on desktop the current order is bad
 - service worker. Understand: is github pages good enough for caching?
   can i solve eventual caching issues with service workers?
   https://web.dev/articles/service-worker-lifecycle

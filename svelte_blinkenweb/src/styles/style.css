@@ -40,6 +40,7 @@
   --color-gray-100: #d0d5df;
   --color-gray-150: #b3b9c5;
   --color-gray-200: #818a9d;
+  --color-gray-250: gray;
   --color-gray-300: #393e4b;
   --color-gray-400: #282c38;
   --color-gray-500: #20232a;
@@ -69,6 +70,7 @@
   --theme-bg: var(--color-gray-400);
   --theme-text-fg-contrasting: var(--color-gray-50);
   --theme-text-fg: var(--color-gray-100);
+  --theme-text-fg-disabled: var(--color-gray-250);
   --theme-link-fg: var(--color-gray-0);
   --theme-link-underline: var(--color-gold-100);
   --theme-inline-code-bg: var(--color-gray-300);
@@ -76,6 +78,7 @@
   --theme-panel-controls-bg: var(--color-gray-600);
   --theme-panel-border: var(--color-gray-t);
   --theme-focus: var(--theme-primary);
+
 
   /* hexdump hex numbers */
   --theme-hex-zero: var(--color-gray-200);
@@ -296,4 +299,299 @@ body {
   color: #a5d6ff;
   color: #79c0ff;
 }
+
+
+
+/**
+* Global UI component styles
+* TODO: properly define these styles together
+* with the MELT ui system.
+*/
+.button, .select, .btgroup__button{
+  border: 1px solid var(--color-gray-t);
+  color: white;
+  padding: .2rem 0.6rem;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: .9rem;
+}
+.button:disabled, .btgroup__button:disabled{
+  color: var(--theme-text-fg-disabled);
+}
+.button:not(:disabled):active,
+.btgroup__button:not(:disabled):active{
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+.button--secondary{
+  color: var(--color-gray-100);
+  text-decoration: none;
+  border-color: transparent;
+}
+.button--secondary:hover{
+  color: var(--color-gray-0);
+  background-color: var(--color-gray-300);
+}
+
+
+.button svg,
+.btgroup__button svg
+{
+  stroke: var(--theme-text-fg-contrasting);
+  fill: var(--theme-text-fg-contrasting);
+  margin-left: 2px;
+  margin-right: 2px;
+}
+.button:disabled svg,
+.btgroup__button:disabled svg
+{
+  fill: var(--theme-text-fg-disabled);
+  stroke: var(--theme-text-fg-disabled);
+}
+
+
+.btgroup{
+  display: flex;
+  border: 1px solid var(--color-gray-t);
+  background-color: transparent;
+  border-radius: 4px;
+}
+.btgroup .btgroup__button{
+  border: 1px solid transparent;
+}
+.btgroup .btgroup__button--select{
+  background-color:rgba(255,255,255,.1);
+}
+.btgroup .btgroup__button:nth-child(1){
+  border-right: 1px solid var(--color-gray-t);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btgroup .btgroup__button:nth-child(2){
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btgroup .btgroup__button:active:not(:disabled):nth-child(1){/* I hereby challenge you to write a line with more selectors */
+  border-right: 1px solid rgba(255,255,255,0.7);
+}
+
+.errorbox{
+    /*TODO: remove hardcoded colors, find proper design */
+  background-color: rgb(224, 73, 35);
+  background-color: rgb(96, 48, 36);
+  color: white;
+  border: 1px solid rgb(245, 127, 97);
+  margin: 0;
+  padding-left: 1rem;
+}
+
+
+/*
+* default style for the Melt UI elements.
+* This style is applied via the data-attributes
+* that the library automatically injects.
+* All these attributes are documented in the library docs
+*/
+*[data-melt-dropdown-menu-submenu],
+*[data-melt-dropdown-menu]{
+  outline: none;
+  z-index: 40;
+  background-color: var(--theme-panel-bg);
+  border-radius: 4px;
+  border: 1px solid var(--theme-text-fg-disabled);
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 30rem;
+  min-width: 15rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+  color: var(--theme-text-fg);
+  font-size: 1rem;
+}
+
+*[data-melt-dropdown-menu-item],
+*[data-melt-dropdown-menu-subtrigger]{
+  outline: none;
+  z-index: 40;
+  position: relative;
+  color: var(--theme-text-fg);
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: .1rem .5rem;
+}
+
+*[data-melt-dropdown-menu-item][data-highlighted],
+*[data-melt-dropdown-menu-subtrigger][data-highlighted] {
+  color: var(--theme-panel-controls-bg);
+  background-color: var(--theme-focus);
+}
+*[data-melt-dropdown-menu-item][data-highlighted] svg,
+*[data-melt-dropdown-menu-subtrigger][data-highlighted] svg{
+  fill: var(--theme-panel-controls-bg);
+}
+
+*[data-melt-separator]{
+  margin: 5px 0;
+  height: 1px;
+  background-color: var(--theme-text-fg-disabled);
+}
+
+.custom-overlay{
+  display: none;
+}
+@media only screen and (max-width: 600px) {
+  *[data-melt-dropdown-menu-submenu],
+  *[data-melt-dropdown-menu]{
+    position: absolute!important;
+    bottom: 0!important;
+    left: 0!important;
+    top: auto!important;
+    width: 100%;
+    padding: 1rem;
+    padding-bottom: 4rem;
+    padding-top: 1rem;
+    border: 1px solid var(--theme-text-fg-disabled);
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    animation: slideIn .2s forwards;
+  }
+  body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) .custom-overlay{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    inset: 0;
+    z-index: 40;
+    background-color: rgba(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+    animation: fadeIn .2s ease-in forwards;
+  }
+
+  *[data-melt-dropdown-menu-item],
+  *[data-melt-dropdown-menu-subtrigger]{
+    padding: .5rem .5rem;
+    color: var(--theme-text-fg-contrasting);
+  }
+}
+
+
+@keyframes slideIn {
+  from {
+    padding-bottom: 0;
+  }
+  to {
+    padding-bottom: 4rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+/* The overlay element which covers the page when the dialog is open. */
+*[data-melt-dialog-overlay]{
+  position: absolute;
+  top: 0;
+  left: 0;
+  inset: 0;
+  z-index: 40;
+  background-color: rgba(0,0,0,0.6);
+  width: 100%;
+  height: 100%;
+  animation: fadeIn .2s ease-in forwards;
+}
+
+*[data-melt-dialog-content]{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  z-index: 50;
+
+  max-height: 85vh;
+  width: 90vw;
+  max-width: 450px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 0.375rem;
+
+  background-color: rgb(var(--color-white) / 1);
+
+  padding: 1rem;
+
+  box-shadow: 0 10px 15px -3px rgb(var(--color-black) / 0.1),
+    0 4px 6px -4px rgb(var(--color-black) / 0.1);
+
+  background-color: var(--theme-panel-bg);
+  /* background-color: var(--theme-bg); */
+  border-radius: 4px;
+  border: 1px solid var(--theme-text-fg-disabled);
+  display: flex;
+  flex-direction: column;
+}
+*[data-melt-dialog-content]:focus{
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+  *[data-melt-dialog-close] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    appearance: none;
+
+    height: 1.8rem;
+    width: 1.8rem;
+
+    border-radius: 9999px;
+    border: 0;
+    background-color:transparent;
+    cursor: pointer;
+
+    color: white;
+  }
+
+  *[data-melt-dialog-close]:hover {
+    background-color: rgba(255,255,255,.2);
+  }
+
+  *[data-melt-dialog-title]{
+    margin: 0;
+
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: var(--color-orange);
+  }
+
+  *[data-melt-dialog-description]{
+    margin-bottom: 1.25rem;
+    margin-top: 0.5rem;
+
+    line-height: 1.5;
+
+    color: white
+  }
 
