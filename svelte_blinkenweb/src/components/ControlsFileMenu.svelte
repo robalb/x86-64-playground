@@ -4,9 +4,11 @@
   import ArrowDropDown from './icons/ArrowDropDown.svelte';
   import {blinkStore} from '../core/store'
 
-import {snippetToAppState, uri_serializeAppState} from '../core/appState'
-import { snippets, default_snippet } from "../core/example_snippets";
-    import { copyTextToClipboard } from '../core/utils';
+  import {snippetToAppState, uri_serializeAppState} from '../core/appState'
+  import { snippets, default_snippet } from "../core/example_snippets";
+  import { copyTextToClipboard } from '../core/utils';
+    import ControlsShareDialog from './ControlsShareDialog.svelte';
+
 
   let blink = blinkStore.getInstance()
 
@@ -58,6 +60,7 @@ import { snippets, default_snippet } from "../core/example_snippets";
     let uri = uri_serializeAppState(blinkStore.getAppState(), true)
     //TODO: handle properly
     console.log(uri)
+    console.log(uri.length)
     copyTextToClipboard(uri)
     // window.open(uri, '_blank').focus();
   }
@@ -69,6 +72,9 @@ import { snippets, default_snippet } from "../core/example_snippets";
   on:change={handleFileUpload}
   type="file" class="file" bind:this={fileElem} />
 
+<div class="custom-overlay"></div>
+<div class="btcontainer">
+<ControlsShareDialog />
 <button
   type="button"
   class="button button--secondary p-right-0 m-left-1"
@@ -78,6 +84,7 @@ import { snippets, default_snippet } from "../core/example_snippets";
   File
   <ArrowDropDown aria-hidden="true" focusable="false" />
 </button>
+</div>
 
 {#if $open}
   <div {...$menu} use:menu >
@@ -108,11 +115,15 @@ import { snippets, default_snippet } from "../core/example_snippets";
 {/if}
 
 <style>
+.btcontainer{
+  display: flex;
+  margin-left: 1rem;
+}
 .p-right-0{
   padding-right: 0;
 }
 .m-left-1{
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
 }
 
 .rightSlot {

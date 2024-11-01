@@ -145,7 +145,6 @@ onMount(async () => {
 
 <style>
   .fail{
-    background-color: red;
     background: repeating-linear-gradient(
       -45deg,
       var(--theme-dis-fail-stripebg1),

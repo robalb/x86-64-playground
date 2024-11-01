@@ -65,7 +65,7 @@ generates a webappstate, that is passed to setWebAppState
 
 actual Todo list:
 
-- [] uri manager and uri appstate serializers
+- [x] uri manager and uri appstate serializers
 - define diagnosticparser interface, associated to an assemblerMode.
   a diagnosticParse should parse the stout of a compiler when assembly fails,
   generating a standardized diagnostic output that is used by the editor to render error lines
