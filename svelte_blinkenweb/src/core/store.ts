@@ -159,4 +159,5 @@ export const signal = portion(blinkStore, "signal");
 export const mode = portion(blinkStore, "mode");
 export const uploadedElf = portion(blinkStore, "uploadedElf");
 export const editorContent_write = portion(blinkStore, "editorContent_write");
+export const editorContent_read = portion(blinkStore, "editorContent_read");
 

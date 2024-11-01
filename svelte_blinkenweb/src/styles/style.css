@@ -300,6 +300,22 @@ body {
   color: #79c0ff;
 }
 
+/** Editor panel errors
+*
+* The editor errors are injected via manual dom updates,
+* and cannot therefore use the native css svelte
+* scoping. They are styled via bem instead
+* TODO: properly define these colors
+*/
+.editor__lineerror{
+  position:absolute;
+  inset:0;
+  z-index: -2;
+  background-color: rgb(52, 30, 24);
+  color: rgb(245, 127, 97);
+  color: #ff7b72;
+}
+
 
 
 /**
@@ -381,7 +397,6 @@ body {
 
 .errorbox{
     /*TODO: remove hardcoded colors, find proper design */
-  background-color: rgb(224, 73, 35);
   background-color: rgb(96, 48, 36);
   color: white;
   border: 1px solid rgb(245, 127, 97);

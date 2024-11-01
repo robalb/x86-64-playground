@@ -458,6 +458,8 @@ export class Blink{
   async setMode(mode: AssemblerMode){
     this.mode = mode;
     this.#setState(this.states.NOT_READY);
+    this.assembler_logs = ""
+    this.assembler_errors = []
 
     //download assembler
     let downloadedElf = await this.#fetchBinaryFile(mode.binaries.assembler.fileurl)

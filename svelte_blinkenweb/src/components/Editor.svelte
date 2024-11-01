@@ -1,5 +1,5 @@
 <script>
-import {blinkStore, state, editorContent_write} from '../core/store'
+import {blinkStore, state, editorContent_write, editorContent_read} from '../core/store'
 import {onMount} from 'svelte'
 import { createEditor } from "prism-code-editor"
 
@@ -22,6 +22,8 @@ import { setIgnoreTab } from "prism-code-editor/commands"
 let editor_elem;
 let editor;
 
+let rendered_errors = [];
+
 let blink = blinkStore.getInstance()
 
 // render conditionals
@@ -42,6 +44,7 @@ function renderEditor(){
       language: "nasm",
       value: $blinkStore.editorContent_write,
       onUpdate: content=>{
+        removeErrors()
         blinkStore.notifyEditorContent(content)
       },
     },
@@ -55,6 +58,45 @@ function renderEditor(){
   setIgnoreTab(true)
 }
 
+function removeErrors(){
+  for(let err of rendered_errors){
+    console.log("editor: remove errors")
+    console.log(err)
+    err.remove()
+  }
+  rendered_errors = [];
+}
+
+function renderErrors(){
+  if(!editor || !blink){
+    return
+  }
+  if(blink.state != blink.states.READY){
+    removeErrors()
+    return;
+  }
+  if(rendered_errors.length > 0){
+    //already rendered the errors
+    return
+  }
+  console.log("editor: render errors")
+
+  // lines[i] with i>0 is an overlayed html line we can edit
+  const lines = editor.wrapper.children
+
+  //render an error
+  for(let err of blink.assembler_errors){
+    const element = document.createElement('div');
+    rendered_errors.push(element)
+    element.className = "editor__lineerror"
+    let lineLength = 2 + lines[err.line].textContent.length
+    element.innerText = (" ".repeat(lineLength)) + err.error
+    if(lines[err.line] && element.parentNode != lines[err.line]){
+      lines[err.line].append(element)
+    }
+  }
+}
+
 function updateEditor(){
   if(!editor){
     return;
@@ -62,9 +104,12 @@ function updateEditor(){
   editor.setOptions({
     value: $editorContent_write
   })
+  renderErrors()
 }
 
 $: $editorContent_write && updateEditor()
+
+$: $state && renderErrors();
 
 onMount(() => {
   renderEditor();
