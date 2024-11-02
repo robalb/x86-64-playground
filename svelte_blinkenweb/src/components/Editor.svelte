@@ -42,7 +42,7 @@ function renderEditor(){
     editor_elem,
     {
       language: "nasm",
-      value: $blinkStore.editorContent_write,
+      value: $blinkStore.editorContent_read,
       onUpdate: content=>{
         removeErrors()
         blinkStore.notifyEditorContent(content)
@@ -61,7 +61,6 @@ function renderEditor(){
 function removeErrors(){
   for(let err of rendered_errors){
     console.log("editor: remove errors")
-    console.log(err)
     err.remove()
   }
   rendered_errors = [];
