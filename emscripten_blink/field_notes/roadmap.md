@@ -88,6 +88,7 @@ actual Todo list:
 
 ### backlog
 - editor tooltip for asm guide, like in compiler explorer
+  https://github.com/compiler-explorer/compiler-explorer/blob/main/lib/asm-docs/generated/asm-docs-amd64.ts
   https://stackblitz.com/edit/vitejs-vite-z2fgpu?file=src%2Fmain.ts
 - invert taborder in the control rows. on desktop the current order is bad
 - service worker. Understand: is github pages good enough for caching?
