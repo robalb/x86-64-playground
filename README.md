@@ -1,8 +1,10 @@
 # x86-64 playground
 
-A browser-based x86-64 assembly playground, powered by a WebAssembly port of the Blink emulator.
+An online assembly editor and debugger for the x86-64 architecture, powered by a Wasm port of the Blink x86-64-linux emulator.<br/> Online at https://x64.halb.it
 
-Online at https://x64.halb.it
+The quickest way to run, debug, and share assembly snippets for a wide range of popular assemblers, including GNU binutils, Fasm, and Nasm.
+
+# Screenshots
 
 <img src="./docs/preview2.jpg" />
 
