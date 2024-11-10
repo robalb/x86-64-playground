@@ -1,0 +1,32 @@
+{
+  "id": "playground/v1"
+  "name": "x64 playground",
+  "short_name": "x64",
+  "description": "An online assembly editor and debugger for the x86-64 architecture. The quickest way to run, debug, and share assembly snippets for a wide range of amd64 assemblers - GNU binutils, Fasm, Nasm",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/card.jpg",
+      "sizes": "1760x1070",
+      "label": "Screenshot showing a web app composed of multiple panes with a dark theme. The leftmost pane is a text editor showing an assembly code snippet. the other panes show debugger data like registers and a hexdump of the stack layout of a process."
+
+    }
+  ],
+  "theme_color": "#343434",
+  "categories": ["education", "programming"],
+  "background_color": "#1c1e24",
+  "display": "standalone"
+}

@@ -62,6 +62,14 @@ every example should be the combo codestring,Assemblers_key.
 we can then create a custom webappstate serializer that takes this combo and 
 generates a webappstate, that is passed to setWebAppState
 
+Open Source code:
+- Blink: ISC https://github.com/jart/blink/blob/master/LICENSE
+- Svelte: MIT https://github.com/sveltejs/svelte?tab=MIT-1-ov-file#readme
+- vitejs: MIT https://github.com/vitejs/vite?tab=MIT-1-ov-file#readme
+- Melt UI: MIT https://github.com/melt-ui/melt-ui?tab=MIT-1-ov-file#readme
+Binaries:
+- binutils: GNU V2 https://github.com/bminor/binutils-gdb?tab=License-1-ov-file#readme
+- Fasm: https://github.com/tgrysztar/fasm?tab=License-1-ov-file#readme
 
 actual Todo list:
 
@@ -69,7 +77,7 @@ actual Todo list:
 - [x] define diagnosticparser interface, associated to an assemblerMode.
   a diagnosticParse should parse the stout of a compiler when assembly fails,
   generating a standardized diagnostic output that is used by the editor to render error lines
-- add line error support to the editor. 
+- [x] add line error support to the editor. 
   this snippet shows how to tap in the editor renderer to add line highlights
     https://stackblitz.com/edit/vitejs-vite-y5pwon?file=src%2Fmain.ts,readme.md
   In the editor component, we'll need to listen to store.diagnostics, and when
@@ -77,8 +85,10 @@ actual Todo list:
   in store.notifyEditorContent we should add a line that resets the diagnostics
 
 
+
 ### backlog
 - editor tooltip for asm guide, like in compiler explorer
+  https://github.com/compiler-explorer/compiler-explorer/blob/main/lib/asm-docs/generated/asm-docs-amd64.ts
   https://stackblitz.com/edit/vitejs-vite-z2fgpu?file=src%2Fmain.ts
 - invert taborder in the control rows. on desktop the current order is bad
 - service worker. Understand: is github pages good enough for caching?
