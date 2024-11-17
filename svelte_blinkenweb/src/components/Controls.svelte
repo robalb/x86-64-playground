@@ -3,24 +3,12 @@
   export let showEditor;
 
   import Logo from './Logo.svelte';
-  import WizardHat from './icons/WizardHat.svelte';
   import ArrowBack from './icons/ArrowBack.svelte';
   import ControlsFileMenu from './ControlsFileMenu.svelte';
-  import { assemblers } from '../core/assemblers';
-  import {blinkStore, state, mode} from '../core/store'
-    import ControlsCompilebt from './ControlsCompilebt.svelte';
+  import {blinkStore, state} from '../core/store'
+  import ControlsCompilebt from './ControlsCompilebt.svelte';
 
   let blink = blinkStore.getInstance()
-
-  //-------------------
-  //bindings for the assembler selection dropdown
-  //-------------------
-  let assemblerModes = Object.values(assemblers)
-	let selectedMode;
-  $: selectedMode = $mode;
-  function handle_assembler_change(){
-    blinkStore.setMode(selectedMode)
-  }
 
   //-------------------
   //render conditionals
@@ -48,16 +36,6 @@
   //-------------------
   //control handlers
   //-------------------
-  async function handle_compile(){
-    blink.loadASM($blinkStore.editorContent_read);
-    //analytics
-    if(window.hasOwnProperty("goatcounter")){
-      window.goatcounter.count({
-          path:  function(p) { return 'click-compile-' + p },
-          event: true,
-      })
-    }
-  }
   function handle_back(){
     blink.setready()
     blinkStore.setUploadedElfName("")
@@ -100,20 +78,6 @@
   <!-- Editor row -->
     <section class="controls__row controls__row-top">
       {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
-        <!-- <div class="btgroup"> -->
-        <!--   <select class="btgroup__button btgroup__button--select" -->
-        <!--     bind:value={selectedMode} on:change={handle_assembler_change}> -->
-        <!--     {#each assemblerModes as mode} -->
-        <!--       <option value={mode.id}> -->
-        <!--         {mode.display_name} -->
-        <!--       </option> -->
-        <!--     {/each} -->
-        <!--   </select> -->
-        <!--   <button class="btgroup__button" -->
-        <!--     disabled={!cancompile} on:click={handle_compile}> -->
-        <!--     <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" /> -->
-        <!--     compile</button> -->
-        <!-- </div> -->
       <ControlsCompilebt cancompile={cancompile} />
       <ControlsFileMenu />
 
