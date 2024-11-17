@@ -7,6 +7,7 @@
 
   import { assemblers } from '../core/assemblers';
   import {blinkStore, state, mode} from '../core/store'
+    import Checkmark from './icons/Checkmark.svelte';
 
   let blink = blinkStore.getInstance()
   let assemblerModes = Object.values(assemblers)
@@ -74,6 +75,10 @@ $: $mode && setMode($mode)
         <div
           {...$option({ value: mode.id, label: mode.display_name})} use:option
         >
+          <Checkmark
+            style={$isSelected(mode.id) ?"": "visibility: hidden;"}
+            aria-hidden="true" focusable="false" 
+          />
           {mode.display_name}
           <!-- <span>{mode.description}</span> -->
         </div>
