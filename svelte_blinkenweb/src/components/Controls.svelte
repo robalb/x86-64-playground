@@ -8,6 +8,7 @@
   import ControlsFileMenu from './ControlsFileMenu.svelte';
   import { assemblers } from '../core/assemblers';
   import {blinkStore, state, mode} from '../core/store'
+    import ControlsCompilebt from './ControlsCompilebt.svelte';
 
   let blink = blinkStore.getInstance()
 
@@ -99,22 +100,22 @@
   <!-- Editor row -->
     <section class="controls__row controls__row-top">
       {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
-        <div class="btgroup">
-          <select class="btgroup__button btgroup__button--select"
-            bind:value={selectedMode} on:change={handle_assembler_change}>
-            {#each assemblerModes as mode}
-              <option value={mode.id}>
-                {mode.display_name}
-              </option>
-            {/each}
-          </select>
-          <button class="btgroup__button"
-            disabled={!cancompile} on:click={handle_compile}>
-            <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" />
-            compile</button>
-        </div>
-
-        <ControlsFileMenu />
+        <!-- <div class="btgroup"> -->
+        <!--   <select class="btgroup__button btgroup__button--select" -->
+        <!--     bind:value={selectedMode} on:change={handle_assembler_change}> -->
+        <!--     {#each assemblerModes as mode} -->
+        <!--       <option value={mode.id}> -->
+        <!--         {mode.display_name} -->
+        <!--       </option> -->
+        <!--     {/each} -->
+        <!--   </select> -->
+        <!--   <button class="btgroup__button" -->
+        <!--     disabled={!cancompile} on:click={handle_compile}> -->
+        <!--     <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" /> -->
+        <!--     compile</button> -->
+        <!-- </div> -->
+      <ControlsCompilebt cancompile={cancompile} />
+      <ControlsFileMenu />
 
       {:else}
         <button on:click={handle_back} class="button" >
