@@ -174,6 +174,7 @@ static char *DisName(struct Dis *d, char *bp, const char *name,
   return p;
 }
 
+
 /**
  * Disassembles instruction based on string spec.
  * @see DisSpec()
@@ -201,11 +202,22 @@ char *DisInst(struct Dis *d, char *p, const char *spec) {
   p = HighStart(p, g_high.keyword);
   p = DisName(d, p, name, hasarg && !hasregister && hasmemory);
   p = HighEnd(p);
-  for (i = 0; i < n; ++i) {
-    if (i && args[n - i][0]) {
-      *p++ = ',';
+  if(INTEL_SYNTAX){
+    for (i = 0; i < n; ++i) {
+      if (i && args[i][0]) {
+        *p++ = ',';
+      }
+      p = stpcpy(p, args[i]);
     }
-    p = stpcpy(p, args[n - i - 1]);
   }
+  else{
+    for (i = 0; i < n; ++i) {
+      if (i && args[n - i][0]) {
+        *p++ = ',';
+      }
+      p = stpcpy(p, args[n - i - 1]);
+    }
+  }
+
   return p;
 }

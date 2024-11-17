@@ -88,7 +88,8 @@ static const char *GetAddrReg(struct Dis *d, u64 rde, u8 x, u8 r) {
 
 static char *DisRegister(char *p, const char *s) {
   p = HighStart(p, g_high.reg);
-  *p++ = '%';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = stpcpy(p, s);
   p = HighEnd(p);
   return p;
@@ -139,7 +140,8 @@ static char *DisSym(struct Dis *d, char *p, i64 value, i64 addr) {
 }
 
 static char *DisSymLiteral(struct Dis *d, u64 rde, char *p, u64 addr, u64 ip) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = DisSym(d, p, addr, addr);
   p = HighEnd(p);
@@ -428,7 +430,8 @@ static char *DisRvds(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisKpvds(struct Dis *d, u64 rde, char *p, u64 x) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = DisInt(p, x);
   p = HighEnd(p);
@@ -445,7 +448,8 @@ static char *DisPvds(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisOne(struct Dis *d, u64 rde, char *p) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = stpcpy(p, "1");
   p = HighEnd(p);

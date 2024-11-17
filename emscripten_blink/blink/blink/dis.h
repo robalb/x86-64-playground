@@ -9,9 +9,12 @@
 
 #define DIS_MAX_SYMBOL_LENGTH 128
 
+
 #ifdef HTML
+  #define INTEL_SYNTAX true
   #define DisHTML(p, str) (stpcpy((p), (str)))
 #else
+  #define INTEL_SYNTAX false
   #define DisHTML(p, str) (p)
 #endif
 
