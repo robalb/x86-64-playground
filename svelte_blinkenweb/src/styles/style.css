@@ -375,12 +375,15 @@ body {
   border: 1px solid var(--color-gray-t);
   background-color: transparent;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 .btgroup .btgroup__button{
   border: 1px solid transparent;
 }
 .btgroup .btgroup__button--select{
   background-color:rgba(255,255,255,.1);
+  justify-content:space-between;
+  padding-right: 0.0rem;
 }
 .btgroup .btgroup__button:nth-child(1){
   border-right: 1px solid var(--color-gray-t);
@@ -412,6 +415,7 @@ body {
 * All these attributes are documented in the library docs
 */
 *[data-melt-dropdown-menu-submenu],
+*[data-melt-select-menu],
 *[data-melt-dropdown-menu]{
   outline: none;
   z-index: 40;
@@ -427,8 +431,13 @@ body {
   color: var(--theme-text-fg);
   font-size: 1rem;
 }
+*[data-melt-select-menu]{
+  min-width: 1rem;
+}
+
 
 *[data-melt-dropdown-menu-item],
+*[data-melt-select-option],
 *[data-melt-dropdown-menu-subtrigger]{
   outline: none;
   z-index: 40;
@@ -440,13 +449,21 @@ body {
   cursor: pointer;
   padding: .1rem .5rem;
 }
+*[data-melt-select-option]{
+  padding-left: 0;
+}
+*[data-melt-select-option] svg{
+  margin-right: 5px;
+}
 
 *[data-melt-dropdown-menu-item][data-highlighted],
+*[data-melt-select-option][data-highlighted],
 *[data-melt-dropdown-menu-subtrigger][data-highlighted] {
   color: var(--theme-panel-controls-bg);
   background-color: var(--theme-focus);
 }
 *[data-melt-dropdown-menu-item][data-highlighted] svg,
+*[data-melt-select-option][data-highlighted] svg,
 *[data-melt-dropdown-menu-subtrigger][data-highlighted] svg{
   fill: var(--theme-panel-controls-bg);
 }
@@ -462,6 +479,7 @@ body {
 }
 @media only screen and (max-width: 600px) {
   *[data-melt-dropdown-menu-submenu],
+  *[data-melt-select-menu],
   *[data-melt-dropdown-menu]{
     position: absolute!important;
     bottom: 0!important;
@@ -479,7 +497,8 @@ body {
     border-top-right-radius: 0;
     animation: slideIn .2s forwards;
   }
-  body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) .custom-overlay{
+  body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) .custom-overlay,
+  body:has(*[data-melt-select-trigger][aria-expanded="true"]) .custom-overlay {
     display: block;
     position: absolute;
     top: 0;
@@ -493,6 +512,7 @@ body {
   }
 
   *[data-melt-dropdown-menu-item],
+  *[data-melt-select-option],
   *[data-melt-dropdown-menu-subtrigger]{
     padding: .5rem .5rem;
     color: var(--theme-text-fg-contrasting);
@@ -517,7 +537,6 @@ body {
     opacity: 1;
   }
 }
-
 
 
 /* The overlay element which covers the page when the dialog is open. */

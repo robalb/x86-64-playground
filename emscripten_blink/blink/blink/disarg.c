@@ -88,7 +88,8 @@ static const char *GetAddrReg(struct Dis *d, u64 rde, u8 x, u8 r) {
 
 static char *DisRegister(char *p, const char *s) {
   p = HighStart(p, g_high.reg);
-  *p++ = '%';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = stpcpy(p, s);
   p = HighEnd(p);
   return p;
@@ -139,7 +140,8 @@ static char *DisSym(struct Dis *d, char *p, i64 value, i64 addr) {
 }
 
 static char *DisSymLiteral(struct Dis *d, u64 rde, char *p, u64 addr, u64 ip) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = DisSym(d, p, addr, addr);
   p = HighEnd(p);
@@ -190,7 +192,16 @@ static char *DisDisp(struct Dis *d, u64 rde, char *p) {
     } else if (IsRealModrmAbsolute(rde)) {
       disp = Unrelative(rde, disp);
     }
-    p = DisSym(d, p, disp, disp);
+    if(INTEL_SYNTAX){
+      char* beforeDisSym = p;
+      *p++ = ' ';
+      p = DisSym(d, p, disp, disp);
+      if(beforeDisSym[1] == '0'){
+        *beforeDisSym = '+';
+      }
+    }else{
+      p = DisSym(d, p, disp, disp);
+    }
   }
   return p;
 }
@@ -253,26 +264,49 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
     }
   }
   if (base || index) {
-    *p++ = '(';
-    if (base) {
-      p = DisRegister(p, base);
-    }
-    if (index) {
-      *p++ = ',';
-      p = DisRegister(p, index);
-      if (scale) {
-        p = stpcpy(p, scale);
+    if(INTEL_SYNTAX){
+      *p++ = '[';
+      if (base) {
+        p = DisRegister(p, base);
       }
+      if (index) {
+        *p++ = '+';
+        p = DisRegister(p, index);
+        if (scale) {
+          p = stpcpy(p, scale);
+          if(scale[0]){
+            *(p-2) = '*';
+          }
+        }
+      }
+      p = DisDisp(d, rde, p);
+      *p++ = ']';
     }
-    *p++ = ')';
+    else{
+      *p++ = '(';
+      if (base) {
+        p = DisRegister(p, base);
+      }
+      if (index) {
+        *p++ = ',';
+        p = DisRegister(p, index);
+        if (scale) {
+          p = stpcpy(p, scale);
+        }
+      }
+      *p++ = ')';
+    }
   }
   *p = '\0';
   return p;
 }
 
+
 static char *DisM(struct Dis *d, u64 rde, char *p) {
   p = DisSego(d, rde, p);
-  p = DisDisp(d, rde, p);
+  if(!INTEL_SYNTAX){
+    p = DisDisp(d, rde, p);
+  }
   p = DisBis(d, rde, p);
   return p;
 }
@@ -393,9 +427,15 @@ static char *DisRdx(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisPort(struct Dis *d, u64 rde, char *p) {
-  *p++ = '(';
-  p = DisRegister(p, kGreg[1][0][0][2]);
-  *p++ = ')';
+  if(INTEL_SYNTAX){
+    *p++ = '[';
+    p = DisRegister(p, kGreg[1][0][0][2]);
+    *p++ = ']';
+  }else{
+    *p++ = '(';
+    p = DisRegister(p, kGreg[1][0][0][2]);
+    *p++ = ')';
+  }
   *p = '\0';
   return p;
 }
@@ -428,7 +468,8 @@ static char *DisRvds(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisKpvds(struct Dis *d, u64 rde, char *p, u64 x) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = DisInt(p, x);
   p = HighEnd(p);
@@ -445,7 +486,8 @@ static char *DisPvds(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisOne(struct Dis *d, u64 rde, char *p) {
-  *p++ = '$';
+  if(!INTEL_SYNTAX)
+    *p++ = '$';
   p = HighStart(p, g_high.literal);
   p = stpcpy(p, "1");
   p = HighEnd(p);
@@ -479,9 +521,15 @@ static char *DisSw(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisSpecialAddr(struct Dis *d, u64 rde, char *p, int r) {
-  *p++ = '(';
-  p = DisRegister(p, GetAddrReg(d, rde, 0, r));
-  *p++ = ')';
+  if(INTEL_SYNTAX){
+    *p++ = '[';
+    p = DisRegister(p, GetAddrReg(d, rde, 0, r));
+    *p++ = ']';
+  }else{
+    *p++ = '(';
+    p = DisRegister(p, GetAddrReg(d, rde, 0, r));
+    *p++ = ')';
+  }
   *p = '\0';
   return p;
 }
@@ -536,9 +584,15 @@ static char *DisQq(struct Dis *d, u64 rde, char *p) {
 static char *DisEst(struct Dis *d, u64 rde, char *p) {
   p = DisRegister(p, "st");
   if (ModrmRm(rde) != 0) {
-    *p++ = '(';
-    *p++ = '0' + ModrmRm(rde);
-    *p++ = ')';
+    if(INTEL_SYNTAX){
+      *p++ = '[';
+      *p++ = '0' + ModrmRm(rde);
+      *p++ = ']';
+    }else{
+      *p++ = '(';
+      *p++ = '0' + ModrmRm(rde);
+      *p++ = ')';
+    }
     *p = '\0';
   }
   return p;
