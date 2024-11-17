@@ -44,7 +44,20 @@ https://intelxed.github.io/ref-manual/index.html
 
 a simple entry point seems to be DisArg.
 
+
 all we need to do:
 remove the $,% prefix
 
+now the hard part is
+the memory addressing.
+
+We are using this test
+
+```
+mov dword [rdi], 0x10000
+mov     eax,[ebx+20h]
+add     eax,[ebx+ecx*2h]
+lea     eax,[ebx+ecx]
+sub     eax,[ebx+ecx*4h-20h]
+```
 

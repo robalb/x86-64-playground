@@ -153,14 +153,30 @@ static char *DisName(struct Dis *d, char *bp, const char *name,
                               !StartsWith(name, "set"))) {
       if (Osz(rde)) {
         if (ambiguous || Mode(rde) != XED_MODE_REAL) {
-          *p++ = 'w';
+          if(INTEL_SYNTAX){
+            p = stpcpy(p, " word");
+          }else{
+            *p++ = 'w';
+          }
         }
       } else if (Rexw(rde)) {
-        *p++ = 'q';
+          if(INTEL_SYNTAX){
+            p = stpcpy(p, " qword");
+          }else{
+            *p++ = 'q';
+          }
       } else if (ambiguous && !notbyte && IsProbablyByteOp(d->xedd)) {
-        *p++ = 'b';
+        if(INTEL_SYNTAX){
+          p = stpcpy(p, " byte");
+        }else{
+          *p++ = 'b';
+        }
       } else if (!notlong) {
-        *p++ = 'l';
+        if(INTEL_SYNTAX){
+          p = stpcpy(p, " dword");
+        }else{
+          *p++ = 'l';
+        }
       }
     }
   }
@@ -206,6 +222,7 @@ char *DisInst(struct Dis *d, char *p, const char *spec) {
     for (i = 0; i < n; ++i) {
       if (i && args[i][0]) {
         *p++ = ',';
+        *p++ = ' ';
       }
       p = stpcpy(p, args[i]);
     }

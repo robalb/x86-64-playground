@@ -255,7 +255,11 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
     }
   }
   if (base || index) {
-    *p++ = '(';
+    if(INTEL_SYNTAX){
+      *p++ = '[';
+    }else{
+      *p++ = '(';
+    }
     if (base) {
       p = DisRegister(p, base);
     }
@@ -266,7 +270,11 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
         p = stpcpy(p, scale);
       }
     }
-    *p++ = ')';
+    if(INTEL_SYNTAX){
+      *p++ = ']';
+    }else{
+      *p++ = ')';
+    }
   }
   *p = '\0';
   return p;
@@ -395,9 +403,15 @@ static char *DisRdx(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisPort(struct Dis *d, u64 rde, char *p) {
-  *p++ = '(';
-  p = DisRegister(p, kGreg[1][0][0][2]);
-  *p++ = ')';
+  if(INTEL_SYNTAX){
+    *p++ = '[';
+    p = DisRegister(p, kGreg[1][0][0][2]);
+    *p++ = ']';
+  }else{
+    *p++ = '(';
+    p = DisRegister(p, kGreg[1][0][0][2]);
+    *p++ = ')';
+  }
   *p = '\0';
   return p;
 }
@@ -483,9 +497,15 @@ static char *DisSw(struct Dis *d, u64 rde, char *p) {
 }
 
 static char *DisSpecialAddr(struct Dis *d, u64 rde, char *p, int r) {
-  *p++ = '(';
-  p = DisRegister(p, GetAddrReg(d, rde, 0, r));
-  *p++ = ')';
+  if(INTEL_SYNTAX){
+    *p++ = '[';
+    p = DisRegister(p, GetAddrReg(d, rde, 0, r));
+    *p++ = ']';
+  }else{
+    *p++ = '(';
+    p = DisRegister(p, GetAddrReg(d, rde, 0, r));
+    *p++ = ')';
+  }
   *p = '\0';
   return p;
 }
@@ -540,9 +560,15 @@ static char *DisQq(struct Dis *d, u64 rde, char *p) {
 static char *DisEst(struct Dis *d, u64 rde, char *p) {
   p = DisRegister(p, "st");
   if (ModrmRm(rde) != 0) {
-    *p++ = '(';
-    *p++ = '0' + ModrmRm(rde);
-    *p++ = ')';
+    if(INTEL_SYNTAX){
+      *p++ = '[';
+      *p++ = '0' + ModrmRm(rde);
+      *p++ = ']';
+    }else{
+      *p++ = '(';
+      *p++ = '0' + ModrmRm(rde);
+      *p++ = ')';
+    }
     *p = '\0';
   }
   return p;
