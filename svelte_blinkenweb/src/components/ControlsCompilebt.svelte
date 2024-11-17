@@ -11,6 +11,17 @@
   let blink = blinkStore.getInstance()
   let assemblerModes = Object.values(assemblers)
 
+  async function handle_compile(){
+    blink.loadASM($blinkStore.editorContent_read);
+    //analytics
+    if(window.hasOwnProperty("goatcounter")){
+      window.goatcounter.count({
+          path:  function(p) { return 'click-compile-' + p },
+          event: true,
+      })
+    }
+  }
+
   function handle_assembler_change(e){
     // See the melt ui docs on change functions
     // https://www.melt-ui.com/docs/controlled#change-functions
@@ -64,6 +75,7 @@ $: $mode && setMode($mode)
           {...$option({ value: mode.id, label: mode.display_name})} use:option
         >
           {mode.display_name}
+          <!-- <span>{mode.description}</span> -->
         </div>
       {/each}
     </div>
@@ -71,7 +83,7 @@ $: $mode && setMode($mode)
 
 
   <button class="btgroup__button"
-    disabled={!cancompile} on:click={()=>{}}>
+    disabled={!cancompile} on:click={handle_compile}>
     <WizardHat aria-hidden="true" focusable="false" width="26px" height="26px" />
     compile</button>
 </div>
