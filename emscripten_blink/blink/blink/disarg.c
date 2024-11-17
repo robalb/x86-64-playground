@@ -192,7 +192,16 @@ static char *DisDisp(struct Dis *d, u64 rde, char *p) {
     } else if (IsRealModrmAbsolute(rde)) {
       disp = Unrelative(rde, disp);
     }
-    p = DisSym(d, p, disp, disp);
+    if(INTEL_SYNTAX){
+      char* beforeDisSym = p;
+      *p++ = ' ';
+      p = DisSym(d, p, disp, disp);
+      if(beforeDisSym[1] == '0'){
+        *beforeDisSym = '+';
+      }
+    }else{
+      p = DisSym(d, p, disp, disp);
+    }
   }
   return p;
 }
@@ -257,22 +266,34 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
   if (base || index) {
     if(INTEL_SYNTAX){
       *p++ = '[';
-    }else{
-      *p++ = '(';
-    }
-    if (base) {
-      p = DisRegister(p, base);
-    }
-    if (index) {
-      *p++ = ',';
-      p = DisRegister(p, index);
-      if (scale) {
-        p = stpcpy(p, scale);
+      if (base) {
+        p = DisRegister(p, base);
       }
-    }
-    if(INTEL_SYNTAX){
+      if (index) {
+        *p++ = '+';
+        p = DisRegister(p, index);
+        if (scale) {
+          p = stpcpy(p, scale);
+          if(scale[0]){
+            *(p-2) = '*';
+          }
+        }
+      }
+      p = DisDisp(d, rde, p);
       *p++ = ']';
-    }else{
+    }
+    else{
+      *p++ = '(';
+      if (base) {
+        p = DisRegister(p, base);
+      }
+      if (index) {
+        *p++ = ',';
+        p = DisRegister(p, index);
+        if (scale) {
+          p = stpcpy(p, scale);
+        }
+      }
       *p++ = ')';
     }
   }
@@ -280,9 +301,12 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
   return p;
 }
 
+
 static char *DisM(struct Dis *d, u64 rde, char *p) {
   p = DisSego(d, rde, p);
-  p = DisDisp(d, rde, p);
+  if(!INTEL_SYNTAX){
+    p = DisDisp(d, rde, p);
+  }
   p = DisBis(d, rde, p);
   return p;
 }
