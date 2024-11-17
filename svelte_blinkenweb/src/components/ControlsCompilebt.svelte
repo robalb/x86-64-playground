@@ -10,25 +10,22 @@
 
   let blink = blinkStore.getInstance()
   let assemblerModes = Object.values(assemblers)
+
   function handle_assembler_change(e){
-    console.log("change:")
-    console.log(e)
-    if(e.next.value){
+    // See the melt ui docs on change functions
+    // https://www.melt-ui.com/docs/controlled#change-functions
+    if(e.curr.value != e.next.value){
       blinkStore.setMode(e.next.value)
     }
     return e.next
   }
-  function setMode(e){
-    console.log("mode change in store: asdasdasd")
-    console.log(e)
-  }
 
-  // let selectModeStore = {
-  //   subscribe: mode.subscribe,
-  //   set: function(){
-  //     console.log("aaa")
-  //   }
-  // }
+  function setMode(mode_id){
+    selected.set({
+        value: mode_id,
+        label: assemblers[mode_id].display_name
+    })
+  }
 
   const {
     elements: { trigger, menu, option, group, groupLabel, label },
@@ -37,7 +34,7 @@
   } = createSelect({
       forceVisible: true,
       onSelectedChange: handle_assembler_change,
-      defaultSelected: $mode,
+      defaultSelected: {value: $mode, label: assemblers[$mode].display_name},
       positioning: {
         placement: 'bottom',
         fitViewport: true,
