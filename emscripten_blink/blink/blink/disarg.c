@@ -196,7 +196,7 @@ static char *DisDisp(struct Dis *d, u64 rde, char *p) {
       char* beforeDisSym = p;
       *p++ = ' ';
       p = DisSym(d, p, disp, disp);
-      if(beforeDisSym[1] == '0'){
+      if(beforeDisSym[1] != '-'){
         *beforeDisSym = '+';
       }
     }else{

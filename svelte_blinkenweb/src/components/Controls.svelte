@@ -75,6 +75,7 @@
    ----------
  -->
 <div class="controls" class:controls-inverted={!mobile} >
+
   <!-- Editor row -->
     <section class="controls__row controls__row-top">
       {#if (showEditor || !mobile) && !$blinkStore.uploadedElf}
@@ -118,6 +119,14 @@
     </section>
   <!-- /Debugger row -->
   {/if}
+
+  <div class="loadingbar">
+    <div class="loadingbar__content"
+      class:active={$state == blink.states.NOT_READY}
+    ></div>
+  </div>
+
+
 </div>
 
 
@@ -190,6 +199,36 @@
   .controls-inverted .controls__row-bottom {
     border-bottom: 1px solid var(--theme-panel-border);
   }
+
+
+  /* -------------------- */
+  /*      Loading bar     */
+  /* -------------------- */
+  .loadingbar{
+    height: 0;
+    width: 100%;
+  }
+  .loadingbar__content{
+    position:relative;
+    height: 1px;
+    /* background: repeating-linear-gradient(to right, black 0%, #de4f17 50%, var(--color-gold-100) 100%); */
+    background: repeating-linear-gradient(to right, black 0%, var(--color-gray-100) 50%, white 100%);
+    width: 100%;
+    background-size: 200% auto;
+    background-position: 0 100%;
+    animation: gradient 2s infinite;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    display:none;
+  }
+  .loadingbar__content.active{
+    display:block;
+  }
+
+@keyframes gradient { 
+  0%   { background-position: 0 0; }
+  100% { background-position: -200% 0; }
+}
 
 
   /* -------------------- */
