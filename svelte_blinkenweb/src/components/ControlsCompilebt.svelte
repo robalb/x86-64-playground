@@ -47,9 +47,9 @@
       onSelectedChange: handle_assembler_change,
       defaultSelected: {value: $mode, label: assemblers[$mode].display_name},
       positioning: {
-        placement: 'bottom',
-        fitViewport: true,
-        sameWidth: true,
+        placement: 'bottom-start',
+        // fitViewport: true,
+        // sameWidth: true,
       },
     });
 
