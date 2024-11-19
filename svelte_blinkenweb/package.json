@@ -8,6 +8,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "engines": {
+    "npm": "^10.2.4",
+    "node": "^20.11.1"
+  },
   "devDependencies": {
     "@melt-ui/svelte": "^0.84.0",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
