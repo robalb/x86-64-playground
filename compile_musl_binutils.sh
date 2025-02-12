@@ -69,6 +69,6 @@ make all
 # copy as and ld in
 # the web assets folder
 #---------------------
-cp gas/as-new ../../../svelte_blinkenweb/src/assets/gnu-as.elf
-cp ld/ld-new ../../../svelte_blinkenweb/src/assets/gnu-ld.elf
+cp gas/as-new ../webapp/src/assets/gnu-as.elf
+cp ld/ld-new ../webapp/src/assets/gnu-ld.elf
 

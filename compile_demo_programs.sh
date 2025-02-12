@@ -1,12 +1,13 @@
 #!/bin/bash
 
-cd blink
+cd demo_programs
 
 #---------------------
 # check dependencies
 #---------------------
 requirements=(
-    "emmake"
+    "musl-gcc"
+    "gcc"
     "make"
 )
 for cmd in "${requirements[@]}"; do
@@ -14,14 +15,12 @@ for cmd in "${requirements[@]}"; do
 done
 
 #---------------------
-# compile blink wasm+js
+# compile all programs
 #---------------------
-emmake make o//blink/blinkenlib.js
-
+make all
 
 #---------------------
-# copy blink wasm+js in
+# copy all programs in
 # the web assets folder
 #---------------------
-cp ./o/blink/blinkenlib.wasm ../../svelte_blinkenweb/src/assets/
-cp ./o/blink/blinkenlib.js ../../svelte_blinkenweb/src/assets/
+cp ./*.elf ../webapp/src/assets/demo_programs/
