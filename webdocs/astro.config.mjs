@@ -18,6 +18,10 @@ export default defineConfig({
         dark: './src/assets/dark-logo.svg',
         replacesTitle: true,
       },
+      customCss: [
+        // Relative path to your custom CSS file
+        './src/styles/custom.css',
+      ],
 			sidebar: [
         {
           label: 'Getting started',
@@ -35,6 +39,12 @@ export default defineConfig({
 					autogenerate: { directory: 'reference' },
 				},
 			],
+      head: [
+        {
+          tag: 'script',
+          content: `window.addEventListener('load', () => document.querySelector('.site-title').href += 'getting-started/')`,
+        },
+      ],
 		}),
 	],
 });
