@@ -203,13 +203,18 @@ header .container{
 
 header .logo{
   display: flex;
+  flex-shrink: 0;
 }
 header .logo img{
   height: calc(var(--ds-nav-height) - 2 * var(--ds-nav-pad-y));
   width: auto;
   max-width: 100%;
-  object-fit: contain;
-  object-position: 0 50%;
+  display: block;
+}
+@media screen and (max-width: 350px){
+  header .logo img{
+    display: none;
+  }
 }
 
 
@@ -236,3 +241,4 @@ header nav a img{
   top: -2px;
   width: auto;
 }
+
