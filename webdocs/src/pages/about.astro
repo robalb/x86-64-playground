@@ -4,6 +4,10 @@ import '../styles/custom.css'
 import logo_large from '../assets/landing-logo-large.svg'
 import logo_small from '../assets/landing-logo-small.svg'
 import art1 from '../assets/art_1_v2_dark.png'
+import screen1 from '../assets/app_desktop_3.png'
+import screen1_webp from '../assets/app_desktop_3.webp'
+import screen2 from '../assets/app_mobile2.png'
+import screen2_webp from '../assets/app_mobile2.webp'
 ---
 <!doctype html>
 <html lang="en">
@@ -49,6 +53,7 @@ import art1 from '../assets/art_1_v2_dark.png'
         x86-64 Playground
       </span>
     </div>
+
     <nav>
       <a href="/">Run</a>
       <a href="/getting-started/">Guides</a>
@@ -59,28 +64,96 @@ import art1 from '../assets/art_1_v2_dark.png'
         Star on GitHub
       </a>
     </nav>
+
+
   </div>
 </header>
 
 
-<div class="hero">
-  <Image src={art1} alt="Logo art" aria-hidden="true" />
+<section class="hero">
 
+  <Image class="hero" src={art1} alt="Logo art" aria-hidden="true" />
   <h1>x86-64 Playground</h1>
   <h2>An online assembly editor and GDB-like debugger</h2>
-</div>
+
+  <div class="btgroup">
+    <a class="action" href="/">Launch the app</a>
+    <a href="#introduction">Explore</a>
+  </div>
+
+
+</section>
+
+<section id="introduction">
+      <p>x86-64 Playground is a web app for experimenting and learning 
+        x86-64 assembly.
+      </p>
+        <ul>
+        <li>
+        The Playground web app offers an online code editor where you
+        can write, compile, and share assembly for a wide
+        range of popular assemblers, including GNU As, Fasm and Nasm.
+        </li>
+        <li>
+        From the same interface you can run and debug your programs,
+        inspecting the results in a GDB-like interface.
+        </li>
+        <li>
+        Drag and drop into the app any x86-64-Linux static executable file to run and 
+        debug it in the same sandboxed environment.
+        </li>
+          </ul>
+
+  <picture>
+    <source srcset={screen1_webp.src} type="image/webp" >
+    <img class="screen" src={screen1.src} alt="TODO" width="900px" loading="lazy" decoding="async" />
+  </picture>
+</section>
+
+<section>
+  <h3>Who is this for</h3>
+  <p>The app is for anyone that wants to run amd64 assembly snippets or
+      inspect the inner workings of simple Linux ELF files.</p>
+  <p>It has been designed for the academic world of binary exploitation in mind;
+        The debugger interface offers visualizations similar to the GDB+PwnGDB debugger plugin,
+        and all the buttons are labelled with the respective GDB commands.
+        </p>
+        <p>In conjuction with Compiler Explorer, this app offers a good starting point to
+      experiment with the core binary exploitation concepts. It includes
+        the guides and resources necessary to continue the experiments locally,
+        on a Linux environment with GDB.</p>
+</section>
+
+<section>
+  <h3>An experience designed for the web </h3>
+
+      <p>Have you ever seen a responsive debugger?</br>
+      The app has been designed with the mobile experience as
+        a first class citizen, and can be embedded in any web page
+        to add an interactive element to online tutorials or documentations.
+<br/>
+<br/>
+      </p>
+  <picture>
+    <source srcset={screen2_webp.src} type="image/webp" >
+    <img class="screen" src={screen2.src} alt="TODO" width="300px" loading="lazy" decoding="async" />
+  </picture>
+</section>
 
 
 <style>
-  .hero{
+  section{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 100%;
     padding: 1rem;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .hero img{
+  img.hero{
     max-width: 20rem;
     height: auto;
   }
@@ -89,7 +162,7 @@ import art1 from '../assets/art_1_v2_dark.png'
     font-size: 3.5rem;
     line-height: 3rem;
     text-align: center;
-    margin: .5rem;
+    margin: .1rem;
     margin-top: 0;
     font-family: 'Neuton';
   }
@@ -101,6 +174,19 @@ import art1 from '../assets/art_1_v2_dark.png'
     font-family: 'Inter';
     font-weight:400;
   }
+  h3{
+    text-align: center;
+    font-size: 2.5rem;
+    line-height: 3rem;
+    font-family: 'Neuton';
+  }
+  p,ul,li{
+    width: 100%;
+    line-height: 1.8rem;
+    font-size: 1.0rem;
+    font-family: 'Inter';
+    margin: .4rem;
+  }
 
   @media screen and (min-width: 600px){
     h1{
@@ -111,6 +197,43 @@ import art1 from '../assets/art_1_v2_dark.png'
       line-height: 1.8rem;
       font-size: 1.3rem;
     }
+  }
+
+  .btgroup {
+    padding-top: 1rem;
+    margin-bottom: 5rem;
+  }
+  .btgroup a{
+    font-size: 1.0rem;
+    font-family: 'Inter';
+    font-weight:600;
+    text-decoration: none;
+    color: var(--color-gray-100);
+    padding: .5rem;
+    border-radius: 8px;
+  }
+  .btgroup a:hover{
+    color: var(--color-gray-0);
+    background-color: var(--color-gray-300);
+  }
+  .btgroup a.action{
+    --blue-gradient: linear-gradient(to right, #29ffc6, #20e3b2, #0cebeb);
+    --orange-gradient: linear-gradient(to right, #ff5e62, #ff9966);
+    color: var(--color-gray-500);
+    background: var(--blue-gradient);
+    margin-right: 1rem;
+  }
+  .btgroup a.action:hover{
+    border-color: #fefefe;
+  }
+
+  img.screen{
+    border: 2px solid black;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
   }
 
 </style>
