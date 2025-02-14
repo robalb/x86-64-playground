@@ -75,7 +75,7 @@ import screen2_webp from '../assets/app_mobile2.webp'
 
   <div class="btgroup">
     <a class="action" href="/">Launch the app</a>
-    <a href="#introduction">Explore</a>
+    <a href="#introduction">Learn more</a>
   </div>
 
 
@@ -126,13 +126,16 @@ import screen2_webp from '../assets/app_mobile2.webp'
 <section>
   <h3>An experience designed for the web </h3>
 
-      <p>Have you ever seen a responsive debugger?<br/>
+      <p>Have you ever seen a responsive debugger?
         The app has been designed with the mobile experience as
         a first class citizen, and can be embedded in any web page
-        to add an interactive element to online tutorials or documentations.
-        <br/>
-        <br/>
+        to add interactivity to technical tutorials or documentations.
       </p>
+      <p>
+        Follow the guide to <a href="#"> embed in your website </a> both the asm editor and debugger.
+        <br/>
+        <br/>
+        </p>
   <picture>
     <source srcset={screen2_webp.src} type="image/webp" >
     <img class="screen" src={screen2.src} alt="TODO" width="300px" height="540px" loading="lazy" decoding="async" />
@@ -143,7 +146,7 @@ import screen2_webp from '../assets/app_mobile2.webp'
   <h3>Offline-first and open-source</h3>
 
   <p>
-  The app is open-source, and available on <a href="https://github.com/robalb/x86-64-playground">Github</a>.
+  The app is open-source, and <a href="https://github.com/robalb/x86-64-playground">available on Github</a>.
   It's powered by the <a href="https://github.com/jart/blink/">Blink Emulator</a>,
   which emulates an x86-64-Linux environment entirely client side in your browser.
   This means that all the code you write, or the excutables you debug are never sent to the server.
@@ -203,6 +206,10 @@ import screen2_webp from '../assets/app_mobile2.webp'
   p a{
     color: var(--color-gray-100);
     text-decoration-color: var(--theme-primary);
+    text-decoration-thickness: 3px;
+  }
+  p a:hover{
+    color: var(--color-gray-0);
   }
 
   @media screen and (min-width: 600px){
@@ -254,5 +261,12 @@ import screen2_webp from '../assets/app_mobile2.webp'
   }
 
 </style>
+<script>
+    window.goatcounter = {
+        path: function(p) { return location.host + p }
+    }
+</script>
+<script data-goatcounter="https://analytics.halb.it/count" async src="//analytics.halb.it/count.js"></script>
+
 </body>
 </html>

@@ -42,8 +42,16 @@ export default defineConfig({
       head: [
         {
           tag: 'script',
-          content: `window.addEventListener('load', () => document.querySelector('.site-title').href += 'getting-started/')`,
+          content: `window.goatcounter = { path: function(p) { return location.host + p } }; window.addEventListener('load', () => document.querySelector('.site-title').href += 'getting-started/')`,
         },
+        {
+          tag: 'script',
+          attrs:  {
+            async: 'true',
+            src: 'https//analytics.halb.it/count.js',
+            ['data-goatcounter']: "https://analytics.halb.it/count" 
+        }
+        }
       ],
 		}),
 	],
