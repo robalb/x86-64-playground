@@ -8,6 +8,8 @@ import screen1 from '../assets/app_desktop_3.png'
 import screen1_webp from '../assets/app_desktop_3.webp'
 import screen2 from '../assets/app_mobile2.png'
 import screen2_webp from '../assets/app_mobile2.webp'
+import flag1 from '../assets/flag_1_transparent.png'
+import flag2 from '../assets/flag_2_Crop.png'
 ---
 <!doctype html>
 <html lang="en">
@@ -109,18 +111,26 @@ import screen2_webp from '../assets/app_mobile2.webp'
   </picture>
 </section>
 
-<section>
+<section class="floatleft">
   <h3>Who is this for</h3>
-  <p>The app is for anyone that wants to run amd64 assembly snippets or
-      inspect the inner workings of simple Linux ELF files.</p>
-  <p>It has been designed with the academic world of binary exploitation in mind;
-        The debugger interface offers visualizations similar to the GDB+PwnGDB debugger plugin,
-        and all the controls are labelled with the respective GDB commands.
-        </p>
-        <p>In conjuction with Compiler Explorer, this app offers a good starting point to
-      experiment with the core concepts behind the art of binary exploitation. It includes
-        the guides and resources necessary to continue the experiments locally,
-        on a Linux environment with GDB.</p>
+  <div class="row">
+    <div class="left">
+    <Image src={flag2} alt="TODO" />
+    </div>
+    <div class="right">
+      <p>The app is for anyone that wants to run amd64 assembly snippets or
+          inspect the inner workings of simple Linux ELF files.</p>
+      <p>It has been designed with the academic world of binary exploitation in mind;
+            The debugger interface offers visualizations similar to the GDB+PwnGDB debugger plugin,
+            and all the controls are labelled with the respective GDB commands.
+            </p>
+            <p>Combined with <a href="https://godbolt.org">Compiler Explorer</a>, this app provides
+            a noise-free environment to learn the basics behind the inner workings of a Linux process.
+            When you are ready, it includes the guides and resources necessary to keep experimenting
+            on your own linux environment with the actual GDB debugger.
+            </p>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -144,7 +154,6 @@ import screen2_webp from '../assets/app_mobile2.webp'
 
 <section>
   <h3>Offline-first and open-source</h3>
-
   <p>
   The app is open-source, and <a href="https://github.com/robalb/x86-64-playground">available on Github</a>.
   It's powered by the <a href="https://github.com/jart/blink/">Blink Emulator</a>,
@@ -168,6 +177,24 @@ import screen2_webp from '../assets/app_mobile2.webp'
     max-width: 850px;
     margin-left: auto;
     margin-right: auto;
+  }
+  section.floatleft{
+    max-width: 1050px;
+    overflow: hidden;
+  }
+  section .left img{
+    max-width: 300px;
+    height: auto;
+  }
+  section .right{
+    margin-right: 3rem;
+  }
+  section .right p:nth-child(2){
+    margin-left: 3rem;
+  }
+  section .row{
+    display: flex;
+    align-items: center;
   }
   img.hero{
     max-width: 20rem;
