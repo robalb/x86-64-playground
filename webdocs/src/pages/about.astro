@@ -47,11 +47,8 @@ import screen2_webp from '../assets/app_mobile2.webp'
       <picture>
         <source media="(max-width: 350px)" sizes="1px" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w"/>
         <source media="(min-width: 500px)" width="258" height="67" srcset={logo_large.src}/>
-        <img src={logo_small.src} width="67", height="67"/>
+        <img src={logo_small.src} width="67", height="67" alt="x86-64 Playground"/>
       </picture>
-      <span class="visually-hidden" translate="no" >
-        x86-64 Playground
-      </span>
     </div>
 
     <nav>
@@ -72,7 +69,7 @@ import screen2_webp from '../assets/app_mobile2.webp'
 
 <section class="hero">
 
-  <Image class="hero" src={art1} alt="Logo art" aria-hidden="true" />
+  <Image class="hero" src={art1} alt="Logo art" aria-hidden="true" fetchpriority="high" />
   <h1>x86-64 Playground</h1>
   <h2>An online assembly editor and GDB-like debugger</h2>
 
@@ -90,23 +87,25 @@ import screen2_webp from '../assets/app_mobile2.webp'
       </p>
         <ul>
         <li>
-        The Playground web app offers an online code editor where you
-        can write, compile, and share assembly for a wide
-        range of popular assemblers, including GNU As, Fasm and Nasm.
+        The Playground web app provides an online code editor where you
+        can write, compile, and share assembly code for a wide
+        range of popular assemblers such as GNU As, Fasm and Nasm.
         </li>
         <li>
-        From the same interface you can run and debug your programs,
-        inspecting the results in a GDB-like interface.
+        Unlike traditional onlide editors, this playground
+          allows you to follow the execution of your program step by step,
+        inspecting memory and registers of the running process from a GDB-like interface.
         </li>
         <li>
-        Drag and drop into the app any x86-64-Linux static executable file to run and 
-        debug it in the same sandboxed environment.
+          You can bring your own programs!
+        Drag and drop into the app any x86-64-Linux static executable to run and 
+        debug it in the same sandboxed environment, without having to install anything.
         </li>
           </ul>
 
   <picture>
     <source srcset={screen1_webp.src} type="image/webp" >
-    <img class="screen" src={screen1.src} alt="TODO" width="900px" loading="lazy" decoding="async" />
+    <img class="screen" src={screen1.src} alt="TODO" width={screen1.width} height={screen1.height} loading="lazy" decoding="async" />
   </picture>
 </section>
 
@@ -114,12 +113,12 @@ import screen2_webp from '../assets/app_mobile2.webp'
   <h3>Who is this for</h3>
   <p>The app is for anyone that wants to run amd64 assembly snippets or
       inspect the inner workings of simple Linux ELF files.</p>
-  <p>It has been designed for the academic world of binary exploitation in mind;
+  <p>It has been designed with the academic world of binary exploitation in mind;
         The debugger interface offers visualizations similar to the GDB+PwnGDB debugger plugin,
-        and all the buttons are labelled with the respective GDB commands.
+        and all the controls are labelled with the respective GDB commands.
         </p>
         <p>In conjuction with Compiler Explorer, this app offers a good starting point to
-      experiment with the core binary exploitation concepts. It includes
+      experiment with the core concepts behind the art of binary exploitation. It includes
         the guides and resources necessary to continue the experiments locally,
         on a Linux environment with GDB.</p>
 </section>
@@ -127,19 +126,33 @@ import screen2_webp from '../assets/app_mobile2.webp'
 <section>
   <h3>An experience designed for the web </h3>
 
-      <p>Have you ever seen a responsive debugger?</br>
-      The app has been designed with the mobile experience as
+      <p>Have you ever seen a responsive debugger?<br/>
+        The app has been designed with the mobile experience as
         a first class citizen, and can be embedded in any web page
         to add an interactive element to online tutorials or documentations.
-<br/>
-<br/>
+        <br/>
+        <br/>
       </p>
   <picture>
     <source srcset={screen2_webp.src} type="image/webp" >
-    <img class="screen" src={screen2.src} alt="TODO" width="300px" loading="lazy" decoding="async" />
+    <img class="screen" src={screen2.src} alt="TODO" width="300px" height="540px" loading="lazy" decoding="async" />
   </picture>
 </section>
 
+<section>
+  <h3>Offline-first and open-source</h3>
+
+  <p>
+  The app is open-source, and available on <a href="https://github.com/robalb/x86-64-playground">Github</a>.
+  It's powered by the <a href="https://github.com/jart/blink/">Blink Emulator</a>,
+  which emulates an x86-64-Linux environment entirely client side in your browser.
+  This means that all the code you write, or the excutables you debug are never sent to the server.
+  </p>
+  <p>
+  everything runs in your browser, and once the Web App loads it will work 
+  without an internet connection.
+  </p>
+</section>
 
 <style>
   section{
@@ -182,10 +195,14 @@ import screen2_webp from '../assets/app_mobile2.webp'
   }
   p,ul,li{
     width: 100%;
-    line-height: 1.8rem;
-    font-size: 1.0rem;
+    line-height: 1.9rem;
+    font-size: 1.1rem;
     font-family: 'Inter';
     margin: .4rem;
+  }
+  p a{
+    color: var(--color-gray-100);
+    text-decoration-color: var(--theme-primary);
   }
 
   @media screen and (min-width: 600px){
