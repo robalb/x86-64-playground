@@ -8,8 +8,9 @@ import screen1 from '../assets/app_desktop_3.png'
 import screen1_webp from '../assets/app_desktop_3.webp'
 import screen2 from '../assets/app_mobile2.png'
 import screen2_webp from '../assets/app_mobile2.webp'
+import screen_art from '../assets/app_mobile_art.png'
 import flag1 from '../assets/flag_1_transparent.png'
-import flag2 from '../assets/flag_2_Crop.png'
+import flag2 from '../assets/flag_2_Crop2.png'
 ---
 <!doctype html>
 <html lang="en">
@@ -112,12 +113,12 @@ import flag2 from '../assets/flag_2_Crop.png'
 </section>
 
 <section class="floatleft">
-  <h3>Who is this for</h3>
   <div class="row">
     <div class="left">
     <Image src={flag2} alt="TODO" />
     </div>
     <div class="right">
+      <h3>Who is this for?</h3>
       <p>The app is for anyone that wants to run amd64 assembly snippets or
           inspect the inner workings of simple Linux ELF files.</p>
       <p>It has been designed with the academic world of binary exploitation in mind;
@@ -133,23 +134,22 @@ import flag2 from '../assets/flag_2_Crop.png'
   </div>
 </section>
 
-<section>
-  <h3>An experience designed for the web </h3>
-
+<section class="tilt">
+  <div class="row">
+    <div class="left">
+      <h3>Designed for the web </h3>
       <p>Have you ever seen a responsive debugger?
-        The app has been designed with the mobile experience as
-        a first class citizen, and can be embedded in any web page
+        The app places the mobile experience at the center of its design,
+        and can be embedded in any web page
         to add interactivity to technical tutorials or documentations.
       </p>
       <p>
         Follow the guide to <a href="#"> embed in your website </a> both the asm editor and debugger.
-        <br/>
-        <br/>
-        </p>
-  <picture>
-    <source srcset={screen2_webp.src} type="image/webp" >
-    <img class="screen" src={screen2.src} alt="TODO" width="300px" height="540px" loading="lazy" decoding="async" />
-  </picture>
+      </p>
+    </div>
+    <div class="right">
+      <Image src={screen_art} alt="TODO" />
+    </div>
 </section>
 
 <section>
@@ -178,24 +178,50 @@ import flag2 from '../assets/flag_2_Crop.png'
     margin-left: auto;
     margin-right: auto;
   }
+
+  /* ------------------ */
+  /* Flag section       */
+  /* ------------------ */
   section.floatleft{
     max-width: 1050px;
     overflow: hidden;
   }
-  section .left img{
-    max-width: 300px;
-    height: auto;
-  }
-  section .right{
-    margin-right: 3rem;
-  }
-  section .right p:nth-child(2){
-    margin-left: 3rem;
-  }
-  section .row{
+  section.floatleft .row{
     display: flex;
     align-items: center;
   }
+  section.floatleft .left img{
+    max-width: 260px;
+    height: auto;
+  }
+  section.floatleft .right{
+    margin-right: 3rem;
+  }
+  section.floatleft .right p:nth-child(2),
+  section.floatleft .right p:nth-child(3){
+    margin-left: 3rem;
+  }
+
+  /* ------------------ */
+  /* Tilt section       */
+  /* ------------------ */
+  section.tilt{
+  }
+  section.tilt .row{
+    display: flex;
+  }
+  section.tilt .right img{
+    max-width: 320px;
+    height: auto;
+  }
+  section.tilt .left{
+  }
+  section.tilt .left h3{
+    text-align: left;
+  }
+
+  
+
   img.hero{
     max-width: 20rem;
     height: auto;
@@ -218,7 +244,8 @@ import flag2 from '../assets/flag_2_Crop.png'
     font-weight:400;
   }
   h3{
-    text-align: center;
+    /* text-align: center; */
+    width: 100%;
     font-size: 2.5rem;
     line-height: 3rem;
     font-family: 'Neuton';
