@@ -4,9 +4,8 @@ import '../styles/custom.css'
 import logo_large from '../assets/landing-logo-large.svg'
 import logo_small from '../assets/landing-logo-small.svg'
 import art1 from '../assets/art_1_v2_dark.png'
-import screen1 from '../assets/app_desktop_3.png'
+import screen1 from '../assets/app_desktop_3.jpg'
 import screen1_webp from '../assets/app_desktop_3.webp'
-import fog from '../assets/app_desktop_3_fog_l.png'
 import screen2 from '../assets/app_mobile2.png'
 import screen2_webp from '../assets/app_mobile2.webp'
 import screen_art from '../assets/app_mobile_art.png'
@@ -92,6 +91,7 @@ import flag2 from '../assets/flag_2_Crop2.png'
       <img class="screen" src={screen1.src} alt="TODO" width={screen1.width} height={screen1.height} loading="lazy" decoding="async" />
     </picture>
   </div>
+    <span></span>   
 </section>
 
 <section class="features">
@@ -142,7 +142,7 @@ import flag2 from '../assets/flag_2_Crop2.png'
         to add interactivity to technical tutorials or documentations.
       </p>
       <p>
-        Follow the guide to <a href="#"> embed in your website </a> both the asm editor and debugger.
+        Follow the guide to <a href="/"> embed in your website </a> both the asm editor and debugger.
       </p>
     </div>
     <div class="right">
@@ -184,17 +184,33 @@ import flag2 from '../assets/flag_2_Crop2.png'
     margin-top: 3rem;
     max-width: 950px;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
   }
   section.intro .fog{
   }
-
-  section.intro .gradient{
+  section.intro span{
+    display: none;
   }
-  @media screen and (max-width: 700px){
+  @media screen and (max-width: 600px){
     section.intro img{
-      width: 800px;
-      height: auto;
+      border: 2px solid var(--color-gray-100);
+      width: auto;
+      height: 400px;
       max-width: 800px;
+    }
+    section.intro span{
+      display: block;
+      position: absolute;
+      top: 0px;
+      z-index: 3;
+      height: 100%;
+      --border-width: 20px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(40,44,56,1) 0%, rgba(0,0,0,0) 36%, rgba(0,0,0,0) 64%, rgba(40,44,56,1) 100%);
+      border: 20px solid #282c38;
+      border-top: 0;
+      border-bottom: 0;
     }
   }
 
