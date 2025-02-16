@@ -288,9 +288,13 @@ in blinkenlights:
 TerminateSignal()
   calls exit
 
+
 Exec does something weird
 with sigsetjmp:
 blinkenlights.c:3211,3277
+
+<img src="./blink_signals_exit.png" />
+
 
 
 ## Tui and Exec compared
