@@ -12,8 +12,13 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  update-pages:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,31 +30,43 @@ jobs:
       with:
         node-version: '20.11.1'  # TODO: nix! reproducible builds! & a sprinkle of professionalism
 
-    - name: Merge master into github_pages
-      run: |
-        git fetch origin
-        git checkout github_pages
-        git reset --hard origin/master
-
     - name: Install dependencies and build the web project
-      working-directory: ./svelte_blinkenweb
+      working-directory: ./webapp
       run: |
         npm ci
         npm run build
 
-    - name: Remove old /docs content
-      run: |
-        rm -rf ./docs/*
+    - name: Upload static files as artifact
+      id: deployment
+      uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+      with:
+        path: ./webapp/dist/
 
-    - name: Copy build to /docs
-      run: |
-        cp -r ./svelte_blinkenweb/dist/* ./docs/
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-    - name: Commit and push changes
-      run: |
-        # Note: the following account information will not work on GHES
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add --all
-        git commit -m "Update GitHub Pages with latest build from master"
-        git push origin github_pages --force
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+    # - name: Remove old /docs content
+    #   run: |
+    #     rm -rf ./docs/*
+
+    # - name: Copy build to /docs
+    #   run: |
+    #     cp -r ./webapp/dist/* ./docs/
+
+    # - name: Commit and push changes
+    #   run: |
+    #     # Note: the following account information will not work on GHES
+    #     git config user.name "github-actions[bot]"
+    #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    #     git add --all
+    #     git commit -m "Update GitHub Pages with latest build from master"
+    #     git push origin github_pages --force
