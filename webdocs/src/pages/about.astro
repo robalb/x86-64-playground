@@ -84,40 +84,34 @@ import flag2 from '../assets/flag_2_Crop2.png'
 
 </section>
 
-<section id="introduction">
-      <p>x86-64 Playground is a web app for experimenting and learning 
-        x86-64 assembly.
-      </p>
-        <ul>
-        <li>
-        The Playground web app provides an online code editor where you
-        can write, compile, and share assembly code for a wide
-        range of popular assemblers such as GNU As, Fasm and Nasm.
-        </li>
-        <li>
-        Unlike traditional onlide editors, this playground
-          allows you to follow the execution of your program step by step,
-        inspecting memory and registers of the running process from a GDB-like interface.
-        </li>
-        <li>
-          You can bring your own programs!
-        Drag and drop into the app any x86-64-Linux static executable to run and 
-        debug it in the same sandboxed environment, without having to install anything.
-        </li>
-          </ul>
-
+<section class="intro">
   <picture>
     <source srcset={screen1_webp.src} type="image/webp" >
     <img class="screen" src={screen1.src} alt="TODO" width={screen1.width} height={screen1.height} loading="lazy" decoding="async" />
   </picture>
+      <h3 id="introduction" >Features</h3>
+        <p>x86-64 Playground is a web app for experimenting and learning 
+          x86-64 assembly.
+        </p>
+        <p>
+        The Playground web app provides an online code editor where you
+        can write, compile, and share assembly code for a wide
+        range of popular assemblers such as GNU As, Fasm and Nasm.
+        </p>
+        <p>
+        Unlike traditional onlide editors, this playground
+          allows you to follow the execution of your program step by step,
+        inspecting memory and registers of the running process from a GDB-like interface.
+        </p>
+        <p>
+          You can bring your own programs!
+        Drag and drop into the app any x86-64-Linux static executable to run and 
+        debug it in the same sandboxed environment, without having to install anything.
+        </p>
+
 </section>
 
 <section class="floatleft">
-  <div class="row">
-    <div class="left">
-    <Image src={flag2} alt="TODO" />
-    </div>
-    <div class="right">
       <h3>Who is this for?</h3>
       <p>The app is for anyone that wants to run amd64 assembly snippets or
           inspect the inner workings of simple Linux ELF files.</p>
@@ -128,10 +122,8 @@ import flag2 from '../assets/flag_2_Crop2.png'
             <p>Combined with <a href="https://godbolt.org">Compiler Explorer</a>, this app provides
             a noise-free environment to learn the basics behind the inner workings of a Linux process.
             When you are ready, it includes the guides and resources necessary to keep experimenting
-            on your own linux environment with the actual GDB debugger.
+            on your own linux environment, with the actual GDB debugger.
             </p>
-    </div>
-  </div>
 </section>
 
 <section class="tilt">
@@ -180,45 +172,51 @@ import flag2 from '../assets/flag_2_Crop2.png'
   }
 
   /* ------------------ */
+  /* Intro section      */
+  /* ------------------ */
+  section.intro{
+    margin-top: 3rem;
+    max-width: 950px;
+    overflow: hidden;
+  }
+
+  /* ------------------ */
   /* Flag section       */
   /* ------------------ */
   section.floatleft{
     max-width: 1050px;
-    overflow: hidden;
-  }
-  section.floatleft .row{
-    display: flex;
-    align-items: center;
-  }
-  section.floatleft .left img{
-    max-width: 260px;
-    height: auto;
-  }
-  section.floatleft .right{
-    margin-right: 3rem;
-  }
-  section.floatleft .right p:nth-child(2),
-  section.floatleft .right p:nth-child(3){
-    margin-left: 3rem;
   }
 
   /* ------------------ */
   /* Tilt section       */
   /* ------------------ */
   section.tilt{
+    margin-bottom: -3rem;
   }
   section.tilt .row{
     display: flex;
+  }
+  section.tilt h3{
+    text-align: center;
   }
   section.tilt .right img{
     max-width: 320px;
     height: auto;
   }
-  section.tilt .left{
+  @media screen and (max-width: 800px){
+    section.tilt .row{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    section.tilt .right img{
+      max-width: 320px;
+      height: auto;
+      margin-top: 3rem;
+    }
+    
   }
-  section.tilt .left h3{
-    text-align: left;
-  }
+
 
   
 
