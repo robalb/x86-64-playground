@@ -6,6 +6,7 @@ import logo_small from '../assets/landing-logo-small.svg'
 import art1 from '../assets/art_1_v2_dark.png'
 import screen1 from '../assets/app_desktop_3.png'
 import screen1_webp from '../assets/app_desktop_3.webp'
+import fog from '../assets/app_desktop_3_fog_l.png'
 import screen2 from '../assets/app_mobile2.png'
 import screen2_webp from '../assets/app_mobile2.webp'
 import screen_art from '../assets/app_mobile_art.png'
@@ -85,10 +86,15 @@ import flag2 from '../assets/flag_2_Crop2.png'
 </section>
 
 <section class="intro">
-  <picture>
-    <source srcset={screen1_webp.src} type="image/webp" >
-    <img class="screen" src={screen1.src} alt="TODO" width={screen1.width} height={screen1.height} loading="lazy" decoding="async" />
-  </picture>
+  <div class="fog">
+    <picture>
+      <source srcset={screen1_webp.src} type="image/webp" >
+      <img class="screen" src={screen1.src} alt="TODO" width={screen1.width} height={screen1.height} loading="lazy" decoding="async" />
+    </picture>
+  </div>
+</section>
+
+<section class="features">
       <h3 id="introduction" >Features</h3>
         <p>x86-64 Playground is a web app for experimenting and learning 
           x86-64 assembly.
@@ -179,6 +185,19 @@ import flag2 from '../assets/flag_2_Crop2.png'
     max-width: 950px;
     overflow: hidden;
   }
+  section.intro .fog{
+  }
+
+  section.intro .gradient{
+  }
+  @media screen and (max-width: 700px){
+    section.intro img{
+      width: 800px;
+      height: auto;
+      max-width: 800px;
+    }
+  }
+
 
   /* ------------------ */
   /* Flag section       */
