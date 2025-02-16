@@ -45,11 +45,11 @@
 
 
 <header>
-  <a class="logo" href="/" aria-label="homepage">
+  <a class="logo" href="https://x64.halb.it" aria-label="homepage">
     <Logo/>
   </a>
   <nav>
-    <a href="https://github.com/robalb/x86-64-playground/blob/master/docs/about.md" target="_blank">About</a>
+    <a href="https://x64.halb.it" target="_blank">About</a>
     <a href="https://github.com/robalb/x86-64-playground" target="_blank">Github</a>
   </nav>
 </header>
