@@ -1,9 +1,0 @@
-:root {
-  --sl-content-width: 50rem;
-}
-/* Light mode colors. */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #f4ccc6;
-	--sl-color-accent: #d84810;
-	--sl-color-accent-high: #581a14;
-}
