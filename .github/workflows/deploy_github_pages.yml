@@ -11,6 +11,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'webapp/**'
 
 permissions:
   contents: read
