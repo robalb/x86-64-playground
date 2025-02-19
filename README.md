@@ -8,9 +8,11 @@
 
 
 <div align="center">
+  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/robalb/x86-64-playground/deploy_github_pages.yml">
   <img alt="GitHub License" src="https://img.shields.io/github/license/robalb/x86-64-playground">
   <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fx64.halb.it">
   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/robalb/x86-64-playground?style=flat">
+  
 </div>
 
 ---
