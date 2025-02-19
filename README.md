@@ -1,33 +1,27 @@
-# x86-64 playground
+<div align="center" ><img width="500px" height="auto" src="./docs/hero.png" alt="x86-64 Playground" /></div>
+<br/>
+<p align="center">
+An online assembly editor and GDB-like debugger for the x86-64 architecture,<br/> powered by a Wasm port of the Blink x86-64-linux emulator.</p>
 
-An online assembly editor and debugger for the x86-64 architecture, powered by a Wasm port of the Blink x86-64-linux emulator.<br/> Online at https://x64.halb.it
-
-The quickest way to run, debug, and share assembly snippets for a wide range of popular assemblers, like GNU binutils, Fasm, and Nasm.
+<p align="center">Online at https://x64.halb.it</p>
 
 <img src="./docs/preview2.jpg" />
 
 
 ## features
 
-- Support for most assemblers: GNU Binutils, Fasm, and Nasm. These programs are real x86-64 ELFs, emulated client-side. You are free
-  to configure their command-line arguments and file input.
-- Editor with syntax-highlighting and error diagnostics
-- Simple, distraction-free interface implementing a reduced set of the gdb commands and behaviour.
-  every button in the debugger is labelled with the name of the corresponding gdb command.
-- Debugger focused on data visualizations typical of the binary exploitation ctf world:
-  Registers and stack hexdump are displayed in the same way as gdb with the gef or pwngdb plugin enabled.
-- Mobile friendly, accessible interface running entirely client-side. Easily loads with slow internet connections thanks to its lightweight bundle size.
+- Test and debug your assembly snippets from the browser, on an emulated x86-64-Linux environment. The web app offers a wide range of popular amd64 assemblers: GNU Binutils, Fasm, Nasm. You can fully customize the command line arguments or even provide your own assemblers.
+- Run and debug your assembly snippets, or any x86-64-Linux ELF you upload. The app features an accessible interface inspired by the GDB debugger where you can step into your program, and visualize disassembly, memory and registers of the emulated process.
+- Share your assembly snippets with others, or embed the app in any web page to add interactive elements to your technical articles.
 
 ## Project overview
 
-This project is divided in two areas of development:
-- the typescript svelte webapp
-- the c x86-64-Linux [blink](https://github.com/jart/blink/) emulator, modified to be used as a webassembly library.
+The web app works as a single static page, without any server side component. It's compiled and hosted on GitHub pages.
+Both the emulator and debugger run client side, in a webAssembly port of the [blink](https://github.com/jart/blink/) emulator
+which has been patched and modified to run as a C library.
+The low-level emulator APIs are expsed to the web app presentation layer via a Typescript wrapper.
 
-Using Emscripten, the modified blink emulator is compiled into a wasm file and and a companion javascript module.
-The typescrpt webapp then implements an API interface around these two artifacts. A bird-eye overview of the whole architecture is described in the diagram below:
-
-<img src="./docs/architecture.png" />
+<img src="./docs/webapp_architecture.drawio-1-1.png" />
 
 
 
