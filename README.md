@@ -17,15 +17,16 @@
 
 <p >
 x86-64 playground is an online assembly editor and GDB-like debugger, powered by a Wasm port of the <a href="https://github.com/jart/blink/">Blink</a> x86-64-linux emulator.</p>
-<p>It's part of a project to make asm tooling more accessible on the web.
-It's available as a web app on https://x64.halb.it or it can be embedded in a web page, to add interactive elements to your technical documentation. </p>
+<p>
+  It is designed to make assembly tooling more accessible on the web. You can use it as a standalone web app at https://x64.halb.it or embed it in web pages to enhance technical documentation with interactive elements.
+</p>
 
 ---
 
 
 <br/>
 
-<img src="./docs/preview2.jpg" />
+<img src="./docs/preview3.jpg" />
 
 
 ## features
