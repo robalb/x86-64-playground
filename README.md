@@ -20,7 +20,7 @@
 <p >
 x86-64 playground is an online assembly editor and GDB-like debugger, powered by a Wasm port of the <a href="https://github.com/jart/blink/">Blink</a> x86-64-linux emulator.</p>
 <p>
-  It is designed to make assembly tooling more accessible on the web. You can use it as a standalone web app at https://x64.halb.it or embed it in web pages to enhance technical documentation with interactive elements.
+  It is designed to make assembly tooling more accessible on the web. You can use it as a standalone web app at https://x64.halb.it or embed it in web pages to enhance your technical documentation with interactive elements.
 </p>
 
 ---
@@ -31,11 +31,12 @@ x86-64 playground is an online assembly editor and GDB-like debugger, powered by
 <img src="./docs/preview3.jpg" />
 
 
-## features
+## ✨ Features
 
 - Test and debug your assembly snippets from the browser, on an emulated x86-64-Linux environment. The web app offers a wide range of popular amd64 assemblers: GNU Binutils, Fasm, Nasm. You can fully customize the command line arguments or even provide your own assemblers.
 - Run and debug your assembly snippets, or any x86-64-Linux ELF you upload. The app features an accessible interface inspired by the GDB debugger where you can step into your program, and visualize disassembly, memory and registers of the emulated process.
 - Share your assembly snippets with others, or embed the app in any web page to add interactive elements to your technical articles.
+- **Offline first**: All the code you write, or the excutables you debug are never sent to the server. Everything is emulated client side in your browser, and works without an internet connection.
 
 ## Project overview
 
@@ -44,8 +45,11 @@ Both the emulator and debugger run client side, in a webAssembly port of the [bl
 which has been patched and modified to run as a C library.
 The low-level emulator APIs are expsed to the web app presentation layer via a Typescript wrapper.
 
-<img src="./docs/webapp_architecture.drawio-1-1.png" width="800px" height="auto" />
+<div align="center">
+<img src="./docs/webapp_architecture.drawio-1-1.png" width="500px" height="auto" />
+  <img src="./docs/compilation_steps.drawio-1.png" width="400px" height="auto" />
 
+</div>
 
 
 ## Licenses
