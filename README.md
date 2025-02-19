@@ -16,9 +16,10 @@ An online assembly editor and GDB-like debugger for the x86-64 architecture,<br/
 
 ## Project overview
 
-The web app is organized as a static web app, without any server side component. It's compiled and hosted on GitHub pages.
-Both the emulator and debugger run client side, in a webAssembly port of the [blink](https://github.com/jart/blink/) emulator.
-The emulator has been patched and modified to run as a C library, that exposes it's APIs to the web app via a Typescript wrapper.
+The web app works as a single static page, without any server side component. It's compiled and hosted on GitHub pages.
+Both the emulator and debugger run client side, in a webAssembly port of the [blink](https://github.com/jart/blink/) emulator
+which has been patched and modified to run as a C library.
+The low-level emulator APIs are expsed to the web app presentation layer via a Typescript wrapper.
 
 <img src="./docs/webapp_architecture.drawio-1-1.png" />
 
