@@ -81,7 +81,7 @@ export const assemblers: Record<string, AssemblerMode> = {
 		display_name: "nasm",
 		description:
 			"NASM 3.00 + GNU ld v2.43.50. Both compiled as a static MUSL binary",
-		diagnosticsParser: null,
+		diagnosticsParser: nasm_diagnostics,
 		binaries: {
 			assembler: {
 				fileurl: nasm_3_00,
@@ -96,6 +96,27 @@ export const assemblers: Record<string, AssemblerMode> = {
 } as const;
 
 /**
+ * Assembler diagnostic parser for the NASM assembler
+ * Chatgpt-generated from unit tests
+ */
+export function nasm_diagnostics(str: string): Array<DiagnosticLine> {
+	const diagnostics: DiagnosticLine[] = [];
+	// Split logs into lines
+	const lines = str.split(/\r?\n/);
+	// Regex to match NASM errors/warnings
+	const regex = /^.*:(\d+): (error|warning): (.*)$/;
+	for (const line of lines) {
+		const match = line.match(regex);
+		if (match) {
+			const lineNumber = Number.parseInt(match[1], 10);
+			const message = match[3].trim();
+			diagnostics.push({ line: lineNumber, error: message });
+		}
+	}
+	return diagnostics;
+}
+
+/**
  * Assembler Diagnostic parser for the GNU Assembler
  * Chatgpt-generated from unit tests
  */
@@ -108,7 +129,7 @@ export function gnu_diagnostics(str: string): Array<DiagnosticLine> {
 		const match = line.match(regex);
 		if (match) {
 			diagnostics.push({
-				line: parseInt(match[1], 10),
+				line: Number.parseInt(match[1], 10),
 				error: match[2],
 			});
 		}
@@ -135,7 +156,7 @@ export function fasm_diagnostics(str: string): Array<DiagnosticLine> {
 		const errorMatch = line.match(errorRegex);
 		// Capture line number if found
 		if (lineMatch) {
-			lineNum = parseInt(lineMatch[1]);
+			lineNum = Number.parseInt(lineMatch[1]);
 		}
 		// Capture error message if found
 		if (errorMatch) {
