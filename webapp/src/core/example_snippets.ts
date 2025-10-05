@@ -259,6 +259,14 @@ export const snippets: Record<string, Snippet> = {
 		mode: "FASM_trunk",
 		editorContent: syscall_fasm,
 	},
+	syscall_NASM: {
+		id: "syscall_NASM",
+		display_name: "Syscall (NASM)",
+		description:
+			"A simple program that prints Hello World using raw syscalls, then quits. written for the Netwide Assembler (NASM)",
+		mode: "NASM_trunk",
+		editorContent: syscall_nasm,
+	},
 	functions_GNU: {
 		id: "functions_GNU",
 		display_name: "Functions (GNU as)",
@@ -274,14 +282,6 @@ export const snippets: Record<string, Snippet> = {
 			"Hello world using function calls. written for the Flat Assembler",
 		mode: "FASM_trunk",
 		editorContent: functions_fasm,
-	},
-	syscall_NASM: {
-		id: "syscall_NASM",
-		display_name: "Syscall (NASM)",
-		description:
-			"A simple program that prints Hello World using raw syscalls, then quits. written for the Netwide Assembler (NASM)",
-		mode: "NASM_trunk",
-		editorContent: syscall_nasm,
 	},
 	functions_NASM: {
 		id: "functions_NASM",
