@@ -78,7 +78,7 @@ export const assemblers: Record<string, AssemblerMode> = {
 	},
 	NASM_trunk: {
 		id: "NASM_trunk",
-		display_name: "nasm",
+		display_name: "Nasm",
 		description:
 			"NASM 3.00 + GNU ld v2.43.50. Both compiled as a static MUSL binary",
 		diagnosticsParser: nasm_diagnostics,
