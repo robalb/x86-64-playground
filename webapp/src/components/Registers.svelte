@@ -33,6 +33,7 @@ let eflags = [
 		name: "CF",
 		name_short: "C",
 		name_long: "Carry Flag",
+		name_gef: "carry",
 		name_1: "CY",
 		name_0: "NC",
 		mask: 0x00000001,
@@ -45,6 +46,7 @@ let eflags = [
 		name: "PF",
 		name_short: "P",
 		name_long: "Parity Flag",
+		name_gef: "parity",
 		name_1: "PE",
 		name_0: "PO",
 		mask: 0x00000004,
@@ -57,6 +59,7 @@ let eflags = [
 		name: "AF",
 		name_short: "A",
 		name_long: "Auxiliary Carry Flag",
+		name_gef: "auxiliary",
 		name_1: "AC",
 		name_0: "NA",
 		mask: 0x00000010,
@@ -69,6 +72,7 @@ let eflags = [
 		name: "ZF",
 		name_short: "Z",
 		name_long: "Zero Flag",
+		name_gef: "zero",
 		name_1: "ZR",
 		name_0: "NZ",
 		mask: 0x00000040,
@@ -81,6 +85,7 @@ let eflags = [
 		name: "SF",
 		name_short: "S",
 		name_long: "Sign Flag",
+		name_gef: "sign",
 		name_1: "NG",
 		name_0: "PL",
 		mask: 0x00000080,
@@ -93,6 +98,7 @@ let eflags = [
 		name: "TF",
 		name_short: "T",
 		name_long: "Trap Flag",
+		name_gef: "trap",
 		display: false,
 		name_1: "ST",
 		name_0: "NT",
@@ -103,22 +109,10 @@ let eflags = [
 			"1=Enable single-step mode for debugging; generates a debug exception after each instruction.",
 	},
 	{
-		name: "IF",
-		name_short: "I",
-		name_long: "Interrupt Enable Flag",
-		display: false,
-		name_1: "EI",
-		name_0: "DI",
-		mask: 0x00000200,
-		value: 0,
-		updated: false,
-		description:
-			"1=Maskable interrupts enabled, 0=Disabled. Controls whether external interrupt requests are processed.",
-	},
-	{
 		name: "DF",
 		name_short: "D",
 		name_long: "Direction Flag",
+		name_gef: "direction",
 		name_1: "DN",
 		name_0: "UP",
 		mask: 0x00000400,
@@ -131,6 +125,7 @@ let eflags = [
 		name: "OF",
 		name_short: "O",
 		name_long: "Overflow Flag",
+		name_gef: "overflow",
 		name_1: "OV",
 		name_0: "NV",
 		mask: 0x00000800,
@@ -138,103 +133,6 @@ let eflags = [
 		updated: false,
 		description:
 			"1=Overflow, 0=No overflow. Indicates that the signed result of an operation is too large to fit in the destination operand.",
-	},
-	{
-		name: "IOPL",
-		name_short: "IO",
-		name_long: "I/O Privilege Level",
-		display: false,
-		name_1: "IOPL3",
-		name_0: "IOPL0",
-		mask: 0x00003000,
-		value: 0,
-		updated: false,
-		description:
-			"Two-bit field indicating the I/O privilege level required for I/O instructions. Only used in protected mode (bits 12–13).",
-	},
-	{
-		name: "NT",
-		name_short: "N",
-		name_long: "Nested Task Flag",
-		name_1: "NT",
-		name_0: "NNT",
-		mask: 0x00004000,
-		value: 0,
-		updated: false,
-		description:
-			"Controls the chaining of interrupts and exceptions in hardware task switching. Set when executing a nested task.",
-	},
-	{
-		name: "RF",
-		name_short: "R",
-		name_long: "Resume Flag",
-		name_1: "RF1",
-		name_0: "RF0",
-		mask: 0x00010000,
-		value: 0,
-		updated: false,
-		description:
-			"Used by the debugger to control the handling of debug exceptions. When set, disables breakpoints for the next instruction.",
-	},
-	{
-		name: "VM",
-		name_short: "V",
-		name_long: "Virtual-8086 Mode Flag",
-		name_1: "VM",
-		name_0: "PM",
-		mask: 0x00020000,
-		value: 0,
-		updated: false,
-		description:
-			"1=Virtual-8086 mode active. Indicates that the processor is executing in a virtual 8086 environment under protected mode.",
-	},
-	{
-		name: "AC",
-		name_short: "A",
-		name_long: "Alignment Check Flag",
-		name_1: "AC1",
-		name_0: "AC0",
-		mask: 0x00040000,
-		value: 0,
-		updated: false,
-		description:
-			"Controls alignment check exceptions in user mode. Set to enable alignment checking of memory references.",
-	},
-	{
-		name: "VIF",
-		name_short: "VI",
-		name_long: "Virtual Interrupt Flag",
-		name_1: "VIF1",
-		name_0: "VIF0",
-		mask: 0x00080000,
-		value: 0,
-		updated: false,
-		description:
-			"Virtual image of IF flag, used in virtual-8086 mode for interrupt virtualization.",
-	},
-	{
-		name: "VIP",
-		name_short: "VP",
-		name_long: "Virtual Interrupt Pending",
-		name_1: "VIP1",
-		name_0: "VIP0",
-		mask: 0x00100000,
-		value: 0,
-		updated: false,
-		description:
-			"Indicates that an interrupt is pending in virtual-8086 mode. Used with VIF for virtualization.",
-	},
-	{
-		name: "ID",
-		name_short: "ID",
-		name_long: "ID Flag",
-		name_1: "ID1",
-		name_0: "ID0",
-		mask: 0x00200000,
-		value: 0,
-		updated: false,
-		description:
-			"Allows the CPUID instruction to be executed when set. Software can toggle this bit to check for CPUID support.",
 	},
 ];
 
@@ -287,7 +185,7 @@ $: $manual_render && updateRegisters();
 <section class="registers">
 {#each registers as r}
     <p>
-      <span class="name" class:updated={r.updated}>{r.name}</span> : 
+      <span class="name infotooltip" tabindex="0" aria-describedby="info-tooltip" class:updated={r.updated}>{r.name}</span> : 
       <span class="int">{r.str}</span>
     </p>
 {/each}
@@ -297,22 +195,19 @@ $: $manual_render && updateRegisters();
       <span class="int">
             {eflagsStr}
         </span>
+        <br/>
         [
 {#each eflags as f}
     {#if f.value}
-        <span class="flag" class:updated={f.updated}>{f.name_short}</span>
+        <span class="flag infotooltip" tabindex="0" aria-describedby="info-tooltip" class:updated={f.updated} 
+                    title={f.name_long + ": " + f.description}
+                >{f.name_gef}</span>
     {/if}
+            <span></span>
 {/each}
         ]
     </p>
     <br/>
-
-    <p>
-      <span class="int">
-            xmm0
-      </span>
-
-    </p>
 
 </section>
 
@@ -339,6 +234,10 @@ $: $manual_render && updateRegisters();
   }
   & .int {
     color: var(--theme-reg-value-int);
+  }
+  & .infotooltip:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
 
