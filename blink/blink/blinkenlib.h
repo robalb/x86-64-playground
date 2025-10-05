@@ -19,16 +19,16 @@
  * list with the meaning of each pointer.
  */
 #define CLSTRUCT_VERSION 1
-struct clstruct{
-  u32 version; //number
+struct clstruct {
+  u32 version;  // number
 
   u32 codemem;
   u32 stackmem;
 
   u32 readaddr;
-  u32 readsize; //number
+  u32 readsize;  // number
   u32 writeaddr;
-  u32 writesize; //number
+  u32 writesize;  // number
 
   u32 flags;
 
@@ -53,10 +53,10 @@ struct clstruct{
   u32 rcx;
   u32 rdx;
 
-  //disassembly buffer
-  u32 dis__max_lines;    //number
-  u32 dis__max_line_len; //number
-  u32 dis__current_line; //number
+  // disassembly buffer
+  u32 dis__max_lines;     // number
+  u32 dis__max_line_len;  // number
+  u32 dis__current_line;  // number
   u32 dis__buffer;
 };
 
@@ -73,4 +73,3 @@ void *blinkenlib_get_progname_string();
 u8 *blinkenlib_spy_address(u64 virtual_address);
 
 #endif /* BLINK_BLINKENLIB_H_ */
-
