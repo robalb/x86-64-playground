@@ -1,7 +1,7 @@
 
 # Reporting Security Issues
 
-The x86-64-playground team and community take security bugs in Electron seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+The x86-64-playground team and community take security bugs seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
 To report a security issue, please use the GitHub Security Advisory ["Report a Vulnerability"](https://github.com/robalb/x86-64-playground/security/advisories/new) tab.
 
