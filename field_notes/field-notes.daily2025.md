@@ -50,6 +50,7 @@ fixing disass visualization bug
 
 disinst.c
 ```
+NOT relevant
 static char *DisSpecialAddr(struct Dis *d, u64 rde, char *p, int r) {
   if(INTEL_SYNTAX){
     *p++ = '[';
@@ -64,5 +65,53 @@ static char *DisSpecialAddr(struct Dis *d, u64 rde, char *p, int r) {
   return p;
 }
 ```
+
+# 8 ott
+
+disSymLiteral
+
+
+# 12 ott
+
+
+DisM (at&t operand source Memory)
+  displacement + `(...)`
+   |               /
+   |              /
+ DisDisp         /
+                DisBis (draws [...])
+                    \
+                     \
+                    DisDysp  --------> DisSym
+                    (draws +/-)
+
+
+
+https://sdasgup3.github.io/Intel_Vs_Att_format/
+Intel Syntax
+instr   foo,segreg:[base+index*scale+disp]
+AT&T Syntax
+instr   %segreg:disp(base,index,scale),foo
+
+
+There are a few different forms of indirect operands in x86:
+
+    [reg]
+    [reg + displacement]
+    [displacement]
+    [reg * constant + reg]
+    [reg * constant + reg + displacement]
+
+The "displacement" is just a constant that gets added to the rest of the address. In cases where there is no component of the address other than the constant, it is still called a "displacement". This is mainly for consistency with the other addressing forms.
+
+Another way to look at it is that all addresses are of the form
+
+[reg * constant + reg + displacement]
+
+With each of the components allowing a value of 0.
+
+The [displacement] form is just the encoding where all components other than the displacement are zero.
+
+As a compiler writer the last 2 forms are particularly interesting. They make it easy to encode things like pArray[index]->field + 1in a single instruction.
 
 
