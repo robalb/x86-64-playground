@@ -153,28 +153,28 @@ static char *DisName(struct Dis *d, char *bp, const char *name,
                               !StartsWith(name, "set"))) {
       if (Osz(rde)) {
         if (ambiguous || Mode(rde) != XED_MODE_REAL) {
-          if(INTEL_SYNTAX){
+          if (INTEL_SYNTAX) {
             p = stpcpy(p, " word");
-          }else{
+          } else {
             *p++ = 'w';
           }
         }
       } else if (Rexw(rde)) {
-          if(INTEL_SYNTAX){
-            p = stpcpy(p, " qword");
-          }else{
-            *p++ = 'q';
-          }
+        if (INTEL_SYNTAX) {
+          p = stpcpy(p, " qword");
+        } else {
+          *p++ = 'q';
+        }
       } else if (ambiguous && !notbyte && IsProbablyByteOp(d->xedd)) {
-        if(INTEL_SYNTAX){
+        if (INTEL_SYNTAX) {
           p = stpcpy(p, " byte");
-        }else{
+        } else {
           *p++ = 'b';
         }
       } else if (!notlong) {
-        if(INTEL_SYNTAX){
+        if (INTEL_SYNTAX) {
           p = stpcpy(p, " dword");
-        }else{
+        } else {
           *p++ = 'l';
         }
       }
@@ -189,7 +189,6 @@ static char *DisName(struct Dis *d, char *bp, const char *name,
   *p = '\0';
   return p;
 }
-
 
 /**
  * Disassembles instruction based on string spec.
@@ -218,7 +217,7 @@ char *DisInst(struct Dis *d, char *p, const char *spec) {
   p = HighStart(p, g_high.keyword);
   p = DisName(d, p, name, hasarg && !hasregister && hasmemory);
   p = HighEnd(p);
-  if(INTEL_SYNTAX){
+  if (INTEL_SYNTAX) {
     for (i = 0; i < n; ++i) {
       if (i && args[i][0]) {
         *p++ = ',';
@@ -226,8 +225,7 @@ char *DisInst(struct Dis *d, char *p, const char *spec) {
       }
       p = stpcpy(p, args[i]);
     }
-  }
-  else{
+  } else {
     for (i = 0; i < n; ++i) {
       if (i && args[n - i][0]) {
         *p++ = ',';
