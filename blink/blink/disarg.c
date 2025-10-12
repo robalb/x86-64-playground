@@ -269,18 +269,13 @@ static char *DisBis(struct Dis *d, u64 rde, char *p) {
         }
       }
 
-      // TODO(al): remove this hack, to avoid the extra space
-      //           that it leaves in the disassembly output when
-      //           printing negative displacements.
+      // TODO(al): remove this hack
       char *beforeDisDisp = p;
-      *p++ = ' ';
       p = DisDisp(d, rde, p);
-      if (p > beforeDisDisp + 1) {
-        if (beforeDisDisp[1] != '-') {
-          *beforeDisDisp = '+';
-        }
-      } else {
-        p -= 1;
+      if (p > beforeDisDisp && *beforeDisDisp != '-') {
+        memmove(beforeDisDisp + 1, beforeDisDisp, p - beforeDisDisp);
+        *beforeDisDisp = '+';
+        p++;
       }
 
       *p++ = ']';
