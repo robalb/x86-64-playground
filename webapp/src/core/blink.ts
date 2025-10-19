@@ -181,6 +181,11 @@ const signals = {
 	SIGSYS: 31,
 };
 
+const sigtrap_codes = {
+	BLINK_PREEMPT: 40,
+	BLINK_STEP: 41,
+};
+
 const signals_info = {
 	1: {
 		name: "SIGHUP",
@@ -212,7 +217,10 @@ const signals_info = {
 	21: { name: "SIGTTIN", description: "Background process requires input." },
 	22: { name: "SIGTTOU", description: "Background process requires output." },
 	23: { name: "SIGURG", description: "Urgent condition on socket." },
-	24: { name: "SIGXCPU", description: "CPU time limit exceeded." },
+	24: {
+		name: "SIGXCPU",
+		description: "CPU time limit exceeded, execution took too long.",
+	},
 	25: { name: "SIGXFSZ", description: "File size limit exceeded." },
 	26: { name: "SIGVTALRM", description: "Virtual timer clock." },
 	27: { name: "SIGPROF", description: "Profile timer clock." },
@@ -402,8 +410,18 @@ export class Blink {
 				details: details,
 			};
 			this.#setState(this.states.PROGRAM_STOPPED);
+			this.#signalHandler(sig, code);
+		} else if (
+			sig === signals.SIGTRAP &&
+			code === sigtrap_codes.BLINK_PREEMPT
+		) {
+			console.log("preempt");
+			requestAnimationFrame(() => {
+				this.Module._blinkenlib_preempt_resume();
+			});
+		} else {
+			this.#signalHandler(sig, code);
 		}
-		this.#signalHandler(sig, code);
 	}
 
 	/**
