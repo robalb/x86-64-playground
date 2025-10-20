@@ -5,12 +5,16 @@ cd blink
 #---------------------
 # check dependencies
 #---------------------
-requirements=(
-    "emmake"
-    "make"
+declare -A pkg_for_cmd=(
+    [emmake]="emscripten"
+    [make]="base-devel"
 )
-for cmd in "${requirements[@]}"; do
-  command -v "$cmd" >/dev/null 2>&1 || { echo >&2 "Required program $cmd is not installed. Aborting."; exit 1; }
+
+for cmd in "${!pkg_for_cmd[@]}"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "Required '$cmd' is not installed, install '${pkg_for_cmd[$cmd]}'. Aborting."
+        exit 1
+    fi
 done
 
 #---------------------
