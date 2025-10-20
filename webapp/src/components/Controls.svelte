@@ -1,46 +1,48 @@
 <script>
-  export let mobile;
-  export let showEditor;
+export let mobile;
+export let showEditor;
 
-  import Logo from './Logo.svelte';
-  import ArrowBack from './icons/ArrowBack.svelte';
-  import ControlsFileMenu from './ControlsFileMenu.svelte';
-  import {blinkStore, state} from '../core/store'
-  import ControlsCompilebt from './ControlsCompilebt.svelte';
+import Logo from "./Logo.svelte";
+import ArrowBack from "./icons/ArrowBack.svelte";
+import ControlsFileMenu from "./ControlsFileMenu.svelte";
+import { blinkStore, state } from "../core/store";
+import ControlsCompilebt from "./ControlsCompilebt.svelte";
 
-  let blink = blinkStore.getInstance()
+let blink = blinkStore.getInstance();
 
-  //-------------------
-  //render conditionals
-  //-------------------
-  let showControls = false;
-  let canstart = false;
-  let canstep = false;
-  let cancompile = false;
-  $: showControls = (
-    !mobile || !showEditor
-  )
-  $: canstart = (
-    $blinkStore.state == blink.states.PROGRAM_LOADED ||
-    $blinkStore.state == blink.states.PROGRAM_STOPPED
-  )
-  $: canstep = (
-    $blinkStore.state == blink.states.PROGRAM_RUNNING
-  )
-  $: cancompile = (
-    $blinkStore.state != blink.states.NOT_READY &&
-    $blinkStore.state != blink.states.ASSEMBLING &&
-    $blinkStore.state != blink.states.LINKING
-  )
+//-------------------
+//render conditionals
+//-------------------
+let showControls = false;
+let canstart = false;
+let canstep = false;
+let cancompile = false;
 
-  //-------------------
-  //control handlers
-  //-------------------
-  function handle_back(){
-    blink.setready()
-    blinkStore.setUploadedElfName("")
-  }
+$: showControls = !mobile || !showEditor;
 
+$: canstart =
+	$blinkStore.state === blink.states.PROGRAM_LOADED ||
+	$blinkStore.state === blink.states.PROGRAM_STOPPED;
+
+$: canstep = $blinkStore.state === blink.states.PROGRAM_RUNNING;
+
+$: cancompile =
+	$blinkStore.state !== blink.states.NOT_READY &&
+	$blinkStore.state !== blink.states.ASSEMBLING &&
+	$blinkStore.state !== blink.states.LINKING;
+
+$: showLoadingBar =
+	$blinkStore.state === blink.states.NOT_READY ||
+	$blinkStore.state === blink.states.ASSEMBLING ||
+	$blinkStore.state === blink.states.LINKING;
+
+//-------------------
+//control handlers
+//-------------------
+function handle_back() {
+	blink.setready();
+	blinkStore.setUploadedElfName("");
+}
 </script>
 
 
@@ -122,7 +124,7 @@
 
   <div class="loadingbar">
     <div class="loadingbar__content"
-      class:active={$state == blink.states.NOT_READY}
+      class:active={showLoadingBar}
     ></div>
   </div>
 
