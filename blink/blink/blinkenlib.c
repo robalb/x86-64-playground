@@ -18,6 +18,44 @@
 void update_clstruct(struct Machine *m);
 
 /*
+ * program  | cpu cycles | speed on low end device
+ * -----------------------------------------------
+ * FASM     |   7 * 10e3 | 300ms
+ * GNU AS   | 157 * 10e3 | 1s
+ * GNU LD   | 215 * 10e3 | 1s
+ * NASM     |1000 * 10e3 | 10s
+ * ---------------------
+ * MAX_CYCLES holds the max amount of cpu emulation
+ * cycles before a "context switch" where execution
+ * is paused, and the javascript runtime event loop
+ * is allowed to resume.
+ * MAX_CYCLES is set so that FASM runs uninterrupted,
+ * and anything else is interrupted at least 5 times
+ * per second, which is enough to have good renderer
+ * updates on low end devices, despite some lag.
+ */
+#define MAX_CYCLES 100000
+
+/*
+ * After this max amount of context switches,
+ * the process will terminate with SIGXCPU
+ */
+#define MAX_SWITCHES 1000
+
+int switches_count = 0;
+
+/*
+ * This blink wrapper will communicate events with
+ * the javascript side via SIGTRAP signals and the
+ * additional SIGTRAP event codes.
+ * The event codes are defined here. An event code
+ * of 0 will be recognized as an actuall SIGTRAP.
+ */
+#define SIGTRAP_CODE_SIGTRAP 0
+#define SIGTRAP_CODE_PREEMPT 40
+#define SIGTRAP_CODE_STEP    41
+
+/*
  * These variables are defined by javascript;
  * the pointers are passed to main when this module starts
  */
@@ -204,17 +242,29 @@ void runLoop() {
 
   if (!(interrupt = sigsetjmp(m->onhalt, 1))) {
     m->canhalt = true;
-    for (;;) {
+    for (int i = 0; i < MAX_CYCLES; i++) {
       LoadInstruction(m, GetPc(m));  // not really needed like this
       ExecuteInstruction(m);
 
       // this check should be replaced with actual breakpoints logic
       // when breakpoints are implemented
       if (single_stepping) {
-        TerminateSignal(m, SIGTRAP, 0);
-        break;
+        TerminateSignal(m, SIGTRAP, SIGTRAP_CODE_STEP);
+        return;
       }
     }
+
+    // send the preemption signal, passing the execution back to
+    // javascript so that the JS event loop can resume. After a
+    // rerender on the main thread JS will call preempt_resume()
+    // and pass execution back to this routine.
+    switches_count += 1;
+    if (switches_count > MAX_SWITCHES) {
+      TerminateSignal(m, SIGXCPU, 0);
+    } else {
+      TerminateSignal(m, SIGTRAP, SIGTRAP_CODE_PREEMPT);
+    }
+
     // TODO: make the loop run a fixed num of instructions,
     // then from here use the emscripten loop features
     // to schedule a recursive call to runLoop that won't block
@@ -250,6 +300,9 @@ void SetUp(void) {
   // can be handled via sigsetjmp, instead of calling the native _exit().
   // see: blinkenlib.c:runLoop()
   m->system->trapexit = true;
+
+  // reset the counter we use to limit the execution cycles of a program
+  switches_count = 0;
 
   // TODO: from blinkenlights. define these callbacks
   //  m->system->redraw = Redraw;
@@ -375,6 +428,14 @@ void blinkenlib_continue() {
     unassert(!"Invalid state");
   }
   single_stepping = false;
+  runLoop();
+}
+
+EMSCRIPTEN_KEEPALIVE
+void blinkenlib_preempt_resume() {
+  if (s->exited) {
+    unassert(!"Invalid state");
+  }
   runLoop();
 }
 

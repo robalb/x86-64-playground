@@ -66,6 +66,7 @@ void blinkenlib_start();
 void blinkenlib_starti();
 void blinkenlib_stepi();
 void blinkenlib_continue();
+void blinkenlib_preempt_resume();
 void *blinkenlib_get_clstruct();
 void *blinkenlib_get_argc_string();
 void *blinkenlib_get_argv_string();
