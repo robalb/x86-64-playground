@@ -65,12 +65,11 @@ CC=musl-gcc CFLAGS="-O3 -static --static -static-libgcc -static-libstdc++" CXXFL
 #---------------------
 make all
 strip --strip-unneeded gas/as-new
-strip --strip-unneeded gas/ld-new
+strip --strip-unneeded ld/ld-new
 
 #---------------------
 # copy as and ld in
 # the web assets folder
 #---------------------
-cp gas/as-new ../webapp/src/assets/assemblers/gnu-as.elf
-cp ld/ld-new ../webapp/src/assets/assemblers/gnu-ld.elf
-
+cp gas/as-new ../../webapp/src/assets/assemblers/gnu-as.elf
+cp ld/ld-new ../../webapp/src/assets/assemblers/gnu-ld.elf
