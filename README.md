@@ -51,6 +51,28 @@ The low-level emulator APIs are expsed to the web app presentation layer via a T
 
 </div>
 
+## How to build
+
+Before building, you must have installed those dependencies:
+- node
+- texinfo
+- emsdk
+- musl-gcc
+- make
+- gcc
+- flex
+- bison
+
+then you can run the individual scripts to build the dependencies needed for the webapp:
+- `init_blink.sh`
+- `compile_blink.sh`
+- `compile_musl_binutils.sh`
+- `compile_musl_nasm.sh`
+
+Finally you can build the web application by going in the `webapp` folder and running:
+- `npm i`
+- `npm run build`
+
 
 ## Licenses
 

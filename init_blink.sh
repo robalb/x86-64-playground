@@ -29,7 +29,7 @@ exported_runtime_methods=(
 # Convert the array into a comma-separated string
 exported_runtime_methods_str=$(IFS=,; echo "${exported_runtime_methods[*]}")
 emscripten_flags="\
--sENVIRONMENT=web \
+-sENVIRONMENT=web,node \
 -sALLOW_MEMORY_GROWTH=1 \
 -sALLOW_TABLE_GROWTH=1 \
 -sEXIT_RUNTIME=0 \
