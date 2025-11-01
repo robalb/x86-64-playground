@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd blink
+git submodule update --init --recursive
+cd libblink
 
 #---------------------
 # check dependencies
