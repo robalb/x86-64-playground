@@ -1,0 +1,4 @@
+[submodule "libblink"]
+	path = libblink
+	url = https://github.com/robalb/blink.git
+    branch = libblink
