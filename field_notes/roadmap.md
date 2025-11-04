@@ -85,6 +85,13 @@ actual Todo list:
   in store.notifyEditorContent we should add a line that resets the diagnostics
 
 
+# Todo week 5 (for the future: these are not real weeks, mostly milestones with no time limit)
+
+- [ ] turn the code cursor red on exit
+- [ ] create an ui showcase page, documenting and showcasing all ux and ui elements in the design system
+- [ ] add peekaddress to libblink
+- [ ] use the existing ui elements and peekaddress to add a custom memory view
+
 
 ### backlog
 - editor tooltip for asm guide, like in compiler explorer
@@ -101,7 +108,7 @@ actual Todo list:
 - completely remove the concept of snippets. make every state reachable by
   url. snippets will just be url that set the asm and the correct compiler
 - add html syntax highlight to c disass.
-- add intel syntax to c disass.
+- add intel syntax to c disass. -> done
 
 
 
