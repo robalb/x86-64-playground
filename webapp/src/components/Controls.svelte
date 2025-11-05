@@ -133,7 +133,7 @@ function handle_back() {
 
 
 {#if mobile && !showEditor && $state == blink.states.PROGRAM_STOPPED}
-  <p class="stopinfo">{blink.stopReason.details}</p>
+  <p class="exitcodeinfo">{blink.stopReason.details}</p>
 {/if}
 
 
@@ -242,12 +242,10 @@ function handle_back() {
     margin-left: 1rem;
   }
 
- .stopinfo{
-    /*TODO: remove hardcoded colors, find proper design */
-    background-color: rgb(224, 73, 35);
-    background-color: rgb(96, 48, 36);
-    color: white;
-    border: 1px solid rgb(245, 127, 97);
+ .exitcodeinfo{
+    background-color: var(--theme-exitcodeinfo-bg);
+    color: var(--theme-exitcodeinfo-fg);
+    border: 1px solid var(--theme-exitcodeinfo-border);
     margin: 0;
     padding-left: 1rem;
   }

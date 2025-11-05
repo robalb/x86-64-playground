@@ -1,127 +1,139 @@
 <script>
-import { onMount } from 'svelte';
-import {blinkStore, manual_render} from '../core/store'
+import { onMount } from "svelte";
+import { blinkStore, manual_render } from "../core/store";
 
-let blink = blinkStore.getInstance()
+const blink = blinkStore.getInstance();
+
+//render conditionals
+let program_stopped = false;
+$: program_stopped = $blinkStore.state === blink.states.PROGRAM_STOPPED;
 
 let elem;
 let first_line = "";
-let disassebly_fail = false
+let disassebly_fail = false;
 
-function getFirstLine(mem, startPtr, line_len){
-  let str = ""
-  for(let j=0; j<line_len; j++){
-    let ch = mem.getUint8(startPtr + j);
-    if(!ch) break;
-    str += String.fromCharCode(ch);
-  }
-  return str;
+function getFirstLine(mem, startPtr, line_len) {
+	let str = "";
+	for (let j = 0; j < line_len; j++) {
+		const ch = mem.getUint8(startPtr + j);
+		if (!ch) break;
+		str += String.fromCharCode(ch);
+	}
+	return str;
 }
 
 function isElementInViewport(el) {
-    let rect = el.getBoundingClientRect();
-    return rect.bottom > 0 &&
-        rect.right > 0 &&
-        rect.left < (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */ &&
-        rect.top < (window.innerHeight || document.documentElement.clientHeight) /* or $(window).height() */;
+	const rect = el.getBoundingClientRect();
+	return (
+		rect.bottom > 0 &&
+		rect.right > 0 &&
+		rect.left <
+			(window.innerWidth ||
+				document.documentElement.clientWidth) /* or $(window).width() */ &&
+		rect.top <
+			(window.innerHeight ||
+				document.documentElement.clientHeight) /* or $(window).height() */
+	);
 }
 
-function scrollRip(elem, currline){
-  let old = elem.querySelector(".current");
-  if(old){
-    old.classList.remove("current");
-  }
-  let n = elem.childNodes[currline];
-  if(n){
-    n.classList.add("current")
-    if(!isElementInViewport(n)){
-      n.scrollIntoView({behaviour:"smooth"});
-    }
-  }
+function scrollRip(elem, currline) {
+	const old = elem.querySelector(".current");
+	if (old) {
+		old.classList.remove("current");
+	}
+	const n = elem.childNodes[currline];
+	if (n) {
+		n.classList.add("current");
+		if (!isElementInViewport(n)) {
+			n.scrollIntoView({ behaviour: "smooth" });
+		}
+	}
 }
 
-function updateDis(){
-  if(!blink.m)return;
-  if(!elem)return;
-  if(!(blink.state == blink.states.PROGRAM_RUNNING ||
-    blink.state == blink.states.PROGRAM_STOPPED)){
-    first_line = "";
-    return;
-  }
+function updateDis() {
+	if (!blink.m) return;
+	if (!elem) return;
+	if (
+		!(
+			blink.state === blink.states.PROGRAM_RUNNING ||
+			blink.state === blink.states.PROGRAM_STOPPED
+		)
+	) {
+		first_line = "";
+		return;
+	}
 
-  if(blink.state == blink.states.PROGRAM_STOPPED &&
-    blink.stopReason.loadFail){
-    disassebly_fail = true;
-    first_line = "";
-    return;
-  }
+	if (
+		blink.state === blink.states.PROGRAM_STOPPED &&
+		blink.stopReason.loadFail
+	) {
+		disassebly_fail = true;
+		first_line = "";
+		return;
+	}
 
-  if(blink.state == blink.states.PROGRAM_STOPPED){
-    first_line = "";
-  }
+	if (blink.state === blink.states.PROGRAM_STOPPED) {
+		first_line = "";
+	}
 
-  let startPtr = blink.m.getPtr("dis__buffer");
-  let lines = blink.m.getPtr("dis__max_lines");
-  let line_len = blink.m.getPtr("dis__max_line_len");
-  let current_line = blink.m.getPtr("dis__current_line");
-  let mem = blink.m.memView;
+	const startPtr = blink.m.getPtr("dis__buffer");
+	const lines = blink.m.getPtr("dis__max_lines");
+	const line_len = blink.m.getPtr("dis__max_line_len");
+	const current_line = blink.m.getPtr("dis__current_line");
+	const mem = blink.m.memView;
 
-  //handle disassembler fails
-  //TODO: there is a bug where first_line = junk data
-  //      after a rip jump to the stack
-  if(current_line > lines){
-    // console.log({
-    //   startPtr,
-    //   lines,
-    //   line_len,
-    //   current_line
-    // })
-    disassebly_fail = true;
-    return;
-  }
-  else{
-    disassebly_fail = false;
-  }
+	//handle disassembler fails
+	//TODO: there is a bug where first_line = junk data
+	//      after a rip jump to the stack
+	if (current_line > lines) {
+		// console.log({
+		//   startPtr,
+		//   lines,
+		//   line_len,
+		//   current_line
+		// })
+		disassebly_fail = true;
+		return;
+	} else {
+		disassebly_fail = false;
+	}
 
-  let current_first_line = getFirstLine(mem, startPtr, line_len)
-  if(current_first_line == first_line){
-    scrollRip(elem, current_line);
-  }
-  else{
-    first_line = current_first_line;
-    // -----------------
-    // Redraw everything
-    // -----------------
-    let str = ''
-    for(let i=0; i< lines; i++){
-      str += "<tr>"
-      for(let j=0; j<line_len; j++){
-        let ch = mem.getUint8(startPtr+i*line_len + j);
-        if(!ch) break;
-        str += String.fromCharCode(ch);
-      }
-      str += "</tr>"
-    }
-    elem.innerHTML = str;
-    scrollRip(elem, current_line);
-  }
+	let current_first_line = getFirstLine(mem, startPtr, line_len);
+	if (current_first_line === first_line) {
+		scrollRip(elem, current_line);
+	} else {
+		first_line = current_first_line;
+		// -----------------
+		// Redraw everything
+		// -----------------
+		let str = "";
+		for (let i = 0; i < lines; i++) {
+			str += "<tr>";
+			for (let j = 0; j < line_len; j++) {
+				const ch = mem.getUint8(startPtr + i * line_len + j);
+				if (!ch) break;
+				str += String.fromCharCode(ch);
+			}
+			str += "</tr>";
+		}
+		elem.innerHTML = str;
+		scrollRip(elem, current_line);
+	}
 }
 
 //rerender the disassembler only when the render event is dispatched
 //we are using svelte's store as a dispatch api for our custom
 //rendering shenaningans.
-//this is faster because this specific component is 
+//this is faster because this specific component is
 //manually updating the DOM, bypassing the optimized svelte renderer
 $: $manual_render && updateDis();
 
 onMount(async () => {
-  updateDis();
+	updateDis();
 });
-
-
 </script>
 
-<div class="disass" class:fail={disassebly_fail} >
+<div class="disass" class:fail={disassebly_fail} class:exit={program_stopped}>
   {#if disassebly_fail}
     <div class="box">
       <p>Disassembly failed</p>
