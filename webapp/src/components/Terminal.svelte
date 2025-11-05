@@ -1,20 +1,19 @@
 <script>
-  import {blinkStore, term_buffer, state} from '../core/store'
+import { blinkStore, term_buffer, state } from "../core/store";
 
-  let blink = blinkStore.getInstance()
-  let termref;
+let blink = blinkStore.getInstance();
+let termref;
 
-  function scroll(){
-    if(termref != null){
-      requestAnimationFrame(()=>{
-          termref.scrollTop = termref.scrollHeight;
-      })
-    }
-  }
-  // Scroll the terminal wen the program state 
-  // or the terminal buffer change
-  $: ($term_buffer || $state) && scroll()
-
+function scroll() {
+	if (termref != null) {
+		requestAnimationFrame(() => {
+			termref.scrollTop = termref.scrollHeight;
+		});
+	}
+}
+// Scroll the terminal wen the program state
+// or the terminal buffer change
+$: ($term_buffer || $state) && scroll();
 </script>
 
 <div class="term" bind:this={termref}>
@@ -22,7 +21,7 @@
     <code >{$term_buffer}</code>
   </div>
 {#if $state == blink.states.PROGRAM_STOPPED}
-    <p class="stopinfo">{blink.stopReason.details}</p>
+    <p class="exitcodeinfo">{blink.stopReason.details}</p>
 {/if}
 </div>
 
@@ -52,12 +51,10 @@
     word-wrap: normal;
     line-height: 1.5;
   }
- .stopinfo{
-    /*TODO: remove hardcoded colors, find proper design */
-    background-color: rgb(224, 73, 35);
-    background-color: rgb(96, 48, 36);
-    color: white;
-    border: 1px solid rgb(245, 127, 97);
+ .exitcodeinfo{
+    background-color: var(--theme-exitcodeinfo-bg);
+    color: var(--theme-exitcodeinfo-fg);
+    border: 1px solid var(--theme-exitcodeinfo-border);
 
     padding-left: 1rem;
   }

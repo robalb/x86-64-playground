@@ -1,412 +1,443 @@
 /* inter-regular - latin */
 @font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-display: optional;
-  src: local(''),
-       url('../assets/fonts/inter-v11-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('../assets/fonts/inter-v11-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local(""), url("../assets/fonts/inter-v11-latin-regular.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+        url("../assets/fonts/inter-v11-latin-regular.woff") format("woff");
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 /* inter-600 - latin */
 @font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: optional;
-  src: local(''),
-       url('../assets/fonts/inter-v11-latin-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('../assets/fonts/inter-v11-latin-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    font-display: optional;
+    src: local(""), url("../assets/fonts/inter-v11-latin-600.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+        url("../assets/fonts/inter-v11-latin-600.woff") format("woff");
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
+
 /* roboto-mono-regular - latin */
 @font-face {
-  font-family: 'Roboto Mono';
-  font-style: normal;
-  font-weight: 400;
-  /* font-display: optional; */
-  font-display: block; /* will generate a FOUT, but we really need this specific font */
-  src: local(''),
-       url('../assets/fonts/roboto-mono-v21-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('../assets/fonts/roboto-mono-v21-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    font-family: "Roboto Mono";
+    font-style: normal;
+    font-weight: 400;
+    /* font-display: optional; */
+    font-display: block;
+    /* will generate a FOUT, but we really need this specific font */
+    src: local(""), url("../assets/fonts/roboto-mono-v21-latin-regular.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+        url("../assets/fonts/roboto-mono-v21-latin-regular.woff") format("woff");
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 :root {
-  --color-white: #fff;
-	--color-black: #000014;
+    --color-white: #fff;
+    --color-black: #000014;
 
-  --color-gray-0: var(--color-white);
-  --color-gray-50: #eee;
-  --color-gray-100: #d0d5df;
-  --color-gray-150: #b3b9c5;
-  --color-gray-200: #818a9d;
-  --color-gray-250: gray;
-  --color-gray-300: #393e4b;
-  --color-gray-400: #282c38;
-  --color-gray-500: #20232a;
-  --color-gray-600: #1c1e24;
-  --color-gray-900: var(--color-black);
+    --color-gray-0: var(--color-white);
+    --color-gray-50: #eee;
+    --color-gray-100: #d0d5df;
+    --color-gray-150: #b3b9c5;
+    --color-gray-200: #818a9d;
+    --color-gray-250: gray;
+    --color-gray-300: #393e4b;
+    --color-gray-400: #282c38;
+    --color-gray-500: #20232a;
+    --color-gray-600: #1c1e24;
+    --color-gray-900: var(--color-black);
 
-  --color-gray-t: rgba(255,255,255,.2); /* this color is still to be properly defined */
+    --color-gray-t: rgba(255, 255, 255, 0.2);
+    /* this color is still to be properly defined */
 
-  --color-gold-50: #ffd479;
-  --color-gold-100: #fdb54a;
-  --color-yellow: #ffeead;
-  --color-green: #92d192;
-  --color-blue: #6ab0f3;
-  --color-orange: #fca369;
-  --color-violet-100: #3e296c;
-  --color-plum-100: #640054;
+    --color-gold-50: #ffd479;
+    --color-gold-100: #fdb54a;
+    --color-yellow: #ffeead;
+    --color-green: #92d192;
+    --color-blue: #6ab0f3;
+    --color-orange: #fca369;
+    --color-violet-100: #3e296c;
+    --color-plum-100: #640054;
 
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
-    'Roboto', Roboto, Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --code-font-family: 'Roboto Mono', Courier New, monospace;
+    --font-family:
+        "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+        "Roboto", Roboto, Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+        "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --code-font-family: "Roboto Mono", Courier New, monospace;
 }
 
-:root{
-	color-scheme: dark;
-  --theme-primary: var(--color-gold-100);
-  --theme-bg: var(--color-gray-400);
-  --theme-text-fg-contrasting: var(--color-gray-50);
-  --theme-text-fg: var(--color-gray-100);
-  --theme-text-fg-disabled: var(--color-gray-250);
-  --theme-link-fg: var(--color-gray-0);
-  --theme-link-underline: var(--color-gold-100);
-  --theme-inline-code-bg: var(--color-gray-300);
-  --theme-panel-bg: var(--color-gray-500);
-  --theme-panel-controls-bg: var(--color-gray-600);
-  --theme-panel-border: var(--color-gray-t);
-  --theme-focus: var(--theme-primary);
+:root {
+    color-scheme: dark;
+    --theme-primary: var(--color-gold-100);
+    --theme-bg: var(--color-gray-400);
+    --theme-text-fg-contrasting: var(--color-gray-50);
+    --theme-text-fg: var(--color-gray-100);
+    --theme-text-fg-disabled: var(--color-gray-250);
+    --theme-link-fg: var(--color-gray-0);
+    --theme-link-underline: var(--color-gold-100);
+    --theme-inline-code-bg: var(--color-gray-300);
+    --theme-panel-bg: var(--color-gray-500);
+    --theme-panel-controls-bg: var(--color-gray-600);
+    --theme-panel-border: var(--color-gray-t);
+    --theme-focus: var(--theme-primary);
 
+    /* hexdump hex numbers */
+    --theme-hex-zero: var(--color-gray-200);
+    --theme-hex-small: var(--color-gray-0);
+    --theme-hex-large: var(--color-yellow);
+    --theme-hex-ff: var(--color-green);
+    --theme-hex-bg: transparent;
+    /* hexdump ascii preview */
+    --theme-hexascii-valid: var(--color-gray-0);
+    --theme-hexascii-invalid: var(--color-gray-150);
+    --theme-hexascii-bg: transparent;
+    /* hexdump address */
+    --theme-hexaddr-fg: var(--color-gray-0);
+    --theme-hexaddr-bg: transparent;
+    /* hexdump highlighted sections */
+    --theme-hex-section-blue: var(--color-violet-100);
+    --theme-hex-section-red: var(--color-plum-100);
+    --theme-hex-section-green: green;
+    /*TODO al: define a dark green in the palette */
+    --theme-hex-section-border: gray;
+    /* todo al: test and define properly */
 
-  /* hexdump hex numbers */
-  --theme-hex-zero: var(--color-gray-200);
-  --theme-hex-small: var(--color-gray-0);
-  --theme-hex-large: var(--color-yellow);
-  --theme-hex-ff: var(--color-green);
-  --theme-hex-bg: transparent;
-  /* hexdump ascii preview */
-  --theme-hexascii-valid: var(--color-gray-0);
-  --theme-hexascii-invalid: var(--color-gray-150);
-  --theme-hexascii-bg: transparent;
-  /* hexdump address */
-  --theme-hexaddr-fg: var(--color-gray-0);
-  --theme-hexaddr-bg: transparent;
-  /* hexdump highlighted sections */
-  --theme-hex-section-blue: var(--color-violet-100);
-  --theme-hex-section-red: var(--color-plum-100);
-  --theme-hex-section-green: green; /*TODO al: define a dark green in the palette */
-  --theme-hex-section-border: gray; /* todo al: test and define properly */
+    /* registers view */
+    --theme-reg-value-int: var(--color-gray-0);
+    --theme-reg-name: var(--color-blue);
+    --theme-reg-name-updated: var(--color-orange);
 
-  /* registers view */
-  --theme-reg-value-int: var(--color-gray-0);
-  --theme-reg-name: var(--color-blue);
-  --theme-reg-name-updated: var(--color-orange);
+    /* disassembler view */
+    --theme-disaddr-fg: var(--color-gray-0);
+    --theme-dishex-fg: var(--color-gray-200);
+    --theme-dislabel-fg: var(--color-orange);
+    --theme-dis-current-bg: rgba(255, 255, 255, 0.1);
+    --theme-dis-current-border: gray;
+    --theme-dis-fail-stripebg1: var(--color-gray-t);
+    --theme-dis-fail-stripebg2: transparent;
+    --theme-dis-fail-boxborder: var(--color-orange);
+    --theme-dis-fail-boxbg: var(--theme-bg);
 
-  /* disassembler view */
-  --theme-disaddr-fg: var(--color-gray-0);
-  --theme-dishex-fg: var(--color-gray-200);
-  --theme-dislabel-fg: var(--color-orange);
-  --theme-dis-current-bg: rgba(255,255,255,0.1);
-  --theme-dis-current-border: gray;
-  --theme-dis-fail-stripebg1: var(--color-gray-t);
-  --theme-dis-fail-stripebg2: transparent;
-  --theme-dis-fail-boxborder: var(--color-orange);
-  --theme-dis-fail-boxbg: var(--theme-bg);
+    /* exit code infobox */
+    --theme-exitcodeinfo-fg: var(--color-gray-0);
+    --theme-exitcodeinfo-bg: rgb(96, 48, 36);
+    /* --theme-exitcodeinfo-bg: rgb(72, 46, 40); */
+
+    --theme-exitcodeinfo-border: rgb(245, 127, 97);
 }
-
 
 /*========================================*/
 /*=========  css resets & a11y  ==========*/
 /*========================================*/
 
 .visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 a:focus-visible,
 button:focus-visible,
 select:focus-visible {
-  outline: 3px solid var(--theme-focus);
-  border-radius: 4px;
-  border-bottom-color: transparent;
+    outline: 3px solid var(--theme-focus);
+    border-radius: 4px;
+    border-bottom-color: transparent;
 }
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: var(--font-family);
-  font-size: 1rem;
-  line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    line-height: 1.65;
 
-  color: var(--theme-text-fg);
-  background: var(--theme-bg);
+    color: var(--theme-text-fg);
+    background: var(--theme-bg);
 
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
-
 
 /*========================================*/
 /*=========  Global BEM styles  ==========*/
 /*========================================*/
 
 /** PaneForge
-* PaneForge, like most svelte UI libraries, allows 
-* custom css classes in its components.
-* This means that the proper way to customize the style
-* is via either Tailwind classes, or global BEM classes.
-* The classic svelte scoped css will not work on external components.
-*/
-.pf{
-}
-.pf__panegroup{
-}
-.pf__panegroup--horizontal{
-}
-.pf__panegroup--vertical{
-}
-.pf__pane{
-}
-.pf__pane--h100{
-  /*important! panels that are as tall as the window
+ * PaneForge, like most svelte UI libraries, allows
+ * custom css classes in its components.
+ * This means that the proper way to customize the style
+ * is via either Tailwind classes, or global BEM classes.
+ * The classic svelte scoped css will not work on external components.
+ */
+.pf {}
+
+.pf__panegroup {}
+
+.pf__panegroup--horizontal {}
+
+.pf__panegroup--vertical {}
+
+.pf__pane {}
+
+.pf__pane--h100 {
+    /*important! panels that are as tall as the window
   * need this class to avoid overflows */
-  height: 100vh;
+    height: 100vh;
 }
 
-.pf__resizer{
-  position: relative; 
-  background-color: var(--theme-panel-border);
-}
-.pf__resizer:after{
-  transition: background-color .1s ease-out;
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 10;
+.pf__resizer {
+    position: relative;
+    background-color: var(--theme-panel-border);
 }
 
-.pf__resizer--horizontal{
-  height: 1px; 
-}
-.pf__resizer--horizontal:after{
-  height: 8px;
-  width: 100%;
-  top: -3px;
-}
-.pf__resizer--vertical{
-  width: 1px; 
-}
-.pf__resizer--vertical:after{
-  width: 8px;
-  height: 100%;
-  left: -3px;
+.pf__resizer:after {
+    transition: background-color .1s ease-out;
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 10;
 }
 
-.pf__resizer[data-active]:after{
-  background-color: var(--theme-focus);
-  outline: none;
+.pf__resizer--horizontal {
+    height: 1px;
 }
 
+.pf__resizer--horizontal:after {
+    height: 8px;
+    width: 100%;
+    top: -3px;
+}
 
+.pf__resizer--vertical {
+    width: 1px;
+}
+
+.pf__resizer--vertical:after {
+    width: 8px;
+    height: 100%;
+    left: -3px;
+}
+
+.pf__resizer[data-active]:after {
+    background-color: var(--theme-focus);
+    outline: none;
+}
 
 /** Disassembly panel
-* The disassembly panel is managed via manual DOM updates,
-* bypassing the svelte renderer completely.
-* For this reason the classic svelte scoped css will not work,
-* and global styling via BEM classes is required.
-*/
-.disass{
-  padding: .5rem;
-  padding-left: 0;
-  font-family: var(--code-font-family);
-  font-size: .9rem;
-  overflow-x: auto;
+ * The disassembly panel is managed via manual DOM updates,
+ * bypassing the svelte renderer completely.
+ * For this reason the classic svelte scoped css will not work,
+ * and global styling via BEM classes is required.
+ */
+.disass {
+    padding: .5rem;
+    padding-left: 0;
+    font-family: var(--code-font-family);
+    font-size: .9rem;
+    overflow-x: auto;
 }
 
 /*remove default styles*/
-.disass table, .disass td {
-  border: none;
-  margin: 0;
-  padding: 0;
-  border-collapse: collapse;
+.disass table,
+.disass td {
+    border: none;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
 }
 
 .disass table {
-  width: 100%;
+    width: 100%;
 }
 
 .disass tr.current {
-  border: 1px solid var(--theme-dis-current-border);
-  background-color: var(--theme-dis-current-bg);
+    border: 1px solid var(--theme-dis-current-border);
+    background-color: var(--theme-dis-current-bg);
+}
+
+.disass.exit tr.current {
+    border: 1px solid var(--theme-exitcodeinfo-border);
+    --theme-exitcodeinfo-bg: rgb(72, 46, 40);
+    background-color: var(--theme-exitcodeinfo-bg);
 }
 
 .disass td {
-  text-align: left;
-  padding-right: 1rem;
+    text-align: left;
+    padding-right: 1rem;
 }
 
 .disass .addr {
-  color: var(--theme-disaddr-fg);
-  width: 100px; /* Adjust as needed */
-  text-align: right;
-  padding-left: 1rem;
+    color: var(--theme-disaddr-fg);
+    width: 100px;
+    /* Adjust as needed */
+    text-align: right;
+    padding-left: 1rem;
 }
 
 .disass .hex {
-  color: var(--theme-dishex-fg);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100px; /* Adjust as needed */
+    color: var(--theme-dishex-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px;
+    /* Adjust as needed */
 }
 
 .disass .str {
-  white-space: nowrap;
-  color: white;
+    white-space: nowrap;
+    color: white;
 }
 
 .disass .label {
-  color: var(--theme-dislabel-fg);
+    color: var(--theme-dislabel-fg);
 }
 
 .disass span.red {
-  color: #ffa657; /* TODO: set proper colors.*/
+    color: #ffa657;
+    /* TODO: set proper colors.*/
 }
 
 .disass span.brown {
-  color: #ff7b72;
+    color: #ff7b72;
 }
 
 .disass span.blue {
-  color: #a5d6ff;
-  color: #79c0ff;
+    color: #a5d6ff;
+    color: #79c0ff;
 }
 
 /** Editor panel errors
-*
-* The editor errors are injected via manual dom updates,
-* and cannot therefore use the native css svelte
-* scoping. They are styled via bem instead
-* TODO: properly define these colors
-*/
-.editor__lineerror{
-  position:absolute;
-  inset:0;
-  z-index: -2;
-  background-color: rgb(52, 30, 24);
-  color: rgb(245, 127, 97);
-  color: #ff7b72;
+ *
+ * The editor errors are injected via manual dom updates,
+ * and cannot therefore use the native css svelte
+ * scoping. They are styled via bem instead
+ * TODO: properly define these colors
+ */
+.editor__lineerror {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-color: rgb(52, 30, 24);
+    color: rgb(245, 127, 97);
+    color: #ff7b72;
 }
-
-
 
 /**
-* Global UI component styles
-* TODO: properly define these styles together
-* with the MELT ui system.
-*/
-.button, .select, .btgroup__button{
-  border: 1px solid var(--color-gray-t);
-  color: white;
-  padding: .2rem 0.6rem;
-  border-radius: 4px;
-  background-color: transparent;
-  cursor: pointer;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  font-size: .9rem;
+ * Global UI component styles
+ * TODO: properly define these styles together
+ * with the MELT ui system.
+ */
+.button,
+.select,
+.btgroup__button {
+    border: 1px solid var(--color-gray-t);
+    color: white;
+    padding: .2rem 0.6rem;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    font-size: .9rem;
 }
-.button:disabled, .btgroup__button:disabled{
-  color: var(--theme-text-fg-disabled);
+
+.button:disabled,
+.btgroup__button:disabled {
+    color: var(--theme-text-fg-disabled);
 }
+
 .button:not(:disabled):active,
-.btgroup__button:not(:disabled):active{
-  border: 1px solid rgba(255,255,255,0.7);
+.btgroup__button:not(:disabled):active {
+    border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-.button--secondary{
-  color: var(--color-gray-100);
-  text-decoration: none;
-  border-color: transparent;
-}
-.button--secondary:hover{
-  color: var(--color-gray-0);
-  background-color: var(--color-gray-300);
+.button--secondary {
+    color: var(--color-gray-100);
+    text-decoration: none;
+    border-color: transparent;
 }
 
+.button--secondary:hover {
+    color: var(--color-gray-0);
+    background-color: var(--color-gray-300);
+}
 
 .button svg,
-.btgroup__button svg
-{
-  stroke: var(--theme-text-fg-contrasting);
-  fill: var(--theme-text-fg-contrasting);
-  margin-left: 2px;
-  margin-right: 2px;
+.btgroup__button svg {
+    stroke: var(--theme-text-fg-contrasting);
+    fill: var(--theme-text-fg-contrasting);
+    margin-left: 2px;
+    margin-right: 2px;
 }
+
 .button:disabled svg,
-.btgroup__button:disabled svg
-{
-  fill: var(--theme-text-fg-disabled);
-  stroke: var(--theme-text-fg-disabled);
+.btgroup__button:disabled svg {
+    fill: var(--theme-text-fg-disabled);
+    stroke: var(--theme-text-fg-disabled);
 }
 
-
-.btgroup{
-  display: flex;
-  border: 1px solid var(--color-gray-t);
-  background-color: transparent;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.btgroup .btgroup__button{
-  border: 1px solid transparent;
-}
-.btgroup .btgroup__button--select{
-  background-color:rgba(255,255,255,.1);
-  justify-content:space-between;
-  padding-right: 0.0rem;
-}
-.btgroup .btgroup__button:nth-child(1){
-  border-right: 1px solid var(--color-gray-t);
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.btgroup .btgroup__button:nth-child(2){
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.btgroup .btgroup__button:active:not(:disabled):nth-child(1){/* I hereby challenge you to write a line with more selectors */
-  border-right: 1px solid rgba(255,255,255,0.7);
+.btgroup {
+    display: flex;
+    border: 1px solid var(--color-gray-t);
+    background-color: transparent;
+    border-radius: 4px;
+    flex-shrink: 0;
 }
 
-.errorbox{
+.btgroup .btgroup__button {
+    border: 1px solid transparent;
+}
+
+.btgroup .btgroup__button--select {
+    background-color: rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+    padding-right: 0.0rem;
+}
+
+.btgroup .btgroup__button:nth-child(1) {
+    border-right: 1px solid var(--color-gray-t);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.btgroup .btgroup__button:nth-child(2) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.btgroup .btgroup__button:active:not(:disabled):nth-child(1) {
+    /* I hereby challenge you to write a line with more selectors */
+    border-right: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.errorbox {
     /*TODO: remove hardcoded colors, find proper design */
-  background-color: rgb(96, 48, 36);
-  color: white;
-  border: 1px solid rgb(245, 127, 97);
-  margin: 0;
-  padding-left: 1rem;
+    background-color: rgb(96, 48, 36);
+    color: white;
+    border: 1px solid rgb(245, 127, 97);
+    margin: 0;
+    padding-left: 1rem;
 }
-
 
 /*
 * default style for the Melt UI elements.
@@ -416,177 +447,183 @@ body {
 */
 *[data-melt-dropdown-menu-submenu],
 *[data-melt-select-menu],
-*[data-melt-dropdown-menu]{
-  outline: none;
-  z-index: 40;
-  background-color: var(--theme-panel-bg);
-  border-radius: 4px;
-  border: 1px solid var(--theme-text-fg-disabled);
-  padding: .5rem;
-  display: flex;
-  flex-direction: column;
-  max-height: 30rem;
-  min-width: 15rem;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
-  color: var(--theme-text-fg);
-  font-size: 1rem;
-}
-*[data-melt-select-menu]{
-  min-width: 1rem;
+*[data-melt-dropdown-menu] {
+    outline: none;
+    z-index: 40;
+    background-color: var(--theme-panel-bg);
+    border-radius: 4px;
+    border: 1px solid var(--theme-text-fg-disabled);
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 30rem;
+    min-width: 15rem;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.6);
+    color: var(--theme-text-fg);
+    font-size: 1rem;
 }
 
+*[data-melt-select-menu] {
+    min-width: 1rem;
+}
 
 *[data-melt-dropdown-menu-item],
 *[data-melt-select-option],
-*[data-melt-dropdown-menu-subtrigger]{
-  outline: none;
-  z-index: 40;
-  position: relative;
-  color: var(--theme-text-fg);
-  border-radius: 0.125rem;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: .1rem .5rem;
+*[data-melt-dropdown-menu-subtrigger] {
+    outline: none;
+    z-index: 40;
+    position: relative;
+    color: var(--theme-text-fg);
+    border-radius: 0.125rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: .1rem .5rem;
 }
-*[data-melt-select-option]{
-  padding-left: 0;
+
+*[data-melt-select-option] {
+    padding-left: 0;
 }
-*[data-melt-select-option] svg{
-  margin-right: 5px;
+
+*[data-melt-select-option] svg {
+    margin-right: 5px;
 }
 
 *[data-melt-dropdown-menu-item][data-highlighted],
 *[data-melt-select-option][data-highlighted],
 *[data-melt-dropdown-menu-subtrigger][data-highlighted] {
-  color: var(--theme-panel-controls-bg);
-  background-color: var(--theme-focus);
+    color: var(--theme-panel-controls-bg);
+    background-color: var(--theme-focus);
 }
+
 *[data-melt-dropdown-menu-item][data-highlighted] svg,
 *[data-melt-select-option][data-highlighted] svg,
-*[data-melt-dropdown-menu-subtrigger][data-highlighted] svg{
-  fill: var(--theme-panel-controls-bg);
+*[data-melt-dropdown-menu-subtrigger][data-highlighted] svg {
+    fill: var(--theme-panel-controls-bg);
 }
 
-*[data-melt-separator]{
-  margin: 5px 0;
-  height: 1px;
-  background-color: var(--theme-text-fg-disabled);
+*[data-melt-separator] {
+    margin: 5px 0;
+    height: 1px;
+    background-color: var(--theme-text-fg-disabled);
 }
 
-.custom-overlay{
-  display: none;
+.custom-overlay {
+    display: none;
 }
+
 @media only screen and (max-width: 600px) {
-  *[data-melt-dropdown-menu-submenu],
-  *[data-melt-select-menu],
-  *[data-melt-dropdown-menu]{
-    position: absolute!important;
-    bottom: 0!important;
-    left: 0!important;
-    top: auto!important;
-    width: 100%;
-    padding: 1rem;
-    padding-bottom: 4rem;
-    padding-top: 1rem;
-    border: 1px solid var(--theme-text-fg-disabled);
-    border-bottom: 0;
-    border-left: 0;
-    border-right: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    animation: slideIn .2s forwards;
-  }
-  body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) .custom-overlay,
-  body:has(*[data-melt-select-trigger][aria-expanded="true"]) .custom-overlay {
-    display: block;
+
+    *[data-melt-dropdown-menu-submenu],
+    *[data-melt-select-menu],
+    *[data-melt-dropdown-menu] {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        top: auto !important;
+        width: 100%;
+        padding: 1rem;
+        padding-bottom: 4rem;
+        padding-top: 1rem;
+        border: 1px solid var(--theme-text-fg-disabled);
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        animation: slideIn .2s forwards;
+    }
+
+    body:has(*[data-melt-dropdown-menu-trigger][aria-expanded="true"]) .custom-overlay,
+    body:has(*[data-melt-select-trigger][aria-expanded="true"]) .custom-overlay {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        inset: 0;
+        z-index: 40;
+        background-color: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+        animation: fadeIn .2s ease-in forwards;
+    }
+
+    *[data-melt-dropdown-menu-item],
+    *[data-melt-select-option],
+    *[data-melt-dropdown-menu-subtrigger] {
+        padding: .5rem .5rem;
+        color: var(--theme-text-fg-contrasting);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        padding-bottom: 0;
+    }
+
+    to {
+        padding-bottom: 4rem;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* The overlay element which covers the page when the dialog is open. */
+*[data-melt-dialog-overlay] {
     position: absolute;
     top: 0;
     left: 0;
     inset: 0;
     z-index: 40;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     width: 100%;
     height: 100%;
     animation: fadeIn .2s ease-in forwards;
-  }
-
-  *[data-melt-dropdown-menu-item],
-  *[data-melt-select-option],
-  *[data-melt-dropdown-menu-subtrigger]{
-    padding: .5rem .5rem;
-    color: var(--theme-text-fg-contrasting);
-  }
 }
 
+*[data-melt-dialog-content] {
+    position: absolute;
+    left: 50%;
+    top: 50%;
 
-@keyframes slideIn {
-  from {
-    padding-bottom: 0;
-  }
-  to {
-    padding-bottom: 4rem;
-  }
+    z-index: 50;
+
+    max-height: 85vh;
+    width: 90vw;
+    max-width: 450px;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 0.375rem;
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 1rem;
+
+    box-shadow: 0 10px 15px -3px rgb(var(--color-black) / 0.1), 0 4px 6px -4px rgb(var(--color-black) / 0.1);
+
+    background-color: var(--theme-panel-bg);
+    /* background-color: var(--theme-bg); */
+    border-radius: 4px;
+    border: 1px solid var(--theme-text-fg-disabled);
+    display: flex;
+    flex-direction: column;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+*[data-melt-dialog-content]:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
 }
 
-
-/* The overlay element which covers the page when the dialog is open. */
-*[data-melt-dialog-overlay]{
-  position: absolute;
-  top: 0;
-  left: 0;
-  inset: 0;
-  z-index: 40;
-  background-color: rgba(0,0,0,0.6);
-  width: 100%;
-  height: 100%;
-  animation: fadeIn .2s ease-in forwards;
-}
-
-*[data-melt-dialog-content]{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-
-  z-index: 50;
-
-  max-height: 85vh;
-  width: 90vw;
-  max-width: 450px;
-
-  transform: translate(-50%, -50%);
-
-  border-radius: 0.375rem;
-
-  background-color: rgb(var(--color-white) / 1);
-
-  padding: 1rem;
-
-  box-shadow: 0 10px 15px -3px rgb(var(--color-black) / 0.1),
-    0 4px 6px -4px rgb(var(--color-black) / 0.1);
-
-  background-color: var(--theme-panel-bg);
-  /* background-color: var(--theme-bg); */
-  border-radius: 4px;
-  border: 1px solid var(--theme-text-fg-disabled);
-  display: flex;
-  flex-direction: column;
-}
-*[data-melt-dialog-content]:focus{
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-  *[data-melt-dialog-close] {
+*[data-melt-dialog-close] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -602,30 +639,29 @@ body {
 
     border-radius: 9999px;
     border: 0;
-    background-color:transparent;
+    background-color: transparent;
     cursor: pointer;
 
     color: white;
-  }
+}
 
-  *[data-melt-dialog-close]:hover {
-    background-color: rgba(255,255,255,.2);
-  }
+*[data-melt-dialog-close]:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
 
-  *[data-melt-dialog-title]{
+*[data-melt-dialog-title] {
     margin: 0;
 
     font-size: 1.125rem;
     line-height: 1.75rem;
     color: var(--color-orange);
-  }
+}
 
-  *[data-melt-dialog-description]{
+*[data-melt-dialog-description] {
     margin-bottom: 1.25rem;
     margin-top: 0.5rem;
 
     line-height: 1.5;
 
-    color: white
-  }
-
+    color: white;
+}

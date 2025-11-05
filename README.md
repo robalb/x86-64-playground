@@ -42,8 +42,10 @@ x86-64 playground is an online assembly editor and GDB-like debugger, powered by
 
 The web app works as a single static page, without any server side component. It's compiled and hosted on GitHub pages.
 Both the emulator and debugger run client side, in a webAssembly port of the [blink](https://github.com/jart/blink/) emulator
-which has been patched and modified to run as a C library.
+which has been [patched](https://github.com/robalb/blink) and modified to run as a C library.
 The low-level emulator APIs are expsed to the web app presentation layer via a Typescript wrapper.
+
+See the [Design document file](./docs/design.md) for an overview of the technical choices behind the project.
 
 <div align="center">
 <img src="./docs/webapp_architecture.drawio-1-1.png" width="500px" height="auto" />
@@ -51,6 +53,35 @@ The low-level emulator APIs are expsed to the web app presentation layer via a T
 
 </div>
 
+## Build the project
+
+This project is subdivided in two areas of development:
+- The web app 
+- the Blink WASM engine
+
+### Working on the web app 
+
+The web app is located in the `webapp` folder, 
+and is a regular Typescript+Svelte+vite web app.
+Check out `webapp/README.md` for instructions on how to 
+build, modify and run it.
+
+The magic that powers the webapp is the WASM bundle 
+stored in `webapp/assets/blinkenlib.wasm`, which contains 
+the compiled Blink engine. Since the compiled file 
+is stored in git, you can work on the web app without worrying about 
+extra compilation steps, GNU autotools, or other spooky tools.
+
+If you want to understand or modify the low-level behaviour of the emulator, you will need to get your hands on the blink library, and recompile it. 
+This will result in a new file that will override the existing file in
+`webapp/assets/blinkenlib.wasm`.
+
+### Working on the blink library
+
+This section is described roughly in [docs/setup.md](./docs/setup.md).
+For more context, check out the [design document](./docs/design.md) for this Project,
+The commits in this [fork of blink](https://github.com/robalb/blink), and the standalone 
+project [blink.js](https://github.com/robalb/x86-64-blink-js)
 
 ## Licenses
 

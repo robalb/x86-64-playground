@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd blink
+cd libblink
 
 #---------------------
 # check dependencies
