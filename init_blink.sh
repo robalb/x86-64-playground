@@ -6,12 +6,15 @@ cd libblink
 #---------------------
 # check dependencies
 #---------------------
-requirements=(
-    "emconfigure"
+declare -A pkg_for_cmd=(
+    [emconfigure]="emscripten"
 )
 
-for cmd in "${requirements[@]}"; do
-  command -v "$cmd" >/dev/null 2>&1 || { echo >&2 "Required program $cmd is not installed. Aborting."; exit 1; }
+for cmd in "${!pkg_for_cmd[@]}"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "Required '$cmd' is not installed, install '${pkg_for_cmd[$cmd]}', or (source /etc/profile.d/emscripten.sh). Aborting."
+        exit 1
+    fi
 done
 
 #---------------------
