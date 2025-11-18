@@ -28,7 +28,7 @@ var readyPromise = new Promise((resolve, reject) => {
   readyPromiseResolve = resolve;
   readyPromiseReject = reject;
 });
-["_memory","___indirect_function_table","_blinkenlib_run_fast","_blinkenlib_run","_blinkenlib_starti","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_preempt_resume","_blinkenlib_get_clstruct","_blinkenlib_get_argc_string","_blinkenlib_get_argv_string","_blinkenlib_get_progname_string","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
+["_memory","___indirect_function_table","_blinkenlib_run_fast","_blinkenlib_run","_blinkenlib_starti","_blinkenlib_start","_blinkenlib_stepi","_blinkenlib_continue","_blinkenlib_preempt_resume","_blinkenlib_faketty_resume","_blinkenlib_get_clstruct","_blinkenlib_get_argc_string","_blinkenlib_get_argv_string","_blinkenlib_get_progname_string","_blinkenlib_spy_address","_main","onRuntimeInitialized"].forEach((prop) => {
   if (!Object.getOwnPropertyDescriptor(readyPromise, prop)) {
     Object.defineProperty(readyPromise, prop, {
       get: () => abort('You are getting ' + prop + ' on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'),
@@ -5454,6 +5454,7 @@ var _blinkenlib_start = Module['_blinkenlib_start'] = createExportWrapper('blink
 var _blinkenlib_stepi = Module['_blinkenlib_stepi'] = createExportWrapper('blinkenlib_stepi', 0);
 var _blinkenlib_continue = Module['_blinkenlib_continue'] = createExportWrapper('blinkenlib_continue', 0);
 var _blinkenlib_preempt_resume = Module['_blinkenlib_preempt_resume'] = createExportWrapper('blinkenlib_preempt_resume', 0);
+var _blinkenlib_faketty_resume = Module['_blinkenlib_faketty_resume'] = createExportWrapper('blinkenlib_faketty_resume', 0);
 var _blinkenlib_get_clstruct = Module['_blinkenlib_get_clstruct'] = createExportWrapper('blinkenlib_get_clstruct', 0);
 var _blinkenlib_get_argc_string = Module['_blinkenlib_get_argc_string'] = createExportWrapper('blinkenlib_get_argc_string', 0);
 var _blinkenlib_get_argv_string = Module['_blinkenlib_get_argv_string'] = createExportWrapper('blinkenlib_get_argv_string', 0);

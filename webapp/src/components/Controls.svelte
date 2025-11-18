@@ -135,6 +135,9 @@ function handle_back() {
 {#if mobile && !showEditor && $state == blink.states.PROGRAM_STOPPED}
   <p class="exitcodeinfo">{blink.stopReason.details}</p>
 {/if}
+{#if mobile && !showEditor && $state == blink.states.PROGRAM_READ_PAUSE}
+  <p class="exitcodeinfo">Program is waiting for user input</p>
+{/if}
 
 
 <style>

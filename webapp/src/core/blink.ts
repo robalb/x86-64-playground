@@ -182,8 +182,10 @@ const signals = {
 };
 
 const sigtrap_codes = {
-	BLINK_PREEMPT: 40,
-	BLINK_STEP: 41,
+    BLINK_SIGTRAP:  0,
+    BLINK_PREEMPT:  40,
+    BLINK_STEP:     41,
+    BLINK_FAKE_TTY: 42,
 };
 
 const signals_info = {
@@ -253,6 +255,7 @@ export class Blink {
 		LINKING: "LINKING",
 		PROGRAM_LOADED: "PROGRAM_LOADED",
 		PROGRAM_RUNNING: "PROGRAM_RUNNING",
+		PROGRAM_READ_PAUSE: "PROGRAM_READ_PAUSE",
 		PROGRAM_STOPPED: "PROGRAM_STOPPED",
 	} as const;
 
@@ -389,14 +392,23 @@ export class Blink {
 	}
 
 	/**
-	 * This callback is called from the wasm code
-	 * when the guest process is stopped by a terminating signal
+	 * This callback is called from the wasm code when
+	 * the guest process is stopped/paused by a signal
+     *
+     * If this callback got called, the execution loop
+     * emulating the cpu on the wasm side is no longer
+     * running.
 	 *
-	 * SIGTRAP is the only signal that does not indicate
+	 * SIGTRAP is the only signal that doesnt indicate
 	 * a program stop.
+     * SIGTRAP is not necessarily a real POSIX SIGTRAP
+     * There is an additional code parameter passed to
+     * the callback, which indicates the actual reason
+     * for the program pause.
 	 */
 	#extern_c__signal_callback(sig: number, code: number) {
-		if (sig !== signals.SIGTRAP) {
+        // signals != SIGTRAP ---> program exit
+        if (sig !== signals.SIGTRAP){
 			const exitCode = 128 + sig;
 			let details = `Program terminated with Exit(${exitCode}) Due to signal ${sig}`;
 			if (Object.prototype.hasOwnProperty.call(signals_info, sig)) {
@@ -406,23 +418,33 @@ export class Blink {
 			}
 			this.stopReason = {
 				loadFail: false,
-				exitCode: exitCode,
-				details: details,
-			};
-			this.#setState(this.states.PROGRAM_STOPPED);
-			this.#signalHandler(sig, code);
-		} else if (
-			sig === signals.SIGTRAP &&
-			code === sigtrap_codes.BLINK_PREEMPT
-		) {
-			console.log("preempt");
-			requestAnimationFrame(() => {
-				this.Module._blinkenlib_preempt_resume();
-			});
-		} else {
-			this.#signalHandler(sig, code);
-		}
-	}
+                exitCode: exitCode,
+                details: details,
+            };
+            this.#setState(this.states.PROGRAM_STOPPED);
+            this.#signalHandler(sig, code);
+            return;
+        }
+
+        // fake SIGTRAP. it actually indicates preemption.
+        // The emulator paused to free the js event loop.
+        if(code === sigtrap_codes.BLINK_PREEMPT){
+            console.log("preempt");
+            requestAnimationFrame(() => {
+                this.Module._blinkenlib_preempt_resume();
+            });
+        }
+        // fake SIGTRAP: it actually indicates a tty line read.
+        // Emulator paused on a read syscall, waiting for 
+        // the user to enter one line on the fake js tty.
+        else if(code === sigtrap_codes.BLINK_FAKE_TTY){
+            this.#setState(this.states.PROGRAM_READ_PAUSE);
+        } 
+        // an actual SIGTRAP
+        else {
+            this.#signalHandler(sig, code);
+        }
+    }
 
 	/**
 	 * This callback is called from the wasm code
