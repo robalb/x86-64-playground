@@ -11,6 +11,10 @@ function scroll() {
 		});
 	}
 }
+
+function lineEnter(){
+    blink.readLineEnter()
+}
 // Scroll the terminal wen the program state
 // or the terminal buffer change
 $: ($term_buffer || $state) && scroll();
@@ -27,7 +31,7 @@ $: ($term_buffer || $state) && scroll();
         <label>Enter your input:</label>
         <div class="stdin_row">
             <input type="text"/>
-            <button>submit</button>
+            <button on:click={lineEnter}>submit</button>
         </div>
     </div>
 {/if}

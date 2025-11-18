@@ -439,6 +439,7 @@ export class Blink {
         // the user to enter one line on the fake js tty.
         else if(code === sigtrap_codes.BLINK_FAKE_TTY){
             this.#setState(this.states.PROGRAM_READ_PAUSE);
+            this.#signalHandler(sig, code);
         } 
         // an actual SIGTRAP
         else {
@@ -691,6 +692,14 @@ export class Blink {
 			this.#setState(this.states.PROGRAM_STOPPED);
 		}
 	}
+
+    readLineEnter(line: string) {
+        console.log("ENTER2")
+        // TODO: set the stdin byte buffer
+        // TODO: also define the stdin function to read from that buffer
+        this.#setState(this.states.PROGRAM_RUNNING);
+		this.Module._blinkenlib_faketty_resume();
+    }
 
 	stepi() {
 		this.Module._blinkenlib_stepi();
