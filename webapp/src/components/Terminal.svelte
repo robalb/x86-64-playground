@@ -1,9 +1,9 @@
 <script>
 import { blinkStore, term_buffer, state } from "../core/store";
+import TerminalInput from "./TerminalInput.svelte"
 
 let blink = blinkStore.getInstance();
 let termref;
-let stdin_str = "";
 
 function scroll() {
 	if (termref != null) {
@@ -13,13 +13,10 @@ function scroll() {
 	}
 }
 
-function lineEnter(){
-    blink.readLineEnter(stdin_str)
-    stdin_str = "";
-}
 // Scroll the terminal wen the program state
 // or the terminal buffer change
 $: ($term_buffer || $state) && scroll();
+
 </script>
 
 <div class="term" bind:this={termref}>
@@ -29,13 +26,7 @@ $: ($term_buffer || $state) && scroll();
 {#if $state == blink.states.PROGRAM_STOPPED}
     <p class="exitcodeinfo">{blink.stopReason.details}</p>
 {:else if $state == blink.states.PROGRAM_READLINE_PAUSE}
-    <div class="stdin">
-        <label>Enter your input:</label>
-        <div class="stdin_row">
-            <input type="text" bind:value={stdin_str}/>
-            <button on:click={lineEnter}>submit</button>
-        </div>
-    </div>
+    <TerminalInput />
 {/if}
 </div>
 

@@ -284,7 +284,6 @@ export class Blink {
 
     //fake TTY readline
     stdin_bytes = [];
-    read_bufsize = 0;
 
 	/**
 	 * Initialize the emscripten blink module.
