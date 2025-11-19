@@ -1,5 +1,6 @@
 <script>
 import { blinkStore, term_buffer, state } from "../core/store";
+import TerminalInput from "./TerminalInput.svelte"
 
 let blink = blinkStore.getInstance();
 let termref;
@@ -11,9 +12,11 @@ function scroll() {
 		});
 	}
 }
+
 // Scroll the terminal wen the program state
 // or the terminal buffer change
 $: ($term_buffer || $state) && scroll();
+
 </script>
 
 <div class="term" bind:this={termref}>
@@ -22,6 +25,8 @@ $: ($term_buffer || $state) && scroll();
   </div>
 {#if $state == blink.states.PROGRAM_STOPPED}
     <p class="exitcodeinfo">{blink.stopReason.details}</p>
+{:else if $state == blink.states.PROGRAM_READLINE_PAUSE}
+    <TerminalInput />
 {/if}
 </div>
 
@@ -57,5 +62,33 @@ $: ($term_buffer || $state) && scroll();
     border: 1px solid var(--theme-exitcodeinfo-border);
 
     padding-left: 1rem;
+  }
+
+  .stdin{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: var(--code-font-family);
+    background-color: #6ab0f3;
+    background-color: #6ab0f35c;
+    border: 1px solid var(--color-blue);
+    color: var(--theme-exitcodeinfo-fg);
+    padding-left: 1rem;
+    font-size: 16px;
+    margin: 16px 0;
+  }
+  .stdin.stdin_row {
+      display: flex;
+  }
+  .stdin input{
+    font-family: var(--code-font-family);
+    font-size: 16px;
+
+    margin: 2px 0 6px 0;
+
+    border: 1px solid white;
+  }
+  .stdin input:focus-visible{
+      outline: 3px solid var(--theme-focus);
   }
 </style>
