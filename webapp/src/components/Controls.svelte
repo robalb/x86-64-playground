@@ -136,7 +136,7 @@ function handle_back() {
   <p class="exitcodeinfo">{blink.stopReason.details}</p>
 {/if}
 {#if $state == blink.states.PROGRAM_READLINE_PAUSE}
-  <p class="exitcodeinfo">Program is paused, waiting for user input <a href="#">enter</a></p>
+  <p class="lineinputinfo">Program is paused, waiting for user input</p>
 {/if}
 
 
@@ -249,6 +249,14 @@ function handle_back() {
     background-color: var(--theme-exitcodeinfo-bg);
     color: var(--theme-exitcodeinfo-fg);
     border: 1px solid var(--theme-exitcodeinfo-border);
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+ .lineinputinfo{
+    color: var(--theme-exitcodeinfo-fg);
+    background-color: #33485c;
+    border: 1px solid var(--color-blue);
     margin: 0;
     padding-left: 1rem;
   }
