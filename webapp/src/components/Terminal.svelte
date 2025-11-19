@@ -3,6 +3,7 @@ import { blinkStore, term_buffer, state } from "../core/store";
 
 let blink = blinkStore.getInstance();
 let termref;
+let stdin_str = "";
 
 function scroll() {
 	if (termref != null) {
@@ -13,7 +14,8 @@ function scroll() {
 }
 
 function lineEnter(){
-    blink.readLineEnter()
+    blink.readLineEnter(stdin_str)
+    stdin_str = "";
 }
 // Scroll the terminal wen the program state
 // or the terminal buffer change
@@ -26,11 +28,11 @@ $: ($term_buffer || $state) && scroll();
   </div>
 {#if $state == blink.states.PROGRAM_STOPPED}
     <p class="exitcodeinfo">{blink.stopReason.details}</p>
-{:else if $state == blink.states.PROGRAM_READ_PAUSE}
+{:else if $state == blink.states.PROGRAM_READLINE_PAUSE}
     <div class="stdin">
         <label>Enter your input:</label>
         <div class="stdin_row">
-            <input type="text"/>
+            <input type="text" bind:value={stdin_str}/>
             <button on:click={lineEnter}>submit</button>
         </div>
     </div>

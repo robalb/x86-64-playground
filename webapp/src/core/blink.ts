@@ -255,7 +255,7 @@ export class Blink {
 		LINKING: "LINKING",
 		PROGRAM_LOADED: "PROGRAM_LOADED",
 		PROGRAM_RUNNING: "PROGRAM_RUNNING",
-		PROGRAM_READ_PAUSE: "PROGRAM_READ_PAUSE",
+		PROGRAM_READLINE_PAUSE: "PROGRAM_READLINE_PAUSE",
 		PROGRAM_STOPPED: "PROGRAM_STOPPED",
 	} as const;
 
@@ -281,6 +281,10 @@ export class Blink {
 	assembler_logs = "";
 	//assembler diagnostic errors
 	assembler_errors = [];
+
+    //fake TTY readline
+    stdin_bytes = [];
+    read_bufsize = 0;
 
 	/**
 	 * Initialize the emscripten blink module.
@@ -309,7 +313,22 @@ export class Blink {
 			noInitialRun: true,
 			preRun: (M: any) => {
 				M.FS.init(
-					this.#stdinHandler,
+                    () => {
+                        //stdin read
+
+                        // TODO: use this when in pipe mode.
+                        // right now, libblink supports only
+                        // a fake TTY mode for reading input
+                        // return this.#stdinHandler()
+
+                        // Fake tty mode: return the data that was inserted via 
+                        // blink.readLineEnter(string)
+                        if(this.stdin_bytes.length){
+                            return this.stdin_bytes.pop()
+                        }else{
+                            return null //EOF
+                        }
+                    },
 					(charcode: number) => {
 						this.#assembler_logcollector(charcode);
 						this.#stdoutHandler(charcode);
@@ -438,7 +457,7 @@ export class Blink {
         // Emulator paused on a read syscall, waiting for 
         // the user to enter one line on the fake js tty.
         else if(code === sigtrap_codes.BLINK_FAKE_TTY){
-            this.#setState(this.states.PROGRAM_READ_PAUSE);
+            this.#setState(this.states.PROGRAM_READLINE_PAUSE);
             this.#signalHandler(sig, code);
         } 
         // an actual SIGTRAP
@@ -694,9 +713,14 @@ export class Blink {
 	}
 
     readLineEnter(line: string) {
-        console.log("ENTER2")
-        // TODO: set the stdin byte buffer
-        // TODO: also define the stdin function to read from that buffer
+        //Note: validation should be handled on the UI side,
+        //e.g.: if user enters an emoji, a message shoul appear
+        //explaining the implications of that - multiple bytes,
+        //utf-8 encoding, need to manually handle that in the
+        //assembly side, etc.
+        //Note: the bytes are stored in reverse order.
+        //the stdin handler will pop bytes from this array.
+        this.stdin_bytes = Array.from(new TextEncoder().encode(line)).reverse();
         this.#setState(this.states.PROGRAM_RUNNING);
 		this.Module._blinkenlib_faketty_resume();
     }
