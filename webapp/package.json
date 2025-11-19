@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "engines": {
-    "npm": "^9.2.0",
-    "node": "^18.19.1"
+    "npm": "^10.2.4",
+    "node": "^20.11.1"
   },
   "devDependencies": {
     "@melt-ui/svelte": "^0.84.0",
