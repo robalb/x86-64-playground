@@ -21,6 +21,7 @@
     <nav class="docs__nav">
       <h2>Components</h2>
       <ul>
+        <li><a href="#surfaces">Surfaces</a></li>
         <li><a href="#buttons">Buttons</a></li>
         <li><a href="#icons">Icons</a></li>
         <li><a href="#panels">Panels</a></li>
@@ -48,6 +49,33 @@
                 Lorem ipsum dolom sit amlet
             </p>
       </section>
+      <!-- Surfaces Section -->
+      <section id="surfaces" class="docs__section">
+        <h2><a href="#surfaces">Surfaces</a></h2>
+        <p>Background surfaces define the layered depth of the interface. Each level is used for a distinct UI context.</p>
+
+        <div class="docs__example">
+          <div class="docs__surface-grid">
+            <div class="docs__surface-item" style="background: var(--theme-panel-controls-bg);">
+              <span class="docs__surface-label">--theme-panel-controls-bg</span>
+              <span class="docs__surface-desc">Deepest layer (controls)</span>
+            </div>
+            <div class="docs__surface-item" style="background: var(--theme-panel-bg);">
+              <span class="docs__surface-label">--theme-panel-bg</span>
+              <span class="docs__surface-desc">Panel background</span>
+            </div>
+            <div class="docs__surface-item" style="background: var(--theme-bg);">
+              <span class="docs__surface-label">--theme-bg</span>
+              <span class="docs__surface-desc">Main background</span>
+            </div>
+            <div class="docs__surface-item" style="background: var(--theme-inline-code-bg);">
+              <span class="docs__surface-label">--theme-inline-code-bg</span>
+              <span class="docs__surface-desc">Elevated (inline code)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Buttons Section -->
       <section id="buttons" class="docs__section">
         <h2><a href="#buttons">Buttons</a></h2>
@@ -432,7 +460,6 @@
   .docs__example {
     margin: 1.5rem 0;
     padding: 1.5rem;
-    background: var(--theme-panel-bg);
     border-radius: 8px;
   }
 
@@ -447,6 +474,34 @@
     background: var(--color-gray-800);
     border-radius: 4px;
     margin-bottom: 1rem;
+  }
+
+  .docs__surface-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .docs__surface-item {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.75rem;
+    border: 1px solid var(--color-gray-300);
+  }
+
+  .docs__surface-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-gray-100);
+  }
+
+  .docs__surface-desc {
+    font-size: 0.6875rem;
+    color: var(--color-gray-200);
+    margin-top: 0.25rem;
   }
 
   .docs__preview--icons {
