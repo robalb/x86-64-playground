@@ -886,10 +886,6 @@ function dbg(...args) {
     }
   }
 
-  var stackRestore = (val) => __emscripten_stack_restore(val);
-
-  var stackSave = () => _emscripten_stack_get_current();
-
   var warnOnce = (text) => {
       warnOnce.shown ||= {};
       if (!warnOnce.shown[text]) {
@@ -4492,10 +4488,6 @@ function dbg(...args) {
       runtimeKeepaliveCounter = 0;
     };
 
-  var __emscripten_throw_longjmp = () => {
-      throw Infinity;
-    };
-
   var isLeapYear = (year) => year%4 === 0 && (year%100 !== 0 || year%400 === 0);
   
   var MONTH_DAYS_LEAP_CUMULATIVE = [0,31,60,91,121,152,182,213,244,274,305,335];
@@ -5095,7 +5087,6 @@ function dbg(...args) {
     };
 
 
-
   
   
   var stringToNewUTF8 = (str) => {
@@ -5385,8 +5376,6 @@ var wasmImports = {
   /** @export */
   _emscripten_runtime_keepalive_clear: __emscripten_runtime_keepalive_clear,
   /** @export */
-  _emscripten_throw_longjmp: __emscripten_throw_longjmp,
-  /** @export */
   _localtime_js: __localtime_js,
   /** @export */
   _mmap_js: __mmap_js,
@@ -5435,14 +5424,6 @@ var wasmImports = {
   /** @export */
   fd_write: _fd_write,
   /** @export */
-  invoke_ji,
-  /** @export */
-  invoke_vi,
-  /** @export */
-  invoke_vii,
-  /** @export */
-  invoke_vij,
-  /** @export */
   proc_exit: _proc_exit
 };
 var wasmExports = createWasm();
@@ -5466,66 +5447,18 @@ var _strerror = createExportWrapper('strerror', 1);
 var _fflush = createExportWrapper('fflush', 1);
 var _emscripten_builtin_memalign = createExportWrapper('emscripten_builtin_memalign', 2);
 var __emscripten_timeout = createExportWrapper('_emscripten_timeout', 2);
-var _setThrew = createExportWrapper('setThrew', 2);
 var __emscripten_tempret_set = createExportWrapper('_emscripten_tempret_set', 1);
 var _emscripten_stack_init = () => (_emscripten_stack_init = wasmExports['emscripten_stack_init'])();
 var _emscripten_stack_get_free = () => (_emscripten_stack_get_free = wasmExports['emscripten_stack_get_free'])();
 var _emscripten_stack_get_base = () => (_emscripten_stack_get_base = wasmExports['emscripten_stack_get_base'])();
 var _emscripten_stack_get_end = () => (_emscripten_stack_get_end = wasmExports['emscripten_stack_get_end'])();
-var __emscripten_stack_restore = (a0) => (__emscripten_stack_restore = wasmExports['_emscripten_stack_restore'])(a0);
 var __emscripten_stack_alloc = (a0) => (__emscripten_stack_alloc = wasmExports['_emscripten_stack_alloc'])(a0);
 var _emscripten_stack_get_current = () => (_emscripten_stack_get_current = wasmExports['emscripten_stack_get_current'])();
-var dynCall_ji = Module['dynCall_ji'] = createExportWrapper('dynCall_ji', 2);
-var dynCall_vij = Module['dynCall_vij'] = createExportWrapper('dynCall_vij', 4);
 var dynCall_iiji = Module['dynCall_iiji'] = createExportWrapper('dynCall_iiji', 5);
 var dynCall_jijj = Module['dynCall_jijj'] = createExportWrapper('dynCall_jijj', 6);
 var dynCall_vijjj = Module['dynCall_vijjj'] = createExportWrapper('dynCall_vijjj', 8);
 var dynCall_jji = Module['dynCall_jji'] = createExportWrapper('dynCall_jji', 4);
 var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji', 5);
-
-function invoke_vi(index,a1) {
-  var sp = stackSave();
-  try {
-    getWasmTableEntry(index)(a1);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vii(index,a1,a2) {
-  var sp = stackSave();
-  try {
-    getWasmTableEntry(index)(a1,a2);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_ji(index,a1) {
-  var sp = stackSave();
-  try {
-    return dynCall_ji(index,a1);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vij(index,a1,a2,a3) {
-  var sp = stackSave();
-  try {
-    dynCall_vij(index,a1,a2,a3);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
 
 
 // include: postamble.js
@@ -5547,6 +5480,8 @@ var missingLibrarySymbols = [
   'readI53FromU64',
   'convertI32PairToI53',
   'convertU32PairToI53',
+  'stackSave',
+  'stackRestore',
   'getTempRet0',
   'setTempRet0',
   'arraySum',
@@ -5647,8 +5582,6 @@ var missingLibrarySymbols = [
   'makePromise',
   'idsToPromises',
   'makePromiseCallback',
-  'ExceptionInfo',
-  'findMatchingCatch',
   'Browser_asyncPrepareDataCounter',
   'setMainLoop',
   'getSocketFromFD',
@@ -5703,8 +5636,6 @@ var unexportedSymbols = [
   'checkStackCookie',
   'readI53FromI64',
   'convertI32PairToI53Checked',
-  'stackSave',
-  'stackRestore',
   'stackAlloc',
   'ptrToString',
   'zeroMemory',
@@ -5772,9 +5703,6 @@ var unexportedSymbols = [
   'doReadv',
   'doWritev',
   'promiseMap',
-  'uncaughtExceptionCount',
-  'exceptionLast',
-  'exceptionCaught',
   'Browser',
   'getPreloadedImageData__data',
   'wget',
