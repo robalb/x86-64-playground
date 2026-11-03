@@ -1,15 +1,21 @@
 #!/bin/bash
 
+NASM_REPO="https://github.com/robalb/nasm.git"
+NASM_COMMIT="bfcbf23e863205dd361f2f9191f837dc860b8bf7" 
+
 cd musl_nasm
 
 #---------------------
 # check dependencies
 #---------------------
 requirements=(
-    "wget"
+    "git"
     "musl-gcc"
     "gcc"
     "make"
+    "perl"
+    "autoconf"
+    "automake"
 )
 
 for cmd in "${requirements[@]}"; do
@@ -17,13 +23,16 @@ for cmd in "${requirements[@]}"; do
 done
 
 #---------------------
-# clone nasm v3.00
+# fetch the nasm repo
+# at a pinned commit.
 #---------------------
 if [ ! -d nasm ] ; then
-  wget https://www.nasm.us/pub/nasm/releasebuilds/3.00/nasm-3.00.tar.gz
-  tar -xf nasm-3.00.tar.gz
-  mv nasm-3.00 nasm
+  git init nasm
+  git -C nasm remote add origin "$NASM_REPO"
 fi
+git -C nasm fetch --depth 1 origin "$NASM_COMMIT"
+git -C nasm checkout --force FETCH_HEAD
+git -C nasm clean -fdx
 
 
 # nasm does not support out-of-tree builds,
@@ -43,18 +52,18 @@ common_configure_flags=(
     "--disable-gc"
 )
 
+./autogen.sh
 CC=musl-gcc LDFLAGS="-static" ./configure "${common_configure_flags[@]}"
 
 
 #---------------------
 # build nasm, stripped
 #---------------------
-make
-make strip
+make nasm
+strip --strip-unneeded nasm
 
 #---------------------
 # copy nasm in the
 # web assets folder
 #---------------------
-cp nasm ../../webapp/src/assets/assemblers/nasm.elf
-
+cp nasm ../../webapp/src/assets/assemblers/nasm.3.00.elf
