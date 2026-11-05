@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd musl_binutils
 
 #---------------------
@@ -9,6 +11,8 @@ requirements=(
     "musl-gcc"
     "gcc"
     "make"
+    "bison"
+    "flex"
 )
 
 for cmd in "${requirements[@]}"; do
@@ -26,7 +30,8 @@ fi
 #---------------------
 # create build directory
 #---------------------
-mkdir -p build
+rm -rf build
+mkdir build
 cd build
 
 
@@ -47,6 +52,7 @@ common_configure_flags=(
     "--disable-libdecnumber"
     "--disable-readline"
     "--disable-sim"
+    "--disable-libctf"
 
     "--disable-werror"
     "--enable-static"
@@ -55,22 +61,32 @@ common_configure_flags=(
     "--target=x86_64-linux-musl"
     "--disable-shared" 
 )
-# "--host=wasm32"
+cflags=(
+    "-Os"
+    "-ffunction-sections"
+    "-fdata-sections"
+    "-fno-asynchronous-unwind-tables"
+    "-fno-unwind-tables"
+    "-static"
+    "--static"
+    "-static-libgcc"
+    "-static-libstdc++"
+)
 
-CC=musl-gcc CFLAGS="-O3 -static --static -static-libgcc -static-libstdc++" CXXFLAGS="-O3 -static --static" ../binutils-gdb/configure "${common_configure_flags[@]}"
+CC=musl-gcc CFLAGS="${cflags[*]}" CXXFLAGS="-O3 -static --static" LDFLAGS="-Wl,--gc-sections" ../binutils-gdb/configure "${common_configure_flags[@]}"
 
 
 #---------------------
 # build as and ld
 #---------------------
-make all
+make MAKEINFO=true all
 strip --strip-unneeded gas/as-new
-strip --strip-unneeded gas/ld-new
+strip --strip-unneeded ld/ld-new
 
 #---------------------
 # copy as and ld in
 # the web assets folder
 #---------------------
-cp gas/as-new ../webapp/src/assets/assemblers/gnu-as.elf
-cp ld/ld-new ../webapp/src/assets/assemblers/gnu-ld.elf
+cp gas/as-new ../../webapp/src/assets/assemblers/gnu-as.elf
+cp ld/ld-new ../../webapp/src/assets/assemblers/gnu-ld.elf
 

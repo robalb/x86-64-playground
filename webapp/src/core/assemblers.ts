@@ -3,9 +3,37 @@ import gnu_as_2_43_50 from "../assets/assemblers/gnu-as.2.43.50.elf?url";
 import gnu_ld_2_43_50 from "../assets/assemblers/gnu-ld.2.43.50.elf?url";
 import nasm_3_00 from "../assets/assemblers/nasm.3.00.elf?url";
 
+const minimal_linker_script = `
+ENTRY(_start)
+SECTIONS
+{
+  PROVIDE(__executable_start = 0x400000);
+  . = 0x400000 + SIZEOF_HEADERS;
+  .note.gnu.property : { *(.note.gnu.property) }
+  . = ALIGN(0x1000);
+  .text : { *(.text .text.*) }
+  PROVIDE(__etext = .);
+  PROVIDE(_etext = .);
+  PROVIDE(etext = .);
+  . = ALIGN(0x1000);
+  .rodata : { *(.rodata .rodata.*) }
+  . = ALIGN(0x1000) + (. & 0xfff);
+  .data : { *(.data .data.*) }
+  PROVIDE(_edata = .);
+  PROVIDE(edata = .);
+  __bss_start = .;
+  .bss : { *(.bss .bss.*) *(COMMON) . = ALIGN(. != 0 ? 8 : 1); }
+  . = ALIGN(8);
+  PROVIDE(_end = .);
+  PROVIDE(end = .);
+}
+`;
+
+
 export interface Binary {
 	fileurl: string;
 	commands: string;
+	linkerScript?: string;
 }
 
 export interface DiagnosticLine {
@@ -60,7 +88,9 @@ export const assemblers: Record<string, AssemblerMode> = {
 			},
 			linker: {
 				fileurl: gnu_ld_2_43_50,
-				commands: "/linker /program.o -o /program",
+				commands:
+					"/linker /program.o -o /program -T /link.ld --hash-size=31",
+				linkerScript: minimal_linker_script,
 			},
 		},
 	},
@@ -80,7 +110,7 @@ export const assemblers: Record<string, AssemblerMode> = {
 		id: "NASM_trunk",
 		display_name: "Nasm",
 		description:
-			"NASM 3.00 + GNU ld v2.43.50. Both compiled as a static MUSL binary",
+			"NASM 3.00 + GNU ld v2.43.50. Both compiled as static MUSL binary",
 		diagnosticsParser: nasm_diagnostics,
 		binaries: {
 			assembler: {
@@ -89,7 +119,9 @@ export const assemblers: Record<string, AssemblerMode> = {
 			},
 			linker: {
 				fileurl: gnu_ld_2_43_50,
-				commands: "/linker /program.o -o /program",
+				commands:
+					"/linker /program.o -o /program -T /link.ld --hash-size=31",
+				linkerScript: minimal_linker_script,
 			},
 		},
 	},
