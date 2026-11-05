@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NASM_REPO="https://github.com/robalb/nasm.git"
-NASM_COMMIT="bfcbf23e863205dd361f2f9191f837dc860b8bf7" 
+NASM_COMMIT="97baa411775b48963826d437ce51f796263f7246" 
 
 cd musl_nasm
 
@@ -51,9 +51,17 @@ common_configure_flags=(
     "--disable-largefile"
     "--disable-gc"
 )
+cflags=(
+    "-O2"
+    "-DOF_ONLY"
+    "-DOF_ELF64"
+    "-DOF_ELF32"
+    "-DOF_BIN"
+    "-fno-asynchronous-unwind-tables"
+)
 
 ./autogen.sh
-CC=musl-gcc LDFLAGS="-static" ./configure "${common_configure_flags[@]}"
+CC=musl-gcc CFLAGS="${cflags[*]}" LDFLAGS="-static" ./configure "${common_configure_flags[@]}"
 
 
 #---------------------
