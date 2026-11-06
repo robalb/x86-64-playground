@@ -683,3 +683,25 @@ body {
 
     color: white;
 }
+
+.asmhint {
+    position: fixed;
+    z-index: 100;
+    max-width: min(28em, 100vw - 16px);
+    margin: 0;
+    padding: .4em .6em;
+    font-family: var(--font-family);
+    font-size: .85rem;
+    line-height: 1.4;
+    color: var(--theme-text-fg);
+    background: var(--theme-panel-controls-bg);
+    border: 1px solid var(--theme-primary);
+    border-radius: 2px;
+    box-shadow: 0 8px 24px #010409cc;
+}
+
+.asmhint a {
+    margin-left: .5em;
+    color: var(--theme-primary);
+    white-space: nowrap;
+}

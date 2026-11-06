@@ -6,6 +6,7 @@ import { createEditor } from "prism-code-editor"
 
 // Prism grammars for all our assembler flavours
 import "../core/syntax"
+import { asmHints } from "../core/asmHints"
 
 // Editor styles
 import "prism-code-editor/layout.css"
@@ -54,6 +55,7 @@ function renderEditor(){
     matchBrackets(),
     highlightSelectionMatches(),
     defaultCommands(),
+    asmHints(),
   )
   setIgnoreTab(true)
   editor.textarea.setAttribute("aria-describedby", "editor-tab-hint")

@@ -6,6 +6,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 export default defineConfig({
   plugins: [svelte()],
   assetsInclude: ['**/*.elf'],
+  json: { stringify: true },
   build: {
     rollupOptions: {
       input: {

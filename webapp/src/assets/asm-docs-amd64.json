@@ -1,0 +1,1834 @@
+{
+	"ADC": [
+		"Adds the destination operand (first operand), the source operand (second operand), and the carry (CF) flag and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADC.html"
+	],
+	"ADD": [
+		"Adds the destination operand (first operand) and the source operand (second operand) and then stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADD.html"
+	],
+	"ADDPD": [
+		"Adds two, four or eight packed double precision floating-point values from the first source operand to the second source operand, and stores the packed double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADDPD.html"
+	],
+	"ADDPS": [
+		"Adds four, eight or sixteen packed single precision floating-point values from the first source operand with the second source operand, and stores the packed single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADDPS.html"
+	],
+	"ADDSD": [
+		"Adds the low double precision floating-point values from the second source operand and the first source operand and stores the double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADDSD.html"
+	],
+	"ADDSS": [
+		"Adds the low single precision floating-point values from the second source operand and the first source operand, and stores the double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ADDSS.html"
+	],
+	"ADDSUBPD": [
+		"Adds odd-numbered double precision floating-point values of the first source operand (second operand) with the corresponding double precision floating-point values from the second source operand (third operand); stores the result in the odd-numbered values of the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/ADDSUBPD.html"
+	],
+	"ADDSUBPS": [
+		"Adds odd-numbered single precision floating-point values of the first source operand (second operand) with the corresponding single precision floating-point values from the second source operand (third operand); stores the result in the odd-numbered values of the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/ADDSUBPS.html"
+	],
+	"AND": [
+		"Performs a bitwise AND operation on the destination (first) and source (second) operands and stores the result in the destination operand location.",
+		"https://www.felixcloutier.com/x86/AND.html"
+	],
+	"ANDNPD": [
+		"Performs a bitwise logical AND NOT of the two, four or eight packed double precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ANDNPD.html"
+	],
+	"ANDNPS": [
+		"Performs a bitwise logical AND NOT of the four, eight or sixteen packed single precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ANDNPS.html"
+	],
+	"ANDPD": [
+		"Performs a bitwise logical AND of the two, four or eight packed double precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ANDPD.html"
+	],
+	"ANDPS": [
+		"Performs a bitwise logical AND of the four, eight or sixteen packed single precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ANDPS.html"
+	],
+	"BSF": [
+		"Searches the source operand (second operand) for the least significant set bit (1 bit).",
+		"https://www.felixcloutier.com/x86/BSF.html"
+	],
+	"BSR": [
+		"Searches the source operand (second operand) for the most significant set bit (1 bit).",
+		"https://www.felixcloutier.com/x86/BSR.html"
+	],
+	"BSWAP": [
+		"Reverses the byte order of a 32-bit or 64-bit (destination) register.",
+		"https://www.felixcloutier.com/x86/BSWAP.html"
+	],
+	"BT": [
+		"Selects the bit in a bit string (specified with the first operand, called the bit base) at the bit-position designated by the bit offset (specified by the second operand) and stores the value of the bit in the CF flag.",
+		"https://www.felixcloutier.com/x86/BT.html"
+	],
+	"BTC": [
+		"Selects the bit in a bit string (specified with the first operand, called the bit base) at the bit-position designated by the bit offset operand (second operand), stores the value of the bit in the CF flag, and complements the selected bit in the bit string.",
+		"https://www.felixcloutier.com/x86/BTC.html"
+	],
+	"BTR": [
+		"Selects the bit in a bit string (specified with the first operand, called the bit base) at the bit-position designated by the bit offset operand (second operand), stores the value of the bit in the CF flag, and clears the selected bit in the bit string to 0.",
+		"https://www.felixcloutier.com/x86/BTR.html"
+	],
+	"BTS": [
+		"Selects the bit in a bit string (specified with the first operand, called the bit base) at the bit-position designated by the bit offset operand (second operand), stores the value of the bit in the CF flag, and sets the selected bit in the bit string to 1.",
+		"https://www.felixcloutier.com/x86/BTS.html"
+	],
+	"CALL": [
+		"Saves procedure linking information on the stack and branches to the called procedure specified using the target operand.",
+		"https://www.felixcloutier.com/x86/CALL.html"
+	],
+	"CBW": [
+		"Double the size of the source operand by means of sign extension.",
+		"https://www.felixcloutier.com/x86/CBW%3ACWDE%3ACDQE.html"
+	],
+	"CDQE": [
+		"Double the size of the source operand by means of sign extension.",
+		"https://www.felixcloutier.com/x86/CBW%3ACWDE%3ACDQE.html"
+	],
+	"CWDE": [
+		"Double the size of the source operand by means of sign extension.",
+		"https://www.felixcloutier.com/x86/CBW%3ACWDE%3ACDQE.html"
+	],
+	"CLC": [
+		"Clears the CF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/CLC.html"
+	],
+	"CLD": [
+		"Clears the DF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/CLD.html"
+	],
+	"CLFLUSH": [
+		"Invalidates from every level of the cache hierarchy in the cache coherence domain the cache line that contains the linear address specified with the memory operand.",
+		"https://www.felixcloutier.com/x86/CLFLUSH.html"
+	],
+	"CLI": [
+		"In most cases, CLI clears the IF flag in the EFLAGS register and no other flags are affected. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/CLI.html"
+	],
+	"CLTS": [
+		"Clears the task-switched (TS) flag in the CR0 register. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/CLTS.html"
+	],
+	"CMC": [
+		"Complements the CF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/CMC.html"
+	],
+	"CMOVA": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVAE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVB": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVBE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVC": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVG": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVGE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVL": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVLE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNA": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNAE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNB": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNBE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNC": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNG": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNGE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNL": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNLE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNO": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNP": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNS": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVNZ": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVO": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVP": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVPE": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVPO": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVS": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMOVZ": [
+		"Each of the CMOVcc instructions performs a move operation if the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) are in a specified state (or condition).",
+		"https://www.felixcloutier.com/x86/CMOVcc.html"
+	],
+	"CMP": [
+		"Compares the first source operand with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMP.html"
+	],
+	"CMPPD": [
+		"Performs a SIMD compare of the packed double precision floating-point values in the second source operand and the first source operand and returns the result of the comparison to the destination operand.",
+		"https://www.felixcloutier.com/x86/CMPPD.html"
+	],
+	"CMPPS": [
+		"Performs a SIMD compare of the packed single precision floating-point values in the second source operand and the first source operand and returns the result of the comparison to the destination operand.",
+		"https://www.felixcloutier.com/x86/CMPPS.html"
+	],
+	"CMPS": [
+		"Compares the byte, word, doubleword, or quadword specified with the first source operand with the byte, word, doubleword, or quadword specified with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMPS%3ACMPSB%3ACMPSW%3ACMPSD%3ACMPSQ.html"
+	],
+	"CMPSB": [
+		"Compares the byte, word, doubleword, or quadword specified with the first source operand with the byte, word, doubleword, or quadword specified with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMPS%3ACMPSB%3ACMPSW%3ACMPSD%3ACMPSQ.html"
+	],
+	"CMPSD": [
+		"Compares the byte, word, doubleword, or quadword specified with the first source operand with the byte, word, doubleword, or quadword specified with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMPS%3ACMPSB%3ACMPSW%3ACMPSD%3ACMPSQ.html"
+	],
+	"CMPSQ": [
+		"Compares the byte, word, doubleword, or quadword specified with the first source operand with the byte, word, doubleword, or quadword specified with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMPS%3ACMPSB%3ACMPSW%3ACMPSD%3ACMPSQ.html"
+	],
+	"CMPSW": [
+		"Compares the byte, word, doubleword, or quadword specified with the first source operand with the byte, word, doubleword, or quadword specified with the second source operand and sets the status flags in the EFLAGS register according to the results.",
+		"https://www.felixcloutier.com/x86/CMPS%3ACMPSB%3ACMPSW%3ACMPSD%3ACMPSQ.html"
+	],
+	"CMPSS": [
+		"Compares the low single precision floating-point values in the second source operand and the first source operand and returns the result of the comparison to the destination operand.",
+		"https://www.felixcloutier.com/x86/CMPSS.html"
+	],
+	"CMPXCHG": [
+		"Compares the value in the AL, AX, EAX, or RAX register with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/CMPXCHG.html"
+	],
+	"CMPXCHG8B": [
+		"Compares the 64-bit value in EDX:EAX (or 128-bit value in RDX:RAX if operand size is 128 bits) with the operand (destination operand).",
+		"https://www.felixcloutier.com/x86/CMPXCHG8B%3ACMPXCHG16B.html"
+	],
+	"COMISD": [
+		"Compares the double precision floating-point values in the low quadwords of operand 1 (first operand) and operand 2 (second operand), and sets the ZF, PF, and CF flags in the EFLAGS register according to the result (unordered, greater than, less than, or equal).",
+		"https://www.felixcloutier.com/x86/COMISD.html"
+	],
+	"COMISS": [
+		"Compares the single precision floating-point values in the low quadwords of operand 1 (first operand) and operand 2 (second operand), and sets the ZF, PF, and CF flags in the EFLAGS register according to the result (unordered, greater than, less than, or equal).",
+		"https://www.felixcloutier.com/x86/COMISS.html"
+	],
+	"CPUID": [
+		"The ID flag (bit 21) in the EFLAGS register indicates support for the CPUID instruction.",
+		"https://www.felixcloutier.com/x86/CPUID.html"
+	],
+	"CVTDQ2PD": [
+		"Converts two, four or eight packed signed doubleword integers in the source operand (the second operand) to two, four or eight packed double precision floating-point values in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/CVTDQ2PD.html"
+	],
+	"CVTDQ2PS": [
+		"Converts four, eight or sixteen packed signed doubleword integers in the source operand to four, eight or sixteen packed single precision floating-point values in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTDQ2PS.html"
+	],
+	"CVTPD2DQ": [
+		"Converts packed double precision floating-point values in the source operand (second operand) to packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPD2DQ.html"
+	],
+	"CVTPD2PI": [
+		"Converts two packed double precision floating-point values in the source operand (second operand) to two packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPD2PI.html"
+	],
+	"CVTPD2PS": [
+		"Converts two, four or eight packed double precision floating-point values in the source operand (second operand) to two, four or eight packed single precision floating-point values in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPD2PS.html"
+	],
+	"CVTPI2PD": [
+		"Converts two packed signed doubleword integers in the source operand (second operand) to two packed double precision floating-point values in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPI2PD.html"
+	],
+	"CVTPI2PS": [
+		"Converts two packed signed doubleword integers in the source operand (second operand) to two packed single precision floating-point values in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPI2PS.html"
+	],
+	"CVTPS2DQ": [
+		"Converts four, eight or sixteen packed single precision floating-point values in the source operand to four, eight or sixteen signed doubleword integers in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTPS2DQ.html"
+	],
+	"CVTPS2PD": [
+		"Converts two, four or eight packed single precision floating-point values in the source operand (second operand) to two, four or eight packed double precision floating-point values in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPS2PD.html"
+	],
+	"CVTPS2PI": [
+		"Converts two packed single precision floating-point values in the source operand (second operand) to two packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTPS2PI.html"
+	],
+	"CVTSD2SI": [
+		"Converts a double precision floating-point value in the source operand (the second operand) to a signed double-word integer in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTSD2SI.html"
+	],
+	"CVTSD2SS": [
+		"Converts a double precision floating-point value in the “convert-from” source operand (the second operand in SSE2 version, otherwise the third operand) to a single precision floating-point value in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTSD2SS.html"
+	],
+	"CVTSI2SD": [
+		"Converts a signed doubleword integer (or signed quadword integer if operand size is 64 bits) in the “convert-from” source operand to a double precision floating-point value in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTSI2SD.html"
+	],
+	"CVTSI2SS": [
+		"Converts a signed doubleword integer (or signed quadword integer if operand size is 64 bits) in the “convert-from” source operand to a single precision floating-point value in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTSI2SS.html"
+	],
+	"CVTSS2SD": [
+		"Converts a single precision floating-point value in the “convert-from” source operand to a double precision floating-point value in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTSS2SD.html"
+	],
+	"CVTSS2SI": [
+		"Converts a single precision floating-point value in the source operand (the second operand) to a signed doubleword integer (or signed quadword integer if operand size is 64 bits) in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/CVTSS2SI.html"
+	],
+	"CVTTPD2DQ": [
+		"Converts two, four or eight packed double precision floating-point values in the source operand (second operand) to two, four or eight packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTTPD2DQ.html"
+	],
+	"CVTTPD2PI": [
+		"Converts two packed double precision floating-point values in the source operand (second operand) to two packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTTPD2PI.html"
+	],
+	"CVTTPS2DQ": [
+		"Converts four, eight or sixteen packed single precision floating-point values in the source operand to four, eight or sixteen signed doubleword integers in the destination operand.",
+		"https://www.felixcloutier.com/x86/CVTTPS2DQ.html"
+	],
+	"CVTTPS2PI": [
+		"Converts two packed single precision floating-point values in the source operand (second operand) to two packed signed doubleword integers in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/CVTTPS2PI.html"
+	],
+	"CVTTSD2SI": [
+		"Converts a double precision floating-point value in the source operand (the second operand) to a signed double-word integer (or signed quadword integer if operand size is 64 bits) in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/CVTTSD2SI.html"
+	],
+	"CVTTSS2SI": [
+		"Converts a single precision floating-point value in the source operand (the second operand) to a signed doubleword integer (or signed quadword integer if operand size is 64 bits) in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/CVTTSS2SI.html"
+	],
+	"CDQ": [
+		"Doubles the size of the operand in register AX, EAX, or RAX (depending on the operand size) by means of sign extension and stores the result in registers DX:AX, EDX:EAX, or RDX:RAX, respectively.",
+		"https://www.felixcloutier.com/x86/CWD%3ACDQ%3ACQO.html"
+	],
+	"CQO": [
+		"Doubles the size of the operand in register AX, EAX, or RAX (depending on the operand size) by means of sign extension and stores the result in registers DX:AX, EDX:EAX, or RDX:RAX, respectively.",
+		"https://www.felixcloutier.com/x86/CWD%3ACDQ%3ACQO.html"
+	],
+	"CWD": [
+		"Doubles the size of the operand in register AX, EAX, or RAX (depending on the operand size) by means of sign extension and stores the result in registers DX:AX, EDX:EAX, or RDX:RAX, respectively.",
+		"https://www.felixcloutier.com/x86/CWD%3ACDQ%3ACQO.html"
+	],
+	"DEC": [
+		"Subtracts 1 from the destination operand, while preserving the state of the CF flag.",
+		"https://www.felixcloutier.com/x86/DEC.html"
+	],
+	"DIV": [
+		"Divides unsigned the value in the AX, DX:AX, EDX:EAX, or RDX:RAX registers (dividend) by the source operand (divisor) and stores the result in the AX (AH:AL), DX:AX, EDX:EAX, or RDX:RAX registers.",
+		"https://www.felixcloutier.com/x86/DIV.html"
+	],
+	"DIVPD": [
+		"Performs a SIMD divide of the double precision floating-point values in the first source operand by the floating-point values in the second source operand (the third operand).",
+		"https://www.felixcloutier.com/x86/DIVPD.html"
+	],
+	"DIVPS": [
+		"Performs a SIMD divide of the four, eight or sixteen packed single precision floating-point values in the first source operand (the second operand) by the four, eight or sixteen packed single precision floating-point values in the second source operand (the third operand).",
+		"https://www.felixcloutier.com/x86/DIVPS.html"
+	],
+	"DIVSD": [
+		"Divides the low double precision floating-point value in the first source operand by the low double precision floating-point value in the second source operand, and stores the double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/DIVSD.html"
+	],
+	"DIVSS": [
+		"Divides the low single precision floating-point value in the first source operand by the low single precision floating-point value in the second source operand, and stores the single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/DIVSS.html"
+	],
+	"EMMS": [
+		"Sets the values of all the tags in the x87 FPU tag word to empty (all 1s).",
+		"https://www.felixcloutier.com/x86/EMMS.html"
+	],
+	"ENTER": [
+		"Creates a stack frame (comprising of space for dynamic storage and 1-32 frame pointer storage) for a procedure.",
+		"https://www.felixcloutier.com/x86/ENTER.html"
+	],
+	"FXRSTOR": [
+		"Reloads the x87 FPU, MMX technology, XMM, and MXCSR registers from the 512-byte memory image specified in the source operand.",
+		"https://www.felixcloutier.com/x86/FXRSTOR.html"
+	],
+	"FXSAVE": [
+		"Saves the current state of the x87 FPU, MMX technology, XMM, and MXCSR registers to a 512-byte memory location specified in the destination operand.",
+		"https://www.felixcloutier.com/x86/FXSAVE.html"
+	],
+	"HADDPD": [
+		"Adds the double precision floating-point values in the high and low quadwords of the destination operand and stores the result in the low quadword of the destination operand.",
+		"https://www.felixcloutier.com/x86/HADDPD.html"
+	],
+	"HADDPS": [
+		"Adds the single precision floating-point values in the first and second dwords of the destination operand and stores the result in the first dword of the destination operand.",
+		"https://www.felixcloutier.com/x86/HADDPS.html"
+	],
+	"HLT": [
+		"Stops instruction execution and places the processor in a HALT state. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/HLT.html"
+	],
+	"HSUBPD": [
+		"The HSUBPD instruction subtracts horizontally the packed double precision floating-point numbers of both operands.",
+		"https://www.felixcloutier.com/x86/HSUBPD.html"
+	],
+	"HSUBPS": [
+		"Subtracts the single precision floating-point value in the second dword of the destination operand from the first dword of the destination operand and stores the result in the first dword of the destination operand.",
+		"https://www.felixcloutier.com/x86/HSUBPS.html"
+	],
+	"IDIV": [
+		"Divides the (signed) value in the AX, DX:AX, or EDX:EAX (dividend) by the source operand (divisor) and stores the result in the AX (AH:AL), DX:AX, or EDX:EAX registers.",
+		"https://www.felixcloutier.com/x86/IDIV.html"
+	],
+	"IMUL": [
+		"Performs a signed multiplication of two operands.",
+		"https://www.felixcloutier.com/x86/IMUL.html"
+	],
+	"IN": [
+		"Copies the value from the I/O port specified with the second operand (source operand) to the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/IN.html"
+	],
+	"INC": [
+		"Adds 1 to the destination operand, while preserving the state of the CF flag.",
+		"https://www.felixcloutier.com/x86/INC.html"
+	],
+	"INS": [
+		"Copies the data from the I/O port specified with the source operand (second operand) to the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/INS%3AINSB%3AINSW%3AINSD.html"
+	],
+	"INSB": [
+		"Copies the data from the I/O port specified with the source operand (second operand) to the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/INS%3AINSB%3AINSW%3AINSD.html"
+	],
+	"INSD": [
+		"Copies the data from the I/O port specified with the source operand (second operand) to the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/INS%3AINSB%3AINSW%3AINSD.html"
+	],
+	"INSW": [
+		"Copies the data from the I/O port specified with the source operand (second operand) to the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/INS%3AINSB%3AINSW%3AINSD.html"
+	],
+	"INT": [
+		"The INT n instruction generates a call to the interrupt or exception handler specified with the destination operand (see the section titled “Interrupts and Exceptions” in Chapter 6 of the Intel® 64 and IA-32 Architectures Software Developer’s Manual, Volume 1).",
+		"https://www.felixcloutier.com/x86/INTn%3AINTO%3AINT3%3AINT1.html"
+	],
+	"INT1": [
+		"The INT n instruction generates a call to the interrupt or exception handler specified with the destination operand (see the section titled “Interrupts and Exceptions” in Chapter 6 of the Intel® 64 and IA-32 Architectures Software Developer’s Manual, Volume 1).",
+		"https://www.felixcloutier.com/x86/INTn%3AINTO%3AINT3%3AINT1.html"
+	],
+	"INT3": [
+		"The INT n instruction generates a call to the interrupt or exception handler specified with the destination operand (see the section titled “Interrupts and Exceptions” in Chapter 6 of the Intel® 64 and IA-32 Architectures Software Developer’s Manual, Volume 1).",
+		"https://www.felixcloutier.com/x86/INTn%3AINTO%3AINT3%3AINT1.html"
+	],
+	"INVD": [
+		"Invalidates (flushes) the processor’s internal caches and issues a special-function bus cycle that directs external caches to also flush themselves. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/INVD.html"
+	],
+	"IRET": [
+		"Returns program control from an exception or interrupt handler to a program or procedure that was interrupted by an exception, an external interrupt, or a software-generated interrupt.",
+		"https://www.felixcloutier.com/x86/IRET%3AIRETD%3AIRETQ.html"
+	],
+	"IRETD": [
+		"Returns program control from an exception or interrupt handler to a program or procedure that was interrupted by an exception, an external interrupt, or a software-generated interrupt.",
+		"https://www.felixcloutier.com/x86/IRET%3AIRETD%3AIRETQ.html"
+	],
+	"IRETQ": [
+		"Returns program control from an exception or interrupt handler to a program or procedure that was interrupted by an exception, an external interrupt, or a software-generated interrupt.",
+		"https://www.felixcloutier.com/x86/IRET%3AIRETD%3AIRETQ.html"
+	],
+	"JMP": [
+		"Transfers program control to a different point in the instruction stream without recording return information.",
+		"https://www.felixcloutier.com/x86/JMP.html"
+	],
+	"JA": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JAE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JB": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JBE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JC": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JECXZ": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JG": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JGE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JL": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JLE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNA": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNAE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNB": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNBE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNC": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNG": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNGE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNL": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNLE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNO": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNP": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNS": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JNZ": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JO": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JP": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JPE": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JPO": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JRCXZ": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JS": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"JZ": [
+		"Checks the state of one or more of the status flags in the EFLAGS register (CF, OF, PF, SF, and ZF) and, if the flags are in the specified state (condition), performs a jump to the target instruction specified by the destination operand.",
+		"https://www.felixcloutier.com/x86/Jcc.html"
+	],
+	"LAR": [
+		"Loads the access rights from the segment descriptor specified by the second operand (source operand) into the first operand (destination operand) and sets the ZF flag in the flag register.",
+		"https://www.felixcloutier.com/x86/LAR.html"
+	],
+	"LDDQU": [
+		"The instruction is functionally similar to (V)MOVDQU ymm/xmm, m256/m128 for loading from memory.",
+		"https://www.felixcloutier.com/x86/LDDQU.html"
+	],
+	"LDMXCSR": [
+		"Loads the source operand into the MXCSR control/status register.",
+		"https://www.felixcloutier.com/x86/LDMXCSR.html"
+	],
+	"LFS": [
+		"Loads a far pointer (segment selector and offset) from the second operand (source operand) into a segment register and the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/LDS%3ALES%3ALFS%3ALGS%3ALSS.html"
+	],
+	"LGS": [
+		"Loads a far pointer (segment selector and offset) from the second operand (source operand) into a segment register and the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/LDS%3ALES%3ALFS%3ALGS%3ALSS.html"
+	],
+	"LSS": [
+		"Loads a far pointer (segment selector and offset) from the second operand (source operand) into a segment register and the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/LDS%3ALES%3ALFS%3ALGS%3ALSS.html"
+	],
+	"LEA": [
+		"Computes the effective address of the second operand (the source operand) and stores it in the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/LEA.html"
+	],
+	"LEAVE": [
+		"Releases the stack frame set up by an earlier ENTER instruction.",
+		"https://www.felixcloutier.com/x86/LEAVE.html"
+	],
+	"LFENCE": [
+		"Performs a serializing operation on all load-from-memory instructions that were issued prior the LFENCE instruction.",
+		"https://www.felixcloutier.com/x86/LFENCE.html"
+	],
+	"LGDT": [
+		"Loads the values in the source operand into the global descriptor table register (GDTR) or the interrupt descriptor table register (IDTR). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/LGDT%3ALIDT.html"
+	],
+	"LIDT": [
+		"Loads the values in the source operand into the global descriptor table register (GDTR) or the interrupt descriptor table register (IDTR). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/LGDT%3ALIDT.html"
+	],
+	"LLDT": [
+		"Loads the source operand into the segment selector field of the local descriptor table register (LDTR). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/LLDT.html"
+	],
+	"LMSW": [
+		"Loads the source operand into the machine status word, bits 0 through 15 of register CR0. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/LMSW.html"
+	],
+	"LOCK": [
+		"Causes the processor’s LOCK# signal to be asserted during execution of the accompanying instruction (turns the instruction into an atomic instruction).",
+		"https://www.felixcloutier.com/x86/LOCK.html"
+	],
+	"LODS": [
+		"Loads a byte, word, or doubleword from the source operand into the AL, AX, or EAX register, respectively.",
+		"https://www.felixcloutier.com/x86/LODS%3ALODSB%3ALODSW%3ALODSD%3ALODSQ.html"
+	],
+	"LODSB": [
+		"Loads a byte, word, or doubleword from the source operand into the AL, AX, or EAX register, respectively.",
+		"https://www.felixcloutier.com/x86/LODS%3ALODSB%3ALODSW%3ALODSD%3ALODSQ.html"
+	],
+	"LODSD": [
+		"Loads a byte, word, or doubleword from the source operand into the AL, AX, or EAX register, respectively.",
+		"https://www.felixcloutier.com/x86/LODS%3ALODSB%3ALODSW%3ALODSD%3ALODSQ.html"
+	],
+	"LODSQ": [
+		"Loads a byte, word, or doubleword from the source operand into the AL, AX, or EAX register, respectively.",
+		"https://www.felixcloutier.com/x86/LODS%3ALODSB%3ALODSW%3ALODSD%3ALODSQ.html"
+	],
+	"LODSW": [
+		"Loads a byte, word, or doubleword from the source operand into the AL, AX, or EAX register, respectively.",
+		"https://www.felixcloutier.com/x86/LODS%3ALODSB%3ALODSW%3ALODSD%3ALODSQ.html"
+	],
+	"LOOP": [
+		"Performs a loop operation using the RCX, ECX or CX register as a counter (depending on whether address size is 64 bits, 32 bits, or 16 bits).",
+		"https://www.felixcloutier.com/x86/LOOP%3ALOOPcc.html"
+	],
+	"LOOPE": [
+		"Performs a loop operation using the RCX, ECX or CX register as a counter (depending on whether address size is 64 bits, 32 bits, or 16 bits).",
+		"https://www.felixcloutier.com/x86/LOOP%3ALOOPcc.html"
+	],
+	"LOOPNE": [
+		"Performs a loop operation using the RCX, ECX or CX register as a counter (depending on whether address size is 64 bits, 32 bits, or 16 bits).",
+		"https://www.felixcloutier.com/x86/LOOP%3ALOOPcc.html"
+	],
+	"LSL": [
+		"Loads the unscrambled segment limit from the segment descriptor specified with the second operand (source operand) into the first operand (destination operand) and sets the ZF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/LSL.html"
+	],
+	"LTR": [
+		"Loads the source operand into the segment selector field of the task register. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/LTR.html"
+	],
+	"MASKMOVDQU": [
+		"Stores selected bytes from the source operand (first operand) into an 128-bit memory location.",
+		"https://www.felixcloutier.com/x86/MASKMOVDQU.html"
+	],
+	"MASKMOVQ": [
+		"Stores selected bytes from the source operand (first operand) into a 64-bit memory location.",
+		"https://www.felixcloutier.com/x86/MASKMOVQ.html"
+	],
+	"MAXPD": [
+		"Performs a SIMD compare of the packed double precision floating-point values in the first source operand and the second source operand and returns the maximum value for each pair of values to the destination operand.",
+		"https://www.felixcloutier.com/x86/MAXPD.html"
+	],
+	"MAXPS": [
+		"Performs a SIMD compare of the packed single precision floating-point values in the first source operand and the second source operand and returns the maximum value for each pair of values to the destination operand.",
+		"https://www.felixcloutier.com/x86/MAXPS.html"
+	],
+	"MAXSD": [
+		"Compares the low double precision floating-point values in the first source operand and the second source operand, and returns the maximum value to the low quadword of the destination operand.",
+		"https://www.felixcloutier.com/x86/MAXSD.html"
+	],
+	"MAXSS": [
+		"Compares the low single precision floating-point values in the first source operand and the second source operand, and returns the maximum value to the low doubleword of the destination operand.",
+		"https://www.felixcloutier.com/x86/MAXSS.html"
+	],
+	"MINPD": [
+		"Performs a SIMD compare of the packed double precision floating-point values in the first source operand and the second source operand and returns the minimum value for each pair of values to the destination operand.",
+		"https://www.felixcloutier.com/x86/MINPD.html"
+	],
+	"MINPS": [
+		"Performs a SIMD compare of the packed single precision floating-point values in the first source operand and the second source operand and returns the minimum value for each pair of values to the destination operand.",
+		"https://www.felixcloutier.com/x86/MINPS.html"
+	],
+	"MINSD": [
+		"Compares the low double precision floating-point values in the first source operand and the second source operand, and returns the minimum value to the low quadword of the destination operand.",
+		"https://www.felixcloutier.com/x86/MINSD.html"
+	],
+	"MINSS": [
+		"Compares the low single precision floating-point values in the first source operand and the second source operand and returns the minimum value to the low doubleword of the destination operand.",
+		"https://www.felixcloutier.com/x86/MINSS.html"
+	],
+	"MOV": [
+		"Copies the second operand (source operand) to the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOV.html"
+	],
+	"MOVAPD": [
+		"Moves 2, 4 or 8 double precision floating-point values from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVAPD.html"
+	],
+	"MOVAPS": [
+		"Moves 4, 8 or 16 single precision floating-point values from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVAPS.html"
+	],
+	"MOVD": [
+		"Copies a doubleword from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVD%3AMOVQ.html"
+	],
+	"MOVQ": [
+		"Copies a doubleword from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVD%3AMOVQ.html"
+	],
+	"MOVDDUP": [
+		"Duplicates even-indexed double precision floating-point values from the source operand (the second operand) and into adjacent pair and store to the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/MOVDDUP.html"
+	],
+	"MOVDQA": [
+		"Moves 128, 256 or 512 bits of packed doubleword/quadword integer values from the source operand (the second operand) to the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/MOVDQA%3AVMOVDQA32%3AVMOVDQA64.html"
+	],
+	"MOVDQU": [
+		"Moves 128, 256 or 512 bits of packed byte/word/doubleword/quadword integer values from the source operand (the second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVDQU%3AVMOVDQU8%3AVMOVDQU16%3AVMOVDQU32%3AVMOVDQU64.html"
+	],
+	"MOVHLPS": [
+		"This instruction cannot be used for memory to register moves.",
+		"https://www.felixcloutier.com/x86/MOVHLPS.html"
+	],
+	"MOVHPD": [
+		"This instruction cannot be used for register to register or memory to memory moves.",
+		"https://www.felixcloutier.com/x86/MOVHPD.html"
+	],
+	"MOVHPS": [
+		"This instruction cannot be used for register to register or memory to memory moves.",
+		"https://www.felixcloutier.com/x86/MOVHPS.html"
+	],
+	"MOVLHPS": [
+		"This instruction cannot be used for memory to register moves.",
+		"https://www.felixcloutier.com/x86/MOVLHPS.html"
+	],
+	"MOVLPD": [
+		"This instruction cannot be used for register to register or memory to memory moves.",
+		"https://www.felixcloutier.com/x86/MOVLPD.html"
+	],
+	"MOVLPS": [
+		"This instruction cannot be used for register to register or memory to memory moves.",
+		"https://www.felixcloutier.com/x86/MOVLPS.html"
+	],
+	"MOVMSKPD": [
+		"Extracts the sign bits from the packed double precision floating-point values in the source operand (second operand), formats them into a 2-bit mask, and stores the mask in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVMSKPD.html"
+	],
+	"MOVMSKPS": [
+		"Extracts the sign bits from the packed single precision floating-point values in the source operand (second operand), formats them into a 4- or 8-bit mask, and stores the mask in the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVMSKPS.html"
+	],
+	"MOVNTDQ": [
+		"Moves the packed integers in the source operand (second operand) to the destination operand (first operand) using a non-temporal hint to prevent caching of the data during the write to memory.",
+		"https://www.felixcloutier.com/x86/MOVNTDQ.html"
+	],
+	"MOVNTI": [
+		"Moves the doubleword integer in the source operand (second operand) to the destination operand (first operand) using a non-temporal hint to minimize cache pollution during the write to memory.",
+		"https://www.felixcloutier.com/x86/MOVNTI.html"
+	],
+	"MOVNTPD": [
+		"Moves the packed double precision floating-point values in the source operand (second operand) to the destination operand (first operand) using a non-temporal hint to prevent caching of the data during the write to memory.",
+		"https://www.felixcloutier.com/x86/MOVNTPD.html"
+	],
+	"MOVNTPS": [
+		"Moves the packed single precision floating-point values in the source operand (second operand) to the destination operand (first operand) using a non-temporal hint to prevent caching of the data during the write to memory.",
+		"https://www.felixcloutier.com/x86/MOVNTPS.html"
+	],
+	"MOVNTQ": [
+		"Moves the quadword in the source operand (second operand) to the destination operand (first operand) using a non-temporal hint to minimize cache pollution during the write to memory.",
+		"https://www.felixcloutier.com/x86/MOVNTQ.html"
+	],
+	"MOVQ2DQ": [
+		"Moves the quadword from the source operand (second operand) to the low quadword of the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVQ2DQ.html"
+	],
+	"MOVS": [
+		"Moves the byte, word, or doubleword specified with the second operand (source operand) to the location specified with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOVS%3AMOVSB%3AMOVSW%3AMOVSD%3AMOVSQ.html"
+	],
+	"MOVSB": [
+		"Moves the byte, word, or doubleword specified with the second operand (source operand) to the location specified with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOVS%3AMOVSB%3AMOVSW%3AMOVSD%3AMOVSQ.html"
+	],
+	"MOVSD": [
+		"Moves the byte, word, or doubleword specified with the second operand (source operand) to the location specified with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOVS%3AMOVSB%3AMOVSW%3AMOVSD%3AMOVSQ.html"
+	],
+	"MOVSQ": [
+		"Moves the byte, word, or doubleword specified with the second operand (source operand) to the location specified with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOVS%3AMOVSB%3AMOVSW%3AMOVSD%3AMOVSQ.html"
+	],
+	"MOVSW": [
+		"Moves the byte, word, or doubleword specified with the second operand (source operand) to the location specified with the first operand (destination operand).",
+		"https://www.felixcloutier.com/x86/MOVS%3AMOVSB%3AMOVSW%3AMOVSD%3AMOVSQ.html"
+	],
+	"MOVSHDUP": [
+		"Duplicates odd-indexed single precision floating-point values from the source operand (the second operand) to adjacent element pair in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/MOVSHDUP.html"
+	],
+	"MOVSLDUP": [
+		"Duplicates even-indexed single precision floating-point values from the source operand (the second operand).",
+		"https://www.felixcloutier.com/x86/MOVSLDUP.html"
+	],
+	"MOVSS": [
+		"Moves a scalar single precision floating-point value from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVSS.html"
+	],
+	"MOVSX": [
+		"Copies the contents of the source operand (register or memory location) to the destination operand (register) and sign extends the value to 16 or 32 bits (see Figure 7-6 in the Intel® 64 and IA-32 Architectures Software Developer’s Manual, Volume 1).",
+		"https://www.felixcloutier.com/x86/MOVSX%3AMOVSXD.html"
+	],
+	"MOVSXD": [
+		"Copies the contents of the source operand (register or memory location) to the destination operand (register) and sign extends the value to 16 or 32 bits (see Figure 7-6 in the Intel® 64 and IA-32 Architectures Software Developer’s Manual, Volume 1).",
+		"https://www.felixcloutier.com/x86/MOVSX%3AMOVSXD.html"
+	],
+	"MOVUPD": [
+		"Moves 512 bits of packed double precision floating-point values from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVUPD.html"
+	],
+	"MOVUPS": [
+		"Moves 512 bits of packed single precision floating-point values from the source operand (second operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/MOVUPS.html"
+	],
+	"MOVZX": [
+		"Copies the contents of the source operand (register or memory location) to the destination operand (register) and zero extends the value.",
+		"https://www.felixcloutier.com/x86/MOVZX.html"
+	],
+	"MUL": [
+		"Performs an unsigned multiplication of the first operand (destination operand) and the second operand (source operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/MUL.html"
+	],
+	"MULPD": [
+		"Multiply packed double precision floating-point values from the first source operand with corresponding values in the second source operand, and stores the packed double precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/MULPD.html"
+	],
+	"MULPS": [
+		"Multiply the packed single precision floating-point values from the first source operand with the corresponding values in the second source operand, and stores the packed double precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/MULPS.html"
+	],
+	"MULSD": [
+		"Multiplies the low double precision floating-point value in the second source operand by the low double precision floating-point value in the first source operand, and stores the double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/MULSD.html"
+	],
+	"MULSS": [
+		"Multiplies the low single precision floating-point value from the second source operand by the low single precision floating-point value in the first source operand, and stores the single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/MULSS.html"
+	],
+	"NEG": [
+		"Replaces the value of operand (the destination operand) with its two's complement.",
+		"https://www.felixcloutier.com/x86/NEG.html"
+	],
+	"NOP": [
+		"This instruction performs no operation.",
+		"https://www.felixcloutier.com/x86/NOP.html"
+	],
+	"NOT": [
+		"Performs a bitwise NOT operation (each 1 is set to 0, and each 0 is set to 1) on the destination operand and stores the result in the destination operand location.",
+		"https://www.felixcloutier.com/x86/NOT.html"
+	],
+	"OR": [
+		"Performs a bitwise inclusive OR operation between the destination (first) and source (second) operands and stores the result in the destination operand location.",
+		"https://www.felixcloutier.com/x86/OR.html"
+	],
+	"ORPD": [
+		"Performs a bitwise logical OR of the two, four or eight packed double precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ORPD.html"
+	],
+	"ORPS": [
+		"Performs a bitwise logical OR of the four, eight or sixteen packed single precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/ORPS.html"
+	],
+	"OUT": [
+		"Copies the value from the second operand (source operand) to the I/O port specified with the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/OUT.html"
+	],
+	"OUTS": [
+		"Copies data from the source operand (second operand) to the I/O port specified with the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/OUTS%3AOUTSB%3AOUTSW%3AOUTSD.html"
+	],
+	"OUTSB": [
+		"Copies data from the source operand (second operand) to the I/O port specified with the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/OUTS%3AOUTSB%3AOUTSW%3AOUTSD.html"
+	],
+	"OUTSD": [
+		"Copies data from the source operand (second operand) to the I/O port specified with the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/OUTS%3AOUTSB%3AOUTSW%3AOUTSD.html"
+	],
+	"OUTSW": [
+		"Copies data from the source operand (second operand) to the I/O port specified with the destination operand (first operand). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/OUTS%3AOUTSB%3AOUTSW%3AOUTSD.html"
+	],
+	"PABSB": [
+		"PABSB/W/D computes the absolute value of each data element of the source operand (the second operand) and stores the UNSIGNED results in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/PABSB%3APABSW%3APABSD%3APABSQ.html"
+	],
+	"PABSD": [
+		"PABSB/W/D computes the absolute value of each data element of the source operand (the second operand) and stores the UNSIGNED results in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/PABSB%3APABSW%3APABSD%3APABSQ.html"
+	],
+	"PABSW": [
+		"PABSB/W/D computes the absolute value of each data element of the source operand (the second operand) and stores the UNSIGNED results in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/PABSB%3APABSW%3APABSD%3APABSQ.html"
+	],
+	"PACKSSDW": [
+		"Converts packed signed word integers into packed signed byte integers (PACKSSWB) or converts packed signed doubleword integers into packed signed word integers (PACKSSDW), using saturation to handle overflow conditions.",
+		"https://www.felixcloutier.com/x86/PACKSSWB%3APACKSSDW.html"
+	],
+	"PACKSSWB": [
+		"Converts packed signed word integers into packed signed byte integers (PACKSSWB) or converts packed signed doubleword integers into packed signed word integers (PACKSSDW), using saturation to handle overflow conditions.",
+		"https://www.felixcloutier.com/x86/PACKSSWB%3APACKSSDW.html"
+	],
+	"PACKUSWB": [
+		"Converts 4, 8, 16, or 32 signed word integers from the destination operand (first operand) and 4, 8, 16, or 32 signed word integers from the source operand (second operand) into 8, 16, 32 or 64 unsigned byte integers and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PACKUSWB.html"
+	],
+	"PADDB": [
+		"Performs a SIMD add of the packed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDB%3APADDW%3APADDD%3APADDQ.html"
+	],
+	"PADDD": [
+		"Performs a SIMD add of the packed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDB%3APADDW%3APADDD%3APADDQ.html"
+	],
+	"PADDQ": [
+		"Performs a SIMD add of the packed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDB%3APADDW%3APADDD%3APADDQ.html"
+	],
+	"PADDW": [
+		"Performs a SIMD add of the packed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDB%3APADDW%3APADDD%3APADDQ.html"
+	],
+	"PADDSB": [
+		"Performs a SIMD add of the packed signed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDSB%3APADDSW.html"
+	],
+	"PADDSW": [
+		"Performs a SIMD add of the packed signed integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDSB%3APADDSW.html"
+	],
+	"PADDUSB": [
+		"Performs a SIMD add of the packed unsigned integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDUSB%3APADDUSW.html"
+	],
+	"PADDUSW": [
+		"Performs a SIMD add of the packed unsigned integers from the source operand (second operand) and the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PADDUSB%3APADDUSW.html"
+	],
+	"PALIGNR": [
+		"(V)PALIGNR concatenates the destination operand (the first operand) and the source operand (the second operand) into an intermediate composite, shifts the composite at byte granularity to the right by a constant immediate, and extracts the right-aligned result into the destination.",
+		"https://www.felixcloutier.com/x86/PALIGNR.html"
+	],
+	"PAND": [
+		"Performs a bitwise logical AND operation on the first source operand and second source operand and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PAND.html"
+	],
+	"PANDN": [
+		"Performs a bitwise logical NOT operation on the first source operand, then performs bitwise AND with second source operand and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PANDN.html"
+	],
+	"PAUSE": [
+		"Improves the performance of spin-wait loops.",
+		"https://www.felixcloutier.com/x86/PAUSE.html"
+	],
+	"PAVGB": [
+		"Performs a SIMD average of the packed unsigned integers from the source operand (second operand) and the destination operand (first operand), and stores the results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PAVGB%3APAVGW.html"
+	],
+	"PAVGW": [
+		"Performs a SIMD average of the packed unsigned integers from the source operand (second operand) and the destination operand (first operand), and stores the results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PAVGB%3APAVGW.html"
+	],
+	"PCLMULQDQ": [
+		"Performs a carry-less multiplication of two quadwords, selected from the first source and second source operand according to the value of the immediate byte.",
+		"https://www.felixcloutier.com/x86/PCLMULQDQ.html"
+	],
+	"PCMPEQB": [
+		"Performs a SIMD compare for equality of the packed bytes, words, or doublewords in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPEQB%3APCMPEQW%3APCMPEQD.html"
+	],
+	"PCMPEQD": [
+		"Performs a SIMD compare for equality of the packed bytes, words, or doublewords in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPEQB%3APCMPEQW%3APCMPEQD.html"
+	],
+	"PCMPEQW": [
+		"Performs a SIMD compare for equality of the packed bytes, words, or doublewords in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPEQB%3APCMPEQW%3APCMPEQD.html"
+	],
+	"PCMPGTB": [
+		"Performs an SIMD signed compare for the greater value of the packed byte, word, or doubleword integers in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPGTB%3APCMPGTW%3APCMPGTD.html"
+	],
+	"PCMPGTD": [
+		"Performs an SIMD signed compare for the greater value of the packed byte, word, or doubleword integers in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPGTB%3APCMPGTW%3APCMPGTD.html"
+	],
+	"PCMPGTW": [
+		"Performs an SIMD signed compare for the greater value of the packed byte, word, or doubleword integers in the destination operand (first operand) and the source operand (second operand).",
+		"https://www.felixcloutier.com/x86/PCMPGTB%3APCMPGTW%3APCMPGTD.html"
+	],
+	"PEXTRW": [
+		"Copies the word in the source operand (second operand) specified by the count operand (third operand) to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PEXTRW.html"
+	],
+	"PHADDSW": [
+		"(V)PHADDSW adds two adjacent signed 16-bit integers horizontally from the source and destination operands and saturates the signed results; packs the signed, saturated 16-bit results to the destination operand (first operand) When the source operand is a 128-bit memory operand, the operand must be aligned on a 16-byte boundary or a general-protection exception (#GP) will be generated.",
+		"https://www.felixcloutier.com/x86/PHADDSW.html"
+	],
+	"PHADDD": [
+		"(V)PHADDW adds two adjacent 16-bit signed integers horizontally from the source and destination operands and packs the 16-bit signed results to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PHADDW%3APHADDD.html"
+	],
+	"PHADDW": [
+		"(V)PHADDW adds two adjacent 16-bit signed integers horizontally from the source and destination operands and packs the 16-bit signed results to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PHADDW%3APHADDD.html"
+	],
+	"PHSUBSW": [
+		"(V)PHSUBSW performs horizontal subtraction on each adjacent pair of 16-bit signed integers by subtracting the most significant word from the least significant word of each pair in the source and destination operands.",
+		"https://www.felixcloutier.com/x86/PHSUBSW.html"
+	],
+	"PHSUBD": [
+		"(V)PHSUBW performs horizontal subtraction on each adjacent pair of 16-bit signed integers by subtracting the most significant word from the least significant word of each pair in the source and destination operands, and packs the signed 16-bit results to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PHSUBW%3APHSUBD.html"
+	],
+	"PHSUBW": [
+		"(V)PHSUBW performs horizontal subtraction on each adjacent pair of 16-bit signed integers by subtracting the most significant word from the least significant word of each pair in the source and destination operands, and packs the signed 16-bit results to the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PHSUBW%3APHSUBD.html"
+	],
+	"PINSRW": [
+		"Copies a word from the source operand and inserts it in the destination operand at the location specified with the count operand.",
+		"https://www.felixcloutier.com/x86/PINSRW.html"
+	],
+	"PMADDUBSW": [
+		"(V)PMADDUBSW multiplies vertically each unsigned byte of the destination operand (first operand) with the corresponding signed byte of the source operand (second operand), producing intermediate signed 16-bit integers.",
+		"https://www.felixcloutier.com/x86/PMADDUBSW.html"
+	],
+	"PMADDWD": [
+		"Multiplies the individual signed words of the destination operand (first operand) by the corresponding signed words of the source operand (second operand), producing temporary signed, doubleword results.",
+		"https://www.felixcloutier.com/x86/PMADDWD.html"
+	],
+	"PMAXSW": [
+		"Performs a SIMD compare of the packed signed byte, word, dword or qword integers in the second source operand and the first source operand and returns the maximum value for each pair of integers to the destination operand.",
+		"https://www.felixcloutier.com/x86/PMAXSB%3APMAXSW%3APMAXSD%3APMAXSQ.html"
+	],
+	"PMAXUB": [
+		"Performs a SIMD compare of the packed unsigned byte, word integers in the second source operand and the first source operand and returns the maximum value for each pair of integers to the destination operand.",
+		"https://www.felixcloutier.com/x86/PMAXUB%3APMAXUW.html"
+	],
+	"PMINSW": [
+		"Performs a SIMD compare of the packed signed byte, word, or dword integers in the second source operand and the first source operand and returns the minimum value for each pair of integers to the destination operand.",
+		"https://www.felixcloutier.com/x86/PMINSB%3APMINSW.html"
+	],
+	"PMINUB": [
+		"Performs a SIMD compare of the packed unsigned byte or word integers in the second source operand and the first source operand and returns the minimum value for each pair of integers to the destination operand.",
+		"https://www.felixcloutier.com/x86/PMINUB%3APMINUW.html"
+	],
+	"PMOVMSKB": [
+		"Creates a mask made up of the most significant bit of each byte of the source operand (second operand) and stores the result in the low byte or word of the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PMOVMSKB.html"
+	],
+	"PMULHRSW": [
+		"PMULHRSW multiplies vertically each signed 16-bit integer from the destination operand (first operand) with the corresponding signed 16-bit integer of the source operand (second operand), producing intermediate, signed 32-bit integers.",
+		"https://www.felixcloutier.com/x86/PMULHRSW.html"
+	],
+	"PMULHUW": [
+		"Performs a SIMD unsigned multiply of the packed unsigned word integers in the destination operand (first operand) and the source operand (second operand), and stores the high 16 bits of each 32-bit intermediate results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PMULHUW.html"
+	],
+	"PMULHW": [
+		"Performs a SIMD signed multiply of the packed signed word integers in the destination operand (first operand) and the source operand (second operand), and stores the high 16 bits of each intermediate 32-bit result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PMULHW.html"
+	],
+	"PMULLW": [
+		"Performs a SIMD signed multiply of the packed signed word integers in the destination operand (first operand) and the source operand (second operand), and stores the low 16 bits of each intermediate 32-bit result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PMULLW.html"
+	],
+	"PMULUDQ": [
+		"Multiplies the first operand (destination operand) by the second operand (source operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PMULUDQ.html"
+	],
+	"POP": [
+		"Loads the value from the top of the stack to the location specified with the destination operand (or explicit opcode) and then increments the stack pointer.",
+		"https://www.felixcloutier.com/x86/POP.html"
+	],
+	"POPCNT": [
+		"This instruction calculates the number of bits set to 1 in the second operand (source) and returns the count in the first operand (a destination register).",
+		"https://www.felixcloutier.com/x86/POPCNT.html"
+	],
+	"POPF": [
+		"Pops a doubleword (POPFD) from the top of the stack (if the current operand-size attribute is 32) and stores the value in the EFLAGS register, or pops a word from the top of the stack (if the operand-size attribute is 16) and stores it in the lower 16 bits of the EFLAGS register (that is, the FLAGS register).",
+		"https://www.felixcloutier.com/x86/POPF%3APOPFD%3APOPFQ.html"
+	],
+	"POPFD": [
+		"Pops a doubleword (POPFD) from the top of the stack (if the current operand-size attribute is 32) and stores the value in the EFLAGS register, or pops a word from the top of the stack (if the operand-size attribute is 16) and stores it in the lower 16 bits of the EFLAGS register (that is, the FLAGS register).",
+		"https://www.felixcloutier.com/x86/POPF%3APOPFD%3APOPFQ.html"
+	],
+	"POPFQ": [
+		"Pops a doubleword (POPFD) from the top of the stack (if the current operand-size attribute is 32) and stores the value in the EFLAGS register, or pops a word from the top of the stack (if the operand-size attribute is 16) and stores it in the lower 16 bits of the EFLAGS register (that is, the FLAGS register).",
+		"https://www.felixcloutier.com/x86/POPF%3APOPFD%3APOPFQ.html"
+	],
+	"POR": [
+		"Performs a bitwise logical OR operation on the source operand (second operand) and the destination operand (first operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/POR.html"
+	],
+	"PREFETCHNTA": [
+		"Fetches the line of data from memory that contains the byte specified with the source operand to a location in the cache hierarchy specified by a locality hint.",
+		"https://www.felixcloutier.com/x86/PREFETCHh.html"
+	],
+	"PREFETCHT0": [
+		"Fetches the line of data from memory that contains the byte specified with the source operand to a location in the cache hierarchy specified by a locality hint.",
+		"https://www.felixcloutier.com/x86/PREFETCHh.html"
+	],
+	"PREFETCHT1": [
+		"Fetches the line of data from memory that contains the byte specified with the source operand to a location in the cache hierarchy specified by a locality hint.",
+		"https://www.felixcloutier.com/x86/PREFETCHh.html"
+	],
+	"PREFETCHT2": [
+		"Fetches the line of data from memory that contains the byte specified with the source operand to a location in the cache hierarchy specified by a locality hint.",
+		"https://www.felixcloutier.com/x86/PREFETCHh.html"
+	],
+	"PSADBW": [
+		"Computes the absolute value of the difference of 8 unsigned byte integers from the source operand (second operand) and from the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/PSADBW.html"
+	],
+	"PSHUFB": [
+		"PSHUFB performs in-place shuffles of bytes in the destination operand (the first operand) according to the shuffle control mask in the source operand (the second operand).",
+		"https://www.felixcloutier.com/x86/PSHUFB.html"
+	],
+	"PSHUFD": [
+		"Copies doublewords from source operand (second operand) and inserts them in the destination operand (first operand) at the locations selected with the order operand (third operand).",
+		"https://www.felixcloutier.com/x86/PSHUFD.html"
+	],
+	"PSHUFHW": [
+		"Copies words from the high quadword of a 128-bit lane of the source operand and inserts them in the high quadword of the destination operand at word locations (of the respective lane) selected with the immediate operand.",
+		"https://www.felixcloutier.com/x86/PSHUFHW.html"
+	],
+	"PSHUFLW": [
+		"Copies words from the low quadword of a 128-bit lane of the source operand and inserts them in the low quadword of the destination operand at word locations (of the respective lane) selected with the immediate operand.",
+		"https://www.felixcloutier.com/x86/PSHUFLW.html"
+	],
+	"PSHUFW": [
+		"Copies words from the source operand (second operand) and inserts them in the destination operand (first operand) at word locations selected with the order operand (third operand).",
+		"https://www.felixcloutier.com/x86/PSHUFW.html"
+	],
+	"PSIGNB": [
+		"(V)PSIGNB/(V)PSIGNW/(V)PSIGND negates each data element of the destination operand (the first operand) if the signed integer value of the corresponding data element in the source operand (the second operand) is less than zero.",
+		"https://www.felixcloutier.com/x86/PSIGNB%3APSIGNW%3APSIGND.html"
+	],
+	"PSIGND": [
+		"(V)PSIGNB/(V)PSIGNW/(V)PSIGND negates each data element of the destination operand (the first operand) if the signed integer value of the corresponding data element in the source operand (the second operand) is less than zero.",
+		"https://www.felixcloutier.com/x86/PSIGNB%3APSIGNW%3APSIGND.html"
+	],
+	"PSIGNW": [
+		"(V)PSIGNB/(V)PSIGNW/(V)PSIGND negates each data element of the destination operand (the first operand) if the signed integer value of the corresponding data element in the source operand (the second operand) is less than zero.",
+		"https://www.felixcloutier.com/x86/PSIGNB%3APSIGNW%3APSIGND.html"
+	],
+	"PSLLDQ": [
+		"Shifts the destination operand (first operand) to the left by the number of bytes specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSLLDQ.html"
+	],
+	"PSLLD": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the left by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSLLW%3APSLLD%3APSLLQ.html"
+	],
+	"PSLLQ": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the left by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSLLW%3APSLLD%3APSLLQ.html"
+	],
+	"PSLLW": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the left by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSLLW%3APSLLD%3APSLLQ.html"
+	],
+	"PSRAD": [
+		"Shifts the bits in the individual data elements (words, doublewords or quadwords) in the destination operand (first operand) to the right by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRAW%3APSRAD%3APSRAQ.html"
+	],
+	"PSRAW": [
+		"Shifts the bits in the individual data elements (words, doublewords or quadwords) in the destination operand (first operand) to the right by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRAW%3APSRAD%3APSRAQ.html"
+	],
+	"PSRLDQ": [
+		"Shifts the destination operand (first operand) to the right by the number of bytes specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRLDQ.html"
+	],
+	"PSRLD": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the right by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRLW%3APSRLD%3APSRLQ.html"
+	],
+	"PSRLQ": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the right by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRLW%3APSRLD%3APSRLQ.html"
+	],
+	"PSRLW": [
+		"Shifts the bits in the individual data elements (words, doublewords, or quadword) in the destination operand (first operand) to the right by the number of bits specified in the count operand (second operand).",
+		"https://www.felixcloutier.com/x86/PSRLW%3APSRLD%3APSRLQ.html"
+	],
+	"PSUBB": [
+		"Performs a SIMD subtract of the packed integers of the source operand (second operand) from the packed integers of the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBB%3APSUBW%3APSUBD.html"
+	],
+	"PSUBD": [
+		"Performs a SIMD subtract of the packed integers of the source operand (second operand) from the packed integers of the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBB%3APSUBW%3APSUBD.html"
+	],
+	"PSUBW": [
+		"Performs a SIMD subtract of the packed integers of the source operand (second operand) from the packed integers of the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBB%3APSUBW%3APSUBD.html"
+	],
+	"PSUBQ": [
+		"Subtracts the second operand (source operand) from the first operand (destination operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBQ.html"
+	],
+	"PSUBSB": [
+		"Performs a SIMD subtract of the packed signed integers of the source operand (second operand) from the packed signed integers of the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBSB%3APSUBSW.html"
+	],
+	"PSUBSW": [
+		"Performs a SIMD subtract of the packed signed integers of the source operand (second operand) from the packed signed integers of the destination operand (first operand), and stores the packed integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBSB%3APSUBSW.html"
+	],
+	"PSUBUSB": [
+		"Performs a SIMD subtract of the packed unsigned integers of the source operand (second operand) from the packed unsigned integers of the destination operand (first operand), and stores the packed unsigned integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBUSB%3APSUBUSW.html"
+	],
+	"PSUBUSW": [
+		"Performs a SIMD subtract of the packed unsigned integers of the source operand (second operand) from the packed unsigned integers of the destination operand (first operand), and stores the packed unsigned integer results in the destination operand.",
+		"https://www.felixcloutier.com/x86/PSUBUSB%3APSUBUSW.html"
+	],
+	"PUNPCKHBW": [
+		"Unpacks and interleaves the high-order data elements (bytes, words, doublewords, or quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKHBW%3APUNPCKHWD%3APUNPCKHDQ%3APUNPCKHQDQ.html"
+	],
+	"PUNPCKHDQ": [
+		"Unpacks and interleaves the high-order data elements (bytes, words, doublewords, or quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKHBW%3APUNPCKHWD%3APUNPCKHDQ%3APUNPCKHQDQ.html"
+	],
+	"PUNPCKHQDQ": [
+		"Unpacks and interleaves the high-order data elements (bytes, words, doublewords, or quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKHBW%3APUNPCKHWD%3APUNPCKHDQ%3APUNPCKHQDQ.html"
+	],
+	"PUNPCKHWD": [
+		"Unpacks and interleaves the high-order data elements (bytes, words, doublewords, or quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKHBW%3APUNPCKHWD%3APUNPCKHDQ%3APUNPCKHQDQ.html"
+	],
+	"PUNPCKLBW": [
+		"Unpacks and interleaves the low-order data elements (bytes, words, doublewords, and quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKLBW%3APUNPCKLWD%3APUNPCKLDQ%3APUNPCKLQDQ.html"
+	],
+	"PUNPCKLDQ": [
+		"Unpacks and interleaves the low-order data elements (bytes, words, doublewords, and quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKLBW%3APUNPCKLWD%3APUNPCKLDQ%3APUNPCKLQDQ.html"
+	],
+	"PUNPCKLQDQ": [
+		"Unpacks and interleaves the low-order data elements (bytes, words, doublewords, and quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKLBW%3APUNPCKLWD%3APUNPCKLDQ%3APUNPCKLQDQ.html"
+	],
+	"PUNPCKLWD": [
+		"Unpacks and interleaves the low-order data elements (bytes, words, doublewords, and quadwords) of the destination operand (first operand) and source operand (second operand) into the destination operand.",
+		"https://www.felixcloutier.com/x86/PUNPCKLBW%3APUNPCKLWD%3APUNPCKLDQ%3APUNPCKLQDQ.html"
+	],
+	"PUSH": [
+		"Decrements the stack pointer and then stores the source operand on the top of the stack.",
+		"https://www.felixcloutier.com/x86/PUSH.html"
+	],
+	"PUSHF": [
+		"Decrements the stack pointer by 4 (if the current operand-size attribute is 32) and pushes the entire contents of the EFLAGS register onto the stack, or decrements the stack pointer by 2 (if the operand-size attribute is 16) and pushes the lower 16 bits of the EFLAGS register (that is, the FLAGS register) onto the stack.",
+		"https://www.felixcloutier.com/x86/PUSHF%3APUSHFD%3APUSHFQ.html"
+	],
+	"PUSHFD": [
+		"Decrements the stack pointer by 4 (if the current operand-size attribute is 32) and pushes the entire contents of the EFLAGS register onto the stack, or decrements the stack pointer by 2 (if the operand-size attribute is 16) and pushes the lower 16 bits of the EFLAGS register (that is, the FLAGS register) onto the stack.",
+		"https://www.felixcloutier.com/x86/PUSHF%3APUSHFD%3APUSHFQ.html"
+	],
+	"PUSHFQ": [
+		"Decrements the stack pointer by 4 (if the current operand-size attribute is 32) and pushes the entire contents of the EFLAGS register onto the stack, or decrements the stack pointer by 2 (if the operand-size attribute is 16) and pushes the lower 16 bits of the EFLAGS register (that is, the FLAGS register) onto the stack.",
+		"https://www.felixcloutier.com/x86/PUSHF%3APUSHFD%3APUSHFQ.html"
+	],
+	"PXOR": [
+		"Performs a bitwise logical exclusive-OR (XOR) operation on the source operand (second operand) and the destination operand (first operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/PXOR.html"
+	],
+	"RCL": [
+		"Shifts (rotates) the bits of the first operand (destination operand) the number of bit positions specified in the second operand (count operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCL%3ARCR%3AROL%3AROR.html"
+	],
+	"RCR": [
+		"Shifts (rotates) the bits of the first operand (destination operand) the number of bit positions specified in the second operand (count operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCL%3ARCR%3AROL%3AROR.html"
+	],
+	"ROL": [
+		"Shifts (rotates) the bits of the first operand (destination operand) the number of bit positions specified in the second operand (count operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCL%3ARCR%3AROL%3AROR.html"
+	],
+	"ROR": [
+		"Shifts (rotates) the bits of the first operand (destination operand) the number of bit positions specified in the second operand (count operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCL%3ARCR%3AROL%3AROR.html"
+	],
+	"RCPPS": [
+		"Performs a SIMD computation of the approximate reciprocals of the four packed single precision floating-point values in the source operand (second operand) stores the packed single precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCPPS.html"
+	],
+	"RCPSS": [
+		"Computes of an approximate reciprocal of the low single precision floating-point value in the source operand (second operand) and stores the single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RCPSS.html"
+	],
+	"RDFSBASE": [
+		"Loads the general-purpose register indicated by the ModR/M:r/m field with the FS or GS segment base address.",
+		"https://www.felixcloutier.com/x86/RDFSBASE%3ARDGSBASE.html"
+	],
+	"RDGSBASE": [
+		"Loads the general-purpose register indicated by the ModR/M:r/m field with the FS or GS segment base address.",
+		"https://www.felixcloutier.com/x86/RDFSBASE%3ARDGSBASE.html"
+	],
+	"RDPID": [
+		"Reads the value of the IA32_TSC_AUX MSR (address C0000103H) into the destination register.",
+		"https://www.felixcloutier.com/x86/RDPID.html"
+	],
+	"RDPMC": [
+		"Reads the contents of the performance monitoring counter (PMC) specified in ECX register into registers EDX:EAX. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/RDPMC.html"
+	],
+	"RDTSC": [
+		"Reads the current value of the processor’s time-stamp counter (a 64-bit MSR) into the EDX:EAX registers.",
+		"https://www.felixcloutier.com/x86/RDTSC.html"
+	],
+	"RDTSCP": [
+		"Reads the current value of the processor’s time-stamp counter (a 64-bit MSR) into the EDX:EAX registers and also reads the value of the IA32_TSC_AUX MSR (address C0000103H) into the ECX register.",
+		"https://www.felixcloutier.com/x86/RDTSCP.html"
+	],
+	"REP": [
+		"Repeats a string instruction the number of times specified in the count register or until the indicated condition of the ZF flag is no longer met.",
+		"https://www.felixcloutier.com/x86/REP%3AREPE%3AREPZ%3AREPNE%3AREPNZ.html"
+	],
+	"REPE": [
+		"Repeats a string instruction the number of times specified in the count register or until the indicated condition of the ZF flag is no longer met.",
+		"https://www.felixcloutier.com/x86/REP%3AREPE%3AREPZ%3AREPNE%3AREPNZ.html"
+	],
+	"REPNE": [
+		"Repeats a string instruction the number of times specified in the count register or until the indicated condition of the ZF flag is no longer met.",
+		"https://www.felixcloutier.com/x86/REP%3AREPE%3AREPZ%3AREPNE%3AREPNZ.html"
+	],
+	"RET": [
+		"Transfers program control to a return address located on the top of the stack.",
+		"https://www.felixcloutier.com/x86/RET.html"
+	],
+	"RSM": [
+		"Returns program control from system management mode (SMM) to the application program or operating-system procedure that was interrupted when the processor received an SMM interrupt. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/RSM.html"
+	],
+	"RSQRTPS": [
+		"Performs a SIMD computation of the approximate reciprocals of the square roots of the four packed single precision floating-point values in the source operand (second operand) and stores the packed single precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/RSQRTPS.html"
+	],
+	"RSQRTSS": [
+		"Computes an approximate reciprocal of the square root of the low single precision floating-point value in the source operand (second operand) stores the single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/RSQRTSS.html"
+	],
+	"SAHF": [
+		"Loads the SF, ZF, AF, PF, and CF flags of the EFLAGS register with values from the corresponding bits in the AH register (bits 7, 6, 4, 2, and 0, respectively).",
+		"https://www.felixcloutier.com/x86/SAHF.html"
+	],
+	"SAL": [
+		"Shifts the bits in the first operand (destination operand) to the left or right by the number of bits specified in the second operand (count operand).",
+		"https://www.felixcloutier.com/x86/SAL%3ASAR%3ASHL%3ASHR.html"
+	],
+	"SAR": [
+		"Shifts the bits in the first operand (destination operand) to the left or right by the number of bits specified in the second operand (count operand).",
+		"https://www.felixcloutier.com/x86/SAL%3ASAR%3ASHL%3ASHR.html"
+	],
+	"SHL": [
+		"Shifts the bits in the first operand (destination operand) to the left or right by the number of bits specified in the second operand (count operand).",
+		"https://www.felixcloutier.com/x86/SAL%3ASAR%3ASHL%3ASHR.html"
+	],
+	"SHR": [
+		"Shifts the bits in the first operand (destination operand) to the left or right by the number of bits specified in the second operand (count operand).",
+		"https://www.felixcloutier.com/x86/SAL%3ASAR%3ASHL%3ASHR.html"
+	],
+	"SBB": [
+		"Adds the source operand (second operand) and the carry (CF) flag, and subtracts the result from the destination operand (first operand).",
+		"https://www.felixcloutier.com/x86/SBB.html"
+	],
+	"SCAS": [
+		"In non-64-bit modes and in default 64-bit mode: this instruction compares a byte, word, doubleword or quadword specified using a memory operand with the value in AL, AX, or EAX.",
+		"https://www.felixcloutier.com/x86/SCAS%3ASCASB%3ASCASW%3ASCASD.html"
+	],
+	"SCASB": [
+		"In non-64-bit modes and in default 64-bit mode: this instruction compares a byte, word, doubleword or quadword specified using a memory operand with the value in AL, AX, or EAX.",
+		"https://www.felixcloutier.com/x86/SCAS%3ASCASB%3ASCASW%3ASCASD.html"
+	],
+	"SCASD": [
+		"In non-64-bit modes and in default 64-bit mode: this instruction compares a byte, word, doubleword or quadword specified using a memory operand with the value in AL, AX, or EAX.",
+		"https://www.felixcloutier.com/x86/SCAS%3ASCASB%3ASCASW%3ASCASD.html"
+	],
+	"SCASQ": [
+		"In non-64-bit modes and in default 64-bit mode: this instruction compares a byte, word, doubleword or quadword specified using a memory operand with the value in AL, AX, or EAX.",
+		"https://www.felixcloutier.com/x86/SCAS%3ASCASB%3ASCASW%3ASCASD.html"
+	],
+	"SCASW": [
+		"In non-64-bit modes and in default 64-bit mode: this instruction compares a byte, word, doubleword or quadword specified using a memory operand with the value in AL, AX, or EAX.",
+		"https://www.felixcloutier.com/x86/SCAS%3ASCASB%3ASCASW%3ASCASD.html"
+	],
+	"SETA": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETAE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETB": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETBE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETC": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETG": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETGE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETL": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETLE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNA": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNAE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNB": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNBE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNC": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNG": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNGE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNL": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNLE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNO": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNP": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNS": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETNZ": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETO": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETP": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETPE": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETPO": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETS": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SETZ": [
+		"Sets the destination operand to 0 or 1 depending on the settings of the status flags (CF, SF, OF, ZF, and PF) in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/SETcc.html"
+	],
+	"SFENCE": [
+		"Orders processor execution relative to all memory stores prior to the SFENCE instruction.",
+		"https://www.felixcloutier.com/x86/SFENCE.html"
+	],
+	"SHLD": [
+		"The SHLD instruction is used for multi-precision shifts of 64 bits or more.",
+		"https://www.felixcloutier.com/x86/SHLD.html"
+	],
+	"SHRD": [
+		"The SHRD instruction is useful for multi-precision shifts of 64 bits or more.",
+		"https://www.felixcloutier.com/x86/SHRD.html"
+	],
+	"SHUFPD": [
+		"Selects a double precision floating-point value of an input pair using a bit control and move to a designated element of the destination operand.",
+		"https://www.felixcloutier.com/x86/SHUFPD.html"
+	],
+	"SHUFPS": [
+		"Selects a single precision floating-point value of an input quadruplet using a two-bit control and move to a designated element of the destination operand.",
+		"https://www.felixcloutier.com/x86/SHUFPS.html"
+	],
+	"SLDT": [
+		"Stores the segment selector from the local descriptor table register (LDTR) in the destination operand.",
+		"https://www.felixcloutier.com/x86/SLDT.html"
+	],
+	"SMSW": [
+		"Stores the machine status word (bits 0 through 15 of control register CR0) into the destination operand.",
+		"https://www.felixcloutier.com/x86/SMSW.html"
+	],
+	"SQRTPD": [
+		"Performs a SIMD computation of the square roots of the two, four or eight packed double precision floating-point values in the source operand (the second operand) stores the packed double precision floating-point results in the destination operand (the first operand).",
+		"https://www.felixcloutier.com/x86/SQRTPD.html"
+	],
+	"SQRTPS": [
+		"Performs a SIMD computation of the square roots of the four, eight or sixteen packed single precision floating-point values in the source operand (second operand) stores the packed single precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/SQRTPS.html"
+	],
+	"SQRTSD": [
+		"Computes the square root of the low double precision floating-point value in the second source operand and stores the double precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/SQRTSD.html"
+	],
+	"SQRTSS": [
+		"Computes the square root of the low single precision floating-point value in the second source operand and stores the single precision floating-point result in the destination operand.",
+		"https://www.felixcloutier.com/x86/SQRTSS.html"
+	],
+	"STC": [
+		"Sets the CF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/STC.html"
+	],
+	"STD": [
+		"Sets the DF flag in the EFLAGS register.",
+		"https://www.felixcloutier.com/x86/STD.html"
+	],
+	"STI": [
+		"In most cases, STI sets the interrupt flag (IF) in the EFLAGS register. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/STI.html"
+	],
+	"STMXCSR": [
+		"Stores the contents of the MXCSR control and status register to the destination operand.",
+		"https://www.felixcloutier.com/x86/STMXCSR.html"
+	],
+	"STOS": [
+		"In non-64-bit and default 64-bit mode; stores a byte, word, or doubleword from the AL, AX, or EAX register (respectively) into the destination operand.",
+		"https://www.felixcloutier.com/x86/STOS%3ASTOSB%3ASTOSW%3ASTOSD%3ASTOSQ.html"
+	],
+	"STOSB": [
+		"In non-64-bit and default 64-bit mode; stores a byte, word, or doubleword from the AL, AX, or EAX register (respectively) into the destination operand.",
+		"https://www.felixcloutier.com/x86/STOS%3ASTOSB%3ASTOSW%3ASTOSD%3ASTOSQ.html"
+	],
+	"STOSD": [
+		"In non-64-bit and default 64-bit mode; stores a byte, word, or doubleword from the AL, AX, or EAX register (respectively) into the destination operand.",
+		"https://www.felixcloutier.com/x86/STOS%3ASTOSB%3ASTOSW%3ASTOSD%3ASTOSQ.html"
+	],
+	"STOSQ": [
+		"In non-64-bit and default 64-bit mode; stores a byte, word, or doubleword from the AL, AX, or EAX register (respectively) into the destination operand.",
+		"https://www.felixcloutier.com/x86/STOS%3ASTOSB%3ASTOSW%3ASTOSD%3ASTOSQ.html"
+	],
+	"STOSW": [
+		"In non-64-bit and default 64-bit mode; stores a byte, word, or doubleword from the AL, AX, or EAX register (respectively) into the destination operand.",
+		"https://www.felixcloutier.com/x86/STOS%3ASTOSB%3ASTOSW%3ASTOSD%3ASTOSQ.html"
+	],
+	"STR": [
+		"Stores the segment selector from the task register (TR) in the destination operand.",
+		"https://www.felixcloutier.com/x86/STR.html"
+	],
+	"SUB": [
+		"Subtracts the second operand (source operand) from the first operand (destination operand) and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/SUB.html"
+	],
+	"SUBPD": [
+		"Performs a SIMD subtract of the two, four or eight packed double precision floating-point values of the second Source operand from the first Source operand, and stores the packed double precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/SUBPD.html"
+	],
+	"SUBPS": [
+		"Performs a SIMD subtract of the packed single precision floating-point values in the second Source operand from the First Source operand, and stores the packed single precision floating-point results in the destination operand.",
+		"https://www.felixcloutier.com/x86/SUBPS.html"
+	],
+	"SUBSD": [
+		"Subtract the low double precision floating-point value in the second source operand from the first source operand and stores the double precision floating-point result in the low quadword of the destination operand.",
+		"https://www.felixcloutier.com/x86/SUBSD.html"
+	],
+	"SUBSS": [
+		"Subtract the low single precision floating-point value from the second source operand and the first source operand and store the double precision floating-point result in the low doubleword of the destination operand.",
+		"https://www.felixcloutier.com/x86/SUBSS.html"
+	],
+	"SWAPGS": [
+		"SWAPGS exchanges the current GS base register value with the value contained in MSR address C0000102H (IA32_KERNEL_GS_BASE). Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/SWAPGS.html"
+	],
+	"SYSCALL": [
+		"SYSCALL invokes an OS system-call handler at privilege level 0.",
+		"https://www.felixcloutier.com/x86/SYSCALL.html"
+	],
+	"SYSENTER": [
+		"Executes a fast call to a level 0 system procedure or routine. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/SYSENTER.html"
+	],
+	"SYSEXIT": [
+		"Executes a fast return to privilege level 3 user code. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/SYSEXIT.html"
+	],
+	"SYSRET": [
+		"SYSRET is a companion instruction to the SYSCALL instruction. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/SYSRET.html"
+	],
+	"TEST": [
+		"Computes the bit-wise logical AND of first operand (source 1 operand) and the second operand (source 2 operand) and sets the SF, ZF, and PF status flags according to the result.",
+		"https://www.felixcloutier.com/x86/TEST.html"
+	],
+	"UCOMISD": [
+		"Performs an unordered compare of the double precision floating-point values in the low quadwords of operand 1 (first operand) and operand 2 (second operand), and sets the ZF, PF, and CF flags in the EFLAGS register according to the result (unordered, greater than, less than, or equal).",
+		"https://www.felixcloutier.com/x86/UCOMISD.html"
+	],
+	"UCOMISS": [
+		"Compares the single precision floating-point values in the low doublewords of operand 1 (first operand) and operand 2 (second operand), and sets the ZF, PF, and CF flags in the EFLAGS register according to the result (unordered, greater than, less than, or equal).",
+		"https://www.felixcloutier.com/x86/UCOMISS.html"
+	],
+	"UD1": [
+		"Generates an invalid opcode exception.",
+		"https://www.felixcloutier.com/x86/UD.html"
+	],
+	"UD2": [
+		"Generates an invalid opcode exception.",
+		"https://www.felixcloutier.com/x86/UD.html"
+	],
+	"UNPCKHPD": [
+		"Performs an interleaved unpack of the high double precision floating-point values from the first source operand and the second source operand.",
+		"https://www.felixcloutier.com/x86/UNPCKHPD.html"
+	],
+	"UNPCKHPS": [
+		"Performs an interleaved unpack of the high single precision floating-point values from the first source operand and the second source operand.",
+		"https://www.felixcloutier.com/x86/UNPCKHPS.html"
+	],
+	"UNPCKLPD": [
+		"Performs an interleaved unpack of the low double precision floating-point values from the first source operand and the second source operand.",
+		"https://www.felixcloutier.com/x86/UNPCKLPD.html"
+	],
+	"UNPCKLPS": [
+		"Performs an interleaved unpack of the low single precision floating-point values from the first source operand and the second source operand.",
+		"https://www.felixcloutier.com/x86/UNPCKLPS.html"
+	],
+	"VERR": [
+		"Verifies whether the code or data segment specified with the source operand is readable (VERR) or writable (VERW) from the current privilege level (CPL).",
+		"https://www.felixcloutier.com/x86/VERR%3AVERW.html"
+	],
+	"VERW": [
+		"Verifies whether the code or data segment specified with the source operand is readable (VERR) or writable (VERW) from the current privilege level (CPL).",
+		"https://www.felixcloutier.com/x86/VERR%3AVERW.html"
+	],
+	"WAIT": [
+		"Causes the processor to check for and handle pending, unmasked, floating-point exceptions before proceeding.",
+		"https://www.felixcloutier.com/x86/WAIT%3AFWAIT.html"
+	],
+	"WBINVD": [
+		"Writes back all modified cache lines in the processor’s internal cache to main memory and invalidates (flushes) the internal caches. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/WBINVD.html"
+	],
+	"WRFSBASE": [
+		"Loads the FS or GS segment base address with the general-purpose register indicated by the modR/M:r/m field.",
+		"https://www.felixcloutier.com/x86/WRFSBASE%3AWRGSBASE.html"
+	],
+	"WRGSBASE": [
+		"Loads the FS or GS segment base address with the general-purpose register indicated by the modR/M:r/m field.",
+		"https://www.felixcloutier.com/x86/WRFSBASE%3AWRGSBASE.html"
+	],
+	"WRMSR": [
+		"Writes the contents of registers EDX:EAX into the 64-bit model specific register (MSR) specified in the ECX register. Privileged instruction: only the operating system kernel is allowed to run it, so it will not run on this emulator.",
+		"https://www.felixcloutier.com/x86/WRMSR.html"
+	],
+	"XADD": [
+		"Exchanges the first operand (destination operand) with the second operand (source operand), then loads the sum of the two values into the destination operand.",
+		"https://www.felixcloutier.com/x86/XADD.html"
+	],
+	"XCHG": [
+		"Exchanges the contents of the destination (first) and source (second) operands.",
+		"https://www.felixcloutier.com/x86/XCHG.html"
+	],
+	"XLAT": [
+		"Locates a byte entry in a table in memory, using the contents of the AL register as a table index, then copies the contents of the table entry back into the AL register.",
+		"https://www.felixcloutier.com/x86/XLAT%3AXLATB.html"
+	],
+	"XLATB": [
+		"Locates a byte entry in a table in memory, using the contents of the AL register as a table index, then copies the contents of the table entry back into the AL register.",
+		"https://www.felixcloutier.com/x86/XLAT%3AXLATB.html"
+	],
+	"XOR": [
+		"Performs a bitwise exclusive OR (XOR) operation on the destination (first) and source (second) operands and stores the result in the destination operand location.",
+		"https://www.felixcloutier.com/x86/XOR.html"
+	],
+	"XORPD": [
+		"Performs a bitwise logical XOR of the two, four or eight packed double precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/XORPD.html"
+	],
+	"XORPS": [
+		"Performs a bitwise logical XOR of the four, eight or sixteen packed single-precision floating-point values from the first source operand and the second source operand, and stores the result in the destination operand.",
+		"https://www.felixcloutier.com/x86/XORPS.html"
+	]
+}
