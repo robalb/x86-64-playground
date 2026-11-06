@@ -54,9 +54,11 @@ function renderEditor(){
     highlightSelectionMatches(),
     defaultCommands(),
   )
-  //annoying but required since this editor is trapping focus, causing
-  //a11y issues
   setIgnoreTab(true)
+  editor.textarea.setAttribute("aria-describedby", "editor-tab-hint")
+  editor.container.addEventListener("pointerdown", () => setIgnoreTab(false))
+  editor.textarea.addEventListener("input", () => setIgnoreTab(false))
+  editor.textarea.addEventListener("blur", () => setIgnoreTab(true))
 }
 
 function removeErrors(){
@@ -134,6 +136,10 @@ onMount(() => {
       <button on:click={()=>blinkStore.setUploadedElfName("")}>back to editor</button>
     </div>
   {/if}
+  <p id="editor-tab-hint" class="visually-hidden">
+    When typing into the editor, Tab inserts indentation.
+    To move focus out of the editor, press escape.
+  </p>
   <div class="editor" bind:this={editor_elem}
     class:hidden={$blinkStore.uploadedElf}> </div>
 </div>
