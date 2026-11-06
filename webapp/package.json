@@ -21,6 +21,6 @@
   "dependencies": {
     "fflate": "^0.8.2",
     "paneforge": "^0.0.6",
-    "prism-code-editor": "^3.4.0"
+    "prism-code-editor": "^5.4.0"
   }
 }

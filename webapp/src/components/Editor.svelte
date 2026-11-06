@@ -10,6 +10,7 @@ import "prism-code-editor/prism/languages/nasm"
 import "prism-code-editor/layout.css"
 import "prism-code-editor/scrollbar.css"
 import "prism-code-editor/themes/github-dark.css"
+import "prism-code-editor/guides.css"
 
 // Non critical extensions (could be lazy loaded)
 import { indentGuides } from "prism-code-editor/guides"
@@ -85,14 +86,15 @@ function renderErrors(){
 
   //render an error
   for(let err of blink.assembler_errors){
+    const line = lines[err.line]
+    if(!line || line.querySelector(".editor__lineerror")){
+      continue
+    }
     const element = document.createElement('div');
     rendered_errors.push(element)
     element.className = "editor__lineerror"
-    let lineLength = 2 + lines[err.line].textContent.length
-    element.innerText = (" ".repeat(lineLength)) + err.error
-    if(lines[err.line] && element.parentNode != lines[err.line]){
-      lines[err.line].append(element)
-    }
+    element.innerText = (" ".repeat(2 + line.textContent.length)) + err.error
+    line.prepend(element)
   }
 }
 

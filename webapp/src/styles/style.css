@@ -325,7 +325,7 @@ body {
     color: #79c0ff;
 }
 
-/** Editor panel errors
+/** Editor panel errors - text
  *
  * The editor errors are injected via manual dom updates,
  * and cannot therefore use the native css svelte
@@ -333,12 +333,30 @@ body {
  * TODO: properly define these colors
  */
 .editor__lineerror {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    background-color: rgb(52, 30, 24);
+    width: max-content;
+    margin: -1lh 0;
     color: rgb(245, 127, 97);
     color: #ff7b72;
+}
+
+/** Editor panel errors  - highlight
+*
+*   This approach is copied from the prism-editor styles. 
+*   It highlights in red lines with errors
+*/
+.pce-line:has(> .editor__lineerror)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: var(--padding-left);
+    z-index: -2;
+    background-color: rgb(52, 30, 24);
+}
+
+.editor .prism-code-editor {
+    overflow: visible;
 }
 
 /**
