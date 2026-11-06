@@ -1,10 +1,11 @@
 <script>
-import {blinkStore, state, editorContent_write, editorContent_read} from '../core/store'
+import {blinkStore, state, mode, editorContent_write, editorContent_read} from '../core/store'
+import {assemblers} from '../core/assemblers'
 import {onMount} from 'svelte'
 import { createEditor } from "prism-code-editor"
 
-// Prism grammars
-import "prism-code-editor/prism/languages/nasm"
+// Prism grammars for all our assembler flavours
+import "../core/syntax"
 
 // Editor styles
 import "prism-code-editor/layout.css"
@@ -42,7 +43,7 @@ function renderEditor(){
   editor = createEditor(
     editor_elem,
     {
-      language: "nasm",
+      language: syntax,
       value: $blinkStore.editorContent_read,
       onUpdate: content=>{
         removeErrors()
@@ -111,6 +112,10 @@ function updateEditor(){
 }
 
 $: $editorContent_write && updateEditor()
+
+$: syntax = assemblers[$mode].syntax
+
+$: editor && editor.setOptions({ language: syntax })
 
 $: $state && renderErrors();
 
