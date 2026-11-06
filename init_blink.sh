@@ -38,8 +38,10 @@ emscripten_flags="\
 -sMODULARIZE \
 -sEXPORT_NAME=\"blinkenlib\" \
 -sEXPORTED_RUNTIME_METHODS='[$exported_runtime_methods_str]' \
+-sSUPPORT_LONGJMP=wasm \
 "
 emconfigure ./configure \
   --disable-all \
   LDFLAGS="$emscripten_flags" \
+  CFLAGS="-g -O2 -sSUPPORT_LONGJMP=wasm" \
   CPPFLAGS="-DHTML -D_FILE_OFFSET_BITS=64 -D_DARWIN_C_SOURCE -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_GNU_SOURCE"

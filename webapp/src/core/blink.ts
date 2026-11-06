@@ -285,6 +285,8 @@ export class Blink {
     //fake TTY readline
     stdin_bytes = [];
 
+	timing = { compileStart: 0, start: 0, busy: 0, sliceStart: 0 };
+
 	/**
 	 * Initialize the emscripten blink module.
 	 */
@@ -352,6 +354,9 @@ export class Blink {
 						true,
 						true,
 					);
+					if (mode.binaries.linker.linkerScript) {
+						M.FS.writeFile("/link.ld", mode.binaries.linker.linkerScript);
+					}
 				}
 			},
 		});
@@ -398,6 +403,30 @@ export class Blink {
 		if (this.state === this.states.ASSEMBLING) {
 			this.assembler_logs += String.fromCharCode(charcode);
 		}
+	}
+
+	#timingStart() {
+		const now = performance.now();
+		this.timing.start = now;
+		this.timing.busy = 0;
+		this.timing.sliceStart = now;
+	}
+
+	#timingResume() {
+		this.timing.sliceStart = performance.now();
+	}
+
+	#timingPause() {
+		this.timing.busy += performance.now() - this.timing.sliceStart;
+	}
+
+	#timingLog(name: string) {
+		const now = performance.now();
+		const t = this.timing;
+		const busy = t.busy + now - t.sliceStart;
+		console.log(
+			`blink timing: ${name} ${(now - t.start).toFixed(1)}ms wall, ${busy.toFixed(1)}ms in wasm, ${(now - t.compileStart).toFixed(1)}ms total`,
+		);
 	}
 
 	#setState(state: (typeof this.states)[keyof typeof this.states]) {
@@ -449,7 +478,9 @@ export class Blink {
         if(code === sigtrap_codes.BLINK_PREEMPT){
             console.log("preempt");
             requestAnimationFrame(() => {
+                this.#timingResume();
                 this.Module._blinkenlib_preempt_resume();
+                this.#timingPause();
             });
         }
         // fake SIGTRAP: it actually indicates a tty line read.
@@ -568,6 +599,9 @@ export class Blink {
 			FS.write(stream, data, 0, data.length, 0);
 			FS.close(stream);
 			FS.chmod("/linker", 0o777);
+			if (mode.binaries.linker.linkerScript) {
+				FS.writeFile("/link.ld", mode.binaries.linker.linkerScript);
+			}
 		}
 		this.#setState(this.states.READY);
 	}
@@ -609,6 +643,7 @@ export class Blink {
 		this.#setState(this.states.ASSEMBLING);
 		const FS = this.Module.FS;
 		FS.writeFile("/assembly.s", asmString);
+		this.timing.compileStart = performance.now();
 		//this hack ensures that the function is called after a browser render pass
 		requestAnimationFrame(() => {
 			this.#setEmulationArgs(
@@ -616,11 +651,14 @@ export class Blink {
 				this.mode.binaries.assembler.commands,
 				"",
 			);
+			this.#timingStart();
 			this.Module._blinkenlib_run_fast();
+			this.#timingPause();
 		});
 	}
 
 	loadASM_assembler_exit_callback(code: number) {
+		this.#timingLog("assembler");
 		if (code !== 0) {
 			console.log("blink: assembler failed");
 			if (this.mode.diagnosticsParser) {
@@ -650,12 +688,15 @@ export class Blink {
 					this.mode.binaries.linker.commands,
 					"",
 				);
+				this.#timingStart();
 				this.Module._blinkenlib_run_fast();
+				this.#timingPause();
 			});
 		}
 	}
 
 	loadASM_linker_exit_callback(code: number) {
+		this.#timingLog("linker");
 		if (code !== 0) {
 			console.log("linker failed");
 			this.#setState(this.states.READY);

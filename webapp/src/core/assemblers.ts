@@ -2,10 +2,40 @@ import fasm_1_73_32 from "../assets/assemblers/fasm.1.73.32.elf?url";
 import gnu_as_2_43_50 from "../assets/assemblers/gnu-as.2.43.50.elf?url";
 import gnu_ld_2_43_50 from "../assets/assemblers/gnu-ld.2.43.50.elf?url";
 import nasm_3_00 from "../assets/assemblers/nasm.3.00.elf?url";
+import type { Syntax } from "./syntax";
+
+const minimal_linker_script = `
+ENTRY(_start)
+SECTIONS
+{
+  PROVIDE(__executable_start = 0x400000);
+  . = 0x400000 + SIZEOF_HEADERS;
+  .note.gnu.property : { *(.note.gnu.property) }
+  . = ALIGN(0x1000);
+  .text : { *(.text .text.*) }
+  PROVIDE(__etext = .);
+  PROVIDE(_etext = .);
+  PROVIDE(etext = .);
+  . = ALIGN(0x1000);
+  .rodata : { *(.rodata .rodata.*) }
+  . = ALIGN(0x1000) + (. & 0xfff);
+  .data : { *(.data .data.*) }
+  PROVIDE(_edata = .);
+  PROVIDE(edata = .);
+  __bss_start = .;
+  .bss : { *(.bss .bss.*) *(COMMON) . = ALIGN(. != 0 ? 8 : 1); }
+  . = ALIGN(8);
+  PROVIDE(_end = .);
+  PROVIDE(end = .);
+}
+`;
+
 
 export interface Binary {
 	fileurl: string;
 	commands: string;
+    //an optional text field, used only by linkers
+	linkerScript?: string;
 }
 
 export interface DiagnosticLine {
@@ -21,8 +51,10 @@ export interface AssemblerMode {
 	id: string;
 	display_name: string;
 	description: string;
-	//a function that will parse assembler errors in a structured format
-	//that the code editor will understand
+    // the syntax-highlight flavour the Text editor should use
+	syntax: Syntax;
+	//a function that transforms assembler errors into a
+    //structured format that the code editor understands
 	diagnosticsParser?: DiagnosticsParser;
 	binaries: {
 		assembler: Binary;
@@ -52,6 +84,7 @@ export const assemblers: Record<string, AssemblerMode> = {
 		display_name: "GNU as",
 		description:
 			"GNU as + GNU ld, version 2.43.50. Compiled as a static MUSL binary",
+		syntax: "gas",
 		diagnosticsParser: gnu_diagnostics,
 		binaries: {
 			assembler: {
@@ -60,7 +93,9 @@ export const assemblers: Record<string, AssemblerMode> = {
 			},
 			linker: {
 				fileurl: gnu_ld_2_43_50,
-				commands: "/linker /program.o -o /program",
+				commands:
+					"/linker /program.o -o /program -T /link.ld --hash-size=31",
+				linkerScript: minimal_linker_script,
 			},
 		},
 	},
@@ -68,6 +103,7 @@ export const assemblers: Record<string, AssemblerMode> = {
 		id: "FASM_trunk",
 		display_name: "Fasm",
 		description: "Flat assembler version 1.73.32",
+		syntax: "nasm",
 		diagnosticsParser: fasm_diagnostics,
 		binaries: {
 			assembler: {
@@ -80,7 +116,8 @@ export const assemblers: Record<string, AssemblerMode> = {
 		id: "NASM_trunk",
 		display_name: "Nasm",
 		description:
-			"NASM 3.00 + GNU ld v2.43.50. Both compiled as a static MUSL binary",
+			"NASM 3.00 + GNU ld v2.43.50. Both compiled as static MUSL binary",
+		syntax: "nasm",
 		diagnosticsParser: nasm_diagnostics,
 		binaries: {
 			assembler: {
@@ -89,7 +126,9 @@ export const assemblers: Record<string, AssemblerMode> = {
 			},
 			linker: {
 				fileurl: gnu_ld_2_43_50,
-				commands: "/linker /program.o -o /program",
+				commands:
+					"/linker /program.o -o /program -T /link.ld --hash-size=31",
+				linkerScript: minimal_linker_script,
 			},
 		},
 	},
